@@ -1,0 +1,15 @@
+{
+  "name": "@baton/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@baton/shared": "*",
+    "hono": "^4.7.0"
+  }
+}

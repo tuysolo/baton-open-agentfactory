@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    // Cùng lý do với `packages/shared`: lấy kiểu của Workers vì `fetch`, `URL`,
+    // `Response` có ở cả Workers và Node. CLI chạy trên Node, nhưng **không**
+    // thêm `@types/node` (không thêm phụ thuộc mới ở phần 5) — đúng ba chỗ cần
+    // `process` nằm trong `bin.ts` và được khai tại đó.
+    "types": ["@cloudflare/workers-types/experimental"]
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../shared" }, { "path": "../client" }]
+}

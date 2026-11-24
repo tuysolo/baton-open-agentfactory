@@ -1,0 +1,246 @@
+name = "baton-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 — cơ sở dữ liệu chính (SPEC mục 1–4).
+# `database_id` là chỗ trống: chủ điền sau khi tự tạo DB. Agent KHÔNG chạy
+# wrangler, không deploy (quyet-dinh.md 01/10).
+[[d1_databases]]
+binding = "DB"
+database_name = "baton"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Durable Object — cửa ghi duy nhất của mỗi workspace.
+# D1 không có giao dịch tương tác, nên mọi lệnh GHI đi qua DO này để tuần tự hoá
+# đọc-kiểm-ghi. DO cũng là chỗ đánh thức các lệnh chờ dài `--wait` (SPEC mục 13).
+[[durable_objects.bindings]]
+name = "WORKSPACE_GATE"
+class_name = "WorkspaceGate"
+
+# Durable Object — bộ đếm 600 request/phút cho mỗi token (SPEC mục 13).
+# Một DO cho mỗi token (id dẫn xuất từ **băm** token), nên tải rải theo số token
+# chứ không dồn vào một đối tượng như cửa ghi. Không đếm trong bộ nhớ Worker:
+# Worker chạy trên nhiều isolate, mỗi isolate một bộ đếm riêng.
+[[durable_objects.bindings]]
+name = "GIOI_HAN_TOKEN"
+class_name = "GioiHanToken"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["WorkspaceGate"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["GioiHanToken"]
+
+# --- Workers Static Assets — giao diện chủ (SPEC mục 14) --------------
+#
+# `quyet-dinh.md` 05/10 (CoS chốt): giao diện là một SPA React + Vite, phục vụ
+# bằng **cùng Worker này**. `/v1/*` là API, mọi đường khác trả SPA.
+#
+# `directory` trỏ vào bản build của `packages/web` (`npm run build:web`, tức
+# `vite build packages/web`). Thư mục đó **không** commit (`.gitignore`), nên
+# trước khi deploy phải build web trước, nếu không asset rỗng.
+#
+# **HAI KHOÁ DƯỚI ĐÂY LÀ TẦNG MỘT, và ở production chúng làm gần hết việc.**
+# (Lượt trước file này khai ngược — rằng chúng chỉ là lớp phụ và `phucVuSpa` mới
+# là lớp thật. Sai, reviewer bắt được; sửa ở đây cho khớp mã.)
+#
+#   * `run_worker_first = ["/v1/*"]` — danh sách đường **luôn** vào Worker, không
+#     hỏi asset. Đây là lớp chắn cứng của API: dù `dist/` có một file tên trùng,
+#     `/v1/*` vẫn không bị asset ăn mất.
+#     Điều **không hiển nhiên**: `wrangler` biến mảng này thành
+#     `routerConfig.static_routing` (`wrangler-dist/cli.js:160750`), và nó bật
+#     `has_static_routing` ở Asset Worker (`miniflare/dist/src/index.js:52462`).
+#   * `not_found_handling = "single-page-application"` — asset trả `index.html`
+#     cho đường không khớp file nào. Và vì `has_static_routing` **đã bật** nhờ
+#     dòng trên, `canFetch` **không** hạ khoá này xuống `"none"` nữa (nhánh
+#     `canFetch` trong `miniflare/.../assets.worker.js` chỉ hạ khi
+#     `!has_static_routing`). Nên `/t/BAT-12` được **Asset Worker** trả SPA, không
+#     cần tới Worker.
+#
+# **Tầng hai là `phucVuSpa` trong `src/phuc-vu-spa.ts`** — nó chạy khi một đường
+# ngoài `/v1/*` vẫn tới được Worker (mất static routing, thiếu `index.html`, hay
+# một cấu hình `wrangler dev` khác). Nó cũng là lớp **duy nhất có ca test**: hai
+# khoá trên không có ca nào, vì `wrangler` bị chặn trong môi trường này. Hai tầng
+# nói cùng một luật; đổi một tầng thì đọc lại tầng kia
+# (`test/ranh-gioi-spa.test.ts`).
+#
+# **CHƯA XÁC MINH ĐƯỢC TRONG PHÒNG SẠCH, cần chủ kiểm lúc deploy:** tên và giá trị
+# ba khoá này đọc từ `node_modules/wrangler/config-schema.json` (định nghĩa
+# `Assets`: `directory`, `binding`, `html_handling`, `not_found_handling`,
+# `run_worker_first`) — tức đúng lược đồ của bản `wrangler` đang cài. Nhưng
+# `wrangler` **bị chặn** trong môi trường này nên không ai chạy được một lần
+# `wrangler deploy --dry-run` để xem nó nhận. Dạng của `run_worker_first` (mảng
+# chuỗi glob) đã đối chiếu thêm với `parseStaticRouting` trong
+# `wrangler-dist/cli.js` (ít nhất 1 luật không phủ định, tối đa `MAX_ROUTES_RULES`
+# luật) — nhưng **đọc mã không thay được một lần chạy thật**.
+[assets]
+directory = "../web/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/v1/*"]
+
+# R2 — **sao lưu tự động hằng ngày, giữ 14 bản** (SPEC mục 15 d.429), đặt ở nơi lưu
+# trữ khác DB chính (19.12 câu 7). BAT-8 bật khối này; handler là `src/sao-luu.ts`,
+# nhịp là ô `sao_luu` của `viecCuaCron` (19:00 UTC = 02:00 giờ chủ — xem `[triggers]`).
+#
+# **Bucket phải có TRƯỚC khi deploy** — chủ tạo một lần (`TRIEN-KHAI.md`, mục "Sao lưu
+# (BAT-8)"): `npx wrangler r2 bucket create baton-sao-luu`. Agent KHÔNG chạy wrangler.
+# Binding `SAO_LUU` là **tuỳ chọn** trong mã: thiếu nó thì nhịp sao lưu bỏ qua + log,
+# không lỗi, và báo cáo sáng/tối có một dòng "Sao lưu tự động chưa bật".
+[[r2_buckets]]
+binding = "SAO_LUU"
+bucket_name = "baton-sao-luu"
+
+[observability]
+enabled = true
+
+# --- Cấu hình thường, KHÔNG phải secret ------------------------------
+#
+# `BATON_URL_CONG_KHAI` — gốc URL công khai của chính Baton, chỗ dựng **link** của
+# SPEC mục 12 d.347 ("mỗi tin có **link thẳng** tới đúng thẻ hoặc ticket").
+#
+# **Vì sao phải khai tay — Baton KHÔNG tự suy ra được.** Tin Telegram được bắn
+# trong một lượt `scheduled` (Cron Trigger mỗi phút), và một lượt `scheduled`
+# **không có `Request` nào** — nên không có `Host`, không có `URL` để đọc ra tên
+# miền. Khác hẳn một lượt `fetch`, nơi suy ra là chuyện hiển nhiên. Đây là lý do
+# duy nhất biến này tồn tại.
+#
+# **Nó ở `[vars]`, KHÔNG phải `wrangler secret put`:** một URL công khai không
+# phải bí mật — nó chính là thứ sẽ nằm trong mọi tin gửi cho chủ. Hai thứ của
+# Telegram thì **ngược lại**, là secret thật và đặt bằng `wrangler secret put`
+# (xem d.135 dưới): `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`. Đặt sai chỗ — URL
+# thành secret, hay token vào `[vars]` của file này — là một trong hai lỗi: một
+# cấu hình khó soát, hoặc một token **commit vào repo** (danh sách cấm
+# `CLAUDE.md` mục 5).
+#
+# **Thiếu nó thì tin VẪN GỬI, chỉ mất link** (`linkCuaTin` trả `null` —
+# `src/thong-bao.ts`, ca `test/cron-thong-bao.test.ts` "thiếu
+# `BATON_URL_CONG_KHAI` ⇒ tin VẪN gửi, chỉ không có link"). Một tin không link
+# vẫn báo được việc gấp; một tin không gửi thì không. Nên nó **không** fail-closed.
+#
+# Giá trị dưới đây là **CHỖ TRỐNG — chủ phải tự điền** địa chỉ thật của Worker trên
+# `workers.dev` (thay `TEN-TAI-KHOAN`) hoặc tên miền riêng, sau lần deploy đầu
+# (`TRIEN-KHAI.md` bước 7 và 37). Nó **không phải secret** — nó chính là thứ nằm trong
+# mọi tin gửi cho chủ, nên nó ở `[vars]` và commit được. Không có dấu `/` ở cuối.
+#
+# Chủ gắn tên miền riêng về sau thì **sửa đúng dòng này** rồi deploy lại; link trong
+# tin cũ không tự đổi theo. Cách kiểm: `TRIEN-KHAI.md`, mục phần 7.
+#
+# SPEC không chốt tên hay dạng của cấu hình này — `cau-hoi-spec.md` #116.
+[vars]
+BATON_URL_CONG_KHAI = "https://baton-api.TEN-TAI-KHOAN.workers.dev"
+
+# --- Cron Triggers — việc nền ----------------------------------------
+#
+# **MỘT** biểu thức: `* * * * *`. `scheduled` trong `src/index.ts` phân nhánh theo
+# **`controller.scheduledTime`** (`viecCuaCron` trong `src/cron-bang-chung.ts`, vẫn
+# là sổ tra duy nhất) — **không** theo `controller.cron`, vì chỉ còn một chuỗi nên
+# chuỗi ấy không mang tin gì.
+#
+# **VÌ SAO MỘT, KHÔNG NĂM — và đừng thêm nhịp thứ hai vào đây.**
+# Gói **Workers Free cho 5 cron trigger mỗi TÀI KHOẢN**, không mỗi Worker. Ngày
+# 07/10 bản deploy bị Cloudflare **từ chối**:
+#     "This account has reached the Workers Free limit of 5 cron triggers per
+#      account"  [code 10072]
+# Tài khoản lúc đó còn một Worker khác đang dùng 2 nhịp, nên Baton chỉ còn tối đa
+# 3 — và năm nhịp cũ không đặt nổi. Hậu quả thật: hai nhịp **báo cáo** (`30 0 * * *`,
+# `0 13 * * *`) **không lên được**, tức báo cáo sáng/tối của SPEC mục 11 d.322/d.330
+# **không chạy** trên production. Gộp về một nhịp trả lại chỗ cho cả tài khoản.
+#
+# Nhịp **hiệu dụng** của từng việc **không đổi** so với năm nhịp cũ, chỉ đổi cách
+# kích (phân nhánh trong mã thay vì một Cron Trigger riêng):
+#
+#   * **mỗi phút** — **hai việc**:
+#     (1) **thử lại** bằng chứng `pending` đã đến hạn (SPEC mục 7 d.220: "tự thử
+#     lại sau 5 phút, tối đa 3 lần, rồi thành `failed` với lý do"). Nhịp một phút
+#     cho mốc 5 phút nên sai số tối đa một phút; nhịp 5 phút sẽ làm lần thử thứ
+#     nhất chờ tới 10 phút.
+#     (2) **gửi thông báo ra Telegram** + **nhắc 🔴 sau 2 giờ** (mục 12 d.339–348,
+#     mục 8 d.283 — `src/cron-thong-bao.ts`, `CRON_THONG_BAO`). Cùng nhịp một phút
+#     vì giãn cách thử lại nhỏ nhất của 19.12 câu 6 là **10 giây**; nhịp thưa hơn
+#     thì lần thử lại thứ nhất tới muộn hơn cả lần thứ hai đáng ra phải tới.
+#     Thiếu hai secret Telegram ⇒ **không gửi và không lỗi** (xem `TRIEN-KHAI.md`
+#     §i); link trong tin cần `BATON_URL_CONG_KHAI` ở `[vars]` trên.
+#   * **phút chia hết 5** (`GIAN_CANH_BAO_PHUT`) — **cảnh báo phiên đứng hoặc lỗi**
+#     (SPEC mục 6 d.196). Nhịp 5 phút là **chốt của chủ**, 19.12 câu 46: "Cảnh báo
+#     được phát hiện bằng một Cron Trigger quét mỗi 5 phút, **không** dựa vào việc
+#     có ai mở Tổng quan." Nhịp ấy **được giữ nguyên**: một nhịp mỗi phút lọc
+#     `minute % 5 === 0` quét đúng 12 lần mỗi giờ như trước. Đừng đổi con số mà
+#     không mở lại câu 46 trước; đừng cho nó chạy **mỗi** phút (quét `phien` của cả
+#     hệ 5 lần nhiều hơn chữ chốt, không đổi lấy gì — mốc chống bắn lặp làm 4 lượt
+#     kia thành những lượt không ghi gì).
+#     Việc này **không gọi mạng**: nó chỉ ghi tin vào **kho thông báo trong app**
+#     (bảng `thong_bao`, migration 0012). Đưa tin ấy **ra Telegram** là việc của
+#     nhịp mỗi phút ở trên — hai chặng rời nhau, nên một Telegram đang hỏng không
+#     làm mất một cảnh báo nào.
+#   * **phút chia hết 10** (`GIAN_THEO_DOI_PHUT`) — **kiểm lại commit `pushed`**
+#     (d.221 "mỗi 10 phút trong 7 ngày") và **dừng theo dõi** cái quá 7 ngày, gắn
+#     nhãn "chưa merge sau 7 ngày", bắn 1 tin (19.7). Đúng chữ SPEC, không dày hơn.
+#   * **từ 00:30 UTC** — **báo cáo sáng** (SPEC mục 11 d.322 "tự sinh lúc **07:30**").
+#   * **từ 13:00 UTC** — **handoff tối** (SPEC mục 11 d.330 "tự sinh lúc **20:00**").
+#   * **từ 19:00 UTC** — **sao lưu R2, giữ 14 bản** (SPEC mục 15 d.429; = **02:00 giờ
+#     Việt Nam**, BAT-8). Cửa sổ 60 phút như báo cáo; trong cửa sổ, `head` R2 chặn ghi
+#     lặp. Mốc tính từ 02:00 trừ `MUI_GIO_CHU_PHUT` (`PHUT_UTC_SAO_LUU`, `src/sao-luu.ts`).
+#
+# **HAI MỐC CUỐI LÀ GIỜ UTC, VÀ ĐÓ LÀ CHỖ DỄ SAI NHẤT CỦA FILE NÀY.**
+# `scheduledTime` của Cloudflare là một mốc epoch và mọi phép đọc giờ của nó trong
+# `viecCuaCron` là **UTC**; giờ của SPEC là giờ **trên tường của chủ** (UTC+7 —
+# `MUI_GIO_CHU_PHUT`, 19.12 câu 60). Nên:
+#     00:30 UTC = **07:30 giờ Việt Nam**   ·   13:00 UTC = **20:00 giờ Việt Nam**
+# Phép đổi đó **không viết tay trong mã**: `PHUT_UTC_BAO_CAO_SANG` / `..._TOI` tính
+# từ 07:30 và 20:00 **trừ `MUI_GIO_CHU_PHUT`** (`phutUtcCuaGioChu`). Chỗ **ghim** nó
+# là `test/cron-bang-chung.test.ts`, ca "mỗi MỐC GIỜ bật đúng việc của nó": ca ấy
+# gọi `viecCuaCron` tại 00:30 và 13:00 — hai con số **UTC viết tay** — nên đổi hằng
+# múi giờ mà quên hai mốc thì nó đỏ. (**Không** phải `test/luat-bao-cao.test.ts`:
+# ca d.322/d.330 ở đó lấy mốc *từ* `CRON_BAO_CAO_SANG`, mà chuỗi ấy nay dẫn xuất từ
+# cùng hằng múi giờ — thành vòng kín, xanh với mọi giá trị.)
+# Đừng "sửa" hai mốc thành 07:30 / 20:00 UTC: đó là 14:30 và 03:00 giờ Việt Nam.
+#
+# **"TỪ", không "ĐÚNG LÚC": Cloudflare có thể nhả nhịp TRỄ hoặc LẶP.** Nên hai nhánh
+# báo cáo mở một **cửa sổ** `[mốc, mốc + 60 phút]` (`TRE_TOI_DA_PHUT`) và bên trong
+# cửa sổ hỏi "**hôm nay (ngày trên tường của chủ) đã có báo cáo loại này chưa**" bằng
+# một `SELECT` rẻ trước chặng đọc nặng — nên nhịp 00:30 mất mà 00:31 có thì báo cáo
+# **vẫn ra đúng một lần**, và 60 nhịp trong cửa sổ **không** thành 60 lượt báo cáo.
+# Lý lẽ đầy đủ: khối đầu `src/cron-bao-cao.ts`.
+#
+# Hai nhịp báo cáo **không gọi mạng**: chúng ghi một dòng `bao_cao` (migration 0020)
+# và một tin vào **kho thông báo trong app**. Đưa tin ấy ra Telegram (d.346) là việc
+# của nhịp mỗi phút ở trên — nên giờ yên lặng của d.347 áp cho tin báo cáo bằng
+# đúng một bộ luật, và một Telegram đang hỏng không làm mất một báo cáo nào.
+# (07:30 và 20:00 đều **ngoài** khung yên lặng 23:00–07:00, nên trên thực tế hai
+# tin này đi ngay; có ca test ghim đúng điều đó tại chính hai mốc ấy.)
+#
+# Chặng gọi mạng của hai việc bằng chứng nằm ở **tầng Worker**, không trong Durable
+# Object cửa ghi — xem đầu `src/cron-bang-chung.ts`.
+[triggers]
+crons = ["* * * * *"]
+
+# --- Chỗ cắm, chưa dùng ----------------------------------------------
+#
+# Các việc nền của **phần sau**, CỐ Ý chưa nối vào `viecCuaCron` (một nhánh chưa có
+# handler là một lần chạy rỗng mỗi nhịp, và một dòng log không ai hiểu):
+#   * mỗi phút: lượt "Không phản hồi" (mục 5), cờ "Đang làm mà không ai cầm"
+#     (mục 19.1)
+#
+# **Chúng sẽ KHÔNG cần một cron mới**: thêm một việc nền từ nay là thêm một ô vào
+# `ViecCuaCron` và một điều kiện theo `scheduledTime`, không một dòng vào `crons` —
+# đó chính là điều giới hạn 5 cron/tài khoản ở trên buộc chúng ta làm.
+#
+# (Hai nhịp báo cáo của mục 11, nhịp nhắc 🔴 sau 2 giờ của mục 8 và **sao lưu hằng
+# ngày** của mục 15 — BAT-8 — **đã rời khỏi danh sách này**: chúng có handler và đã
+# có nhánh trong `viecCuaCron`.)
+#
+# Secret (chủ tự đặt bằng `wrangler secret put`, KHÔNG để trong file này,
+# KHÔNG commit — mục 15): GITHUB_TOKEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID,
+# và TOKEN_CHU.
+#
+# TOKEN_CHU là **đường tạm của phần 1** để xác thực chủ, đủ để kiểm các luật
+# "chỉ chủ làm được". Mật khẩu + TOTP (SPEC mục 15) là phần 6; khi đó bỏ secret
+# này. Để trống thì không có đường nào vào với tư cách chủ (fail-closed).
+#
+# CHO_DUONG_TEST **không** được đặt khi deploy: nó mở đường `/v1/_loi/:ma` dùng
+# để kiểm middleware lỗi. Chỉ Miniflare lúc chạy test bật cờ này.

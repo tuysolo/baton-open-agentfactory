@@ -1,0 +1,26 @@
+{
+  // Test của root này nằm **ngoài** build của package (`../tsconfig.json` có
+  // `rootDir: "src"`, và `dist/bin.js` phải ở đúng đường đó cho `bin` trong
+  // `package.json`). File này tồn tại để `typescript-eslint` có một project cho
+  // chúng: `projectService` tìm `tsconfig.json` gần nhất đi lên, và nếu không có
+  // file này thì `test/` không thuộc project nào và lint đỏ.
+  //
+  // `noEmit` + `composite: false`: không phải một mắt **được tham chiếu** trong
+  // chuỗi `tsc --build` của các package — không ai `references` tới nó.
+  //
+  // Nhưng nó **được nêu thẳng** ở cuối `npm run typecheck` (và `npm run clean`)
+  // như một project gốc riêng, để lỗi kiểu trong `test/` đỏ ở cổng typecheck
+  // chứ không chỉ ở lint type-aware. An toàn vì nó độc lập: `rootDir: "src"` và
+  // thứ tự build của `packages/cli` không đổi, và `noEmit` nên nó không sinh gì
+  // ngoài `tsconfig.tsbuildinfo` (đã nằm trong `.gitignore`).
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": ["@cloudflare/workers-types/experimental"]
+  },
+  "include": ["**/*.ts"]
+}

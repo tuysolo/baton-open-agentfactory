@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    // Chạy trên Workers (API) và trên Node (CLI, MCP). Lấy kiểu của Workers vì
+    // đó là nơi chạy thật; `crypto`, `fetch`, `URL`, `TextEncoder` đều có ở cả hai.
+    "types": ["@cloudflare/workers-types/experimental"]
+  },
+  "include": ["src/**/*.ts"]
+}

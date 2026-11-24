@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+# `dist/` ở mọi cấp: `packages/*/dist` của `tsc --build`, và `packages/web/dist`
+# của `vite build` (bản SPA mà `wrangler.toml` trỏ `[assets]` vào).
+dist/
+build/
+.next/
+coverage/
+.wrangler/
+*.tsbuildinfo
+*.sqlite
+*.db

@@ -1,0 +1,27 @@
+-- ===================================================================
+-- 0008 — **Mốc "lần vào `error`"** của phiên — SPEC mục 6 d.196
+-- ===================================================================
+--
+-- d.196: "phiên chuyển sang `stalled` **hoặc** `error` thì bắn **1** thông báo;
+-- phiên **hồi lại rồi đứng lần nữa** thì bắn lại". Tin bắn theo **lần chuyển
+-- sang**, mỗi lần chuyển sang đúng 1 tin.
+--
+-- Mốc chống bắn lặp của 0007 (`canh_bao_tin_hieu_luc`) gắn vào
+-- `tin_hieu_cuoi_luc`. Với `stalled` thì đúng: `stalled` là **dẫn xuất** từ
+-- im lặng, nên một tín hiệu mới **đưa phiên ra khỏi** `stalled` và lần đứng sau
+-- là một lần chuyển sang mới.
+--
+-- Với `error` thì **sai**: `error` là trạng thái **ghi trong DB**; một tín hiệu
+-- mới (nhịp tim, mục `thought`) **không** đưa phiên ra khỏi `error`. Kịch bản
+-- sai: phiên vào `error` lúc T1, quét → bắn tin, mốc = T1; agent gửi nhịp tim
+-- lúc T2 → `tin_hieu_cuoi_luc = T2`, trạng thái vẫn `error` → lần quét sau bắn
+-- **tin thứ hai cho cùng một lần lỗi**. Agent lỗi mà vẫn đập nhịp tim thì mỗi
+-- lần có ai mở Tổng quan lại bắn một tin.
+--
+-- Nên `error` cần mốc riêng: **lúc phiên chuyển sang `error`**. Cảnh báo cho
+-- `error` so mốc đã bắn với `error_luc`, không với `tin_hieu_cuoi_luc`. Phiên ra
+-- khỏi `error` rồi vào lại thì `error_luc` **mới** → bắn lại (đúng câu 2 d.196).
+--
+-- `NULL` = phiên chưa bao giờ vào `error`, kể cả dòng dựng trước migration này;
+-- khi đó `canhBaoDung` rơi về `tin_hieu_cuoi_luc` để vẫn có một mốc để so.
+ALTER TABLE phien ADD COLUMN error_luc INTEGER;

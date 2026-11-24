@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- SPEC mục 14 d.411: điện thoại 375px phải dùng được. -->
+    <title>Baton</title>
+    <!--
+      **Đặt chế độ sáng/tối TRƯỚC khi React vẽ** — nếu không, mọi lần tải trang ở
+      chế độ tối là một nhoáng trắng toàn màn hình (React chỉ chạy sau khi bundle
+      về; một `useEffect` thì còn sau nữa).
+
+      Vì vậy nó là một script **nội tuyến, đồng bộ, trong `<head>`**: nó chạy
+      trước khi trình duyệt vẽ frame đầu, và nó không chờ mạng. Ba chữ
+      (`sang`/`toi`/`may`), tên khoá và tên thuộc tính khớp từng chữ với
+      `src/vo/theme.ts` — đó là chỗ duy nhất khác còn biết chúng.
+
+      Bọc `try` vì `localStorage` **ném khi chỉ đọc thuộc tính** ở Safari chặn
+      cookie / iframe sandbox: một ngoại lệ ở đây sẽ chặn cả phần còn lại của
+      `<head>`. Chưa có lựa chọn đã nhớ ⇒ MẶC ĐỊNH `toi` (Chủ chốt 29/10,
+      `THIET-KE.md`; khớp `THEME_MAC_DINH`). Script ném ⇒ không đặt `data-theme`
+      gì, và khối `:root:not([data-theme])` của `kieu.css` cũng là tối.
+    -->
+    <script>
+      (function () {
+        try {
+          var c = localStorage.getItem('baton.theme');
+          if (c !== 'sang' && c !== 'toi' && c !== 'may') c = 'toi';
+          var toi =
+            c === 'toi' ||
+            (c === 'may' &&
+              typeof matchMedia === 'function' &&
+              matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.setAttribute('data-theme', toi ? 'toi' : 'sang');
+          document.documentElement.setAttribute('data-theme-chon', c);
+        } catch (e) {
+          /* không đọc được thì để CSS mặc định (tối) — xem khối trên. */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="goc"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    /*
+     * **Web CỐ Ý nằm ngoài chuỗi project reference của repo.**
+     *
+     * `npm run build` của repo là `tsc --build shared → client → cli → api`: bốn
+     * package đó `composite: true` và **phát** ra `dist/` thật, vì `baton` và
+     * `baton-mcp` chạy bằng `node` nên phải có `.js`. Web thì không: bản phát của
+     * nó là **bundle của Vite** (`vite build`), không phải đầu ra của `tsc`. Ép
+     * web vào `--build` sẽ sinh một `dist/` thứ hai mà không ai dùng, và buộc
+     * `composite` (tức `declaration`) cho một đống `.tsx` chỉ để bỏ đi.
+     *
+     * Nên ở đây `tsc` chỉ làm **một** việc: kiểm kiểu. `npm run typecheck` của
+     * root gọi `tsc -p packages/web` thành một chặng riêng.
+     */
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx", "vite.config.ts", "vitest.config.ts"]
+}

@@ -1,0 +1,63 @@
+{
+  "_ghi_chu": "Du lieu GIA de thu chuc nang nhap ticket (SPEC muc 16). Trang thai cu can anh xa sang ma Baton tren man hinh xem truoc.",
+  "tickets": [
+    {
+      "old_id": "OLD-1",
+      "project": "DEMO",
+      "title": "Dựng trang đăng nhập",
+      "description": "Đăng nhập bằng email.",
+      "old_status": "Done",
+      "priority": "high",
+      "labels": ["web"],
+      "parent_old_id": null,
+      "related_old_ids": ["OLD-2"],
+      "created_at": "2026-09-20T09:00:00+07:00",
+      "updated_at": "2026-09-22T17:00:00+07:00",
+      "comments": [
+        {"author": "M-Demo", "created_at": "2026-09-21T10:00:00+07:00", "body": "Đã giao W-builder."}
+      ]
+    },
+    {
+      "old_id": "OLD-2",
+      "project": "DEMO",
+      "title": "Thêm đăng nhập Google",
+      "description": "",
+      "old_status": "In Progress",
+      "priority": "medium",
+      "labels": ["web", "auth"],
+      "parent_old_id": null,
+      "related_old_ids": ["OLD-1"],
+      "created_at": "2026-09-23T09:00:00+07:00",
+      "updated_at": "2026-09-29T11:00:00+07:00",
+      "comments": []
+    },
+    {
+      "old_id": "OLD-3",
+      "project": "DEMO",
+      "title": "Kiểm tra lỗi hiển thị trên điện thoại",
+      "description": "Con của OLD-2.",
+      "old_status": "Todo",
+      "priority": "low",
+      "labels": [],
+      "parent_old_id": "OLD-2",
+      "related_old_ids": [],
+      "created_at": "2026-09-24T09:00:00+07:00",
+      "updated_at": "2026-09-24T09:00:00+07:00",
+      "comments": []
+    },
+    {
+      "old_id": "OLD-4",
+      "project": "NOIBO",
+      "title": "Viết mẫu báo cáo tuần",
+      "description": "",
+      "old_status": "Backlog",
+      "priority": "none",
+      "labels": [],
+      "parent_old_id": null,
+      "related_old_ids": [],
+      "created_at": "2026-09-25T09:00:00+07:00",
+      "updated_at": "2026-09-25T09:00:00+07:00",
+      "comments": []
+    }
+  ]
+}

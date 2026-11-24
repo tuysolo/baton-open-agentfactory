@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "lib": ["ES2022"],
+    "types": ["@cloudflare/workers-types/experimental", "@cloudflare/vitest-pool-workers"]
+  },
+  // `vitest.config.ts` chạy trên Node, không nằm trong build của Worker;
+  // vitest tự lo kiểu cho nó.
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  /*
+   * `../cli` nằm trong references vì **test của CLI chạy ở root này**: CLI phải
+   * được kiểm bằng đường thật (phân tích tham số → gọi API → in), và hạ tầng duy
+   * nhất có Worker thật là `vitest.config.ts` của `packages/api` (Miniflare + D1
+   * + migration). Một root vitest thứ hai cho `packages/cli` nghĩa là dựng lại cả
+   * hạ tầng đó lần thứ hai, rồi hai bản lệch nhau. `packages/cli` **không** phụ
+   * thuộc `packages/api` (chiều ngược lại mới có), nên không có vòng nào.
+   */
+  "references": [{ "path": "../shared" }, { "path": "../client" }, { "path": "../cli" }]
+}

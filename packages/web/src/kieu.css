@@ -1,0 +1,347 @@
+@import 'tailwindcss';
+
+/*
+ * ==================================================================
+ * TOKEN MÀU — một chỗ duy nhất cho CẢ HAI chế độ (tối / sáng)
+ * ==================================================================
+ *
+ * Nguồn sự thật cho GIÁ TRỊ là `THIET-KE.md` ở gốc repo (hệ thiết kế kiểu
+ * Linear, Chủ chốt 29/10): bảng token ở đó và hai cột dưới đây phải khớp từng
+ * dòng. Từ 29/10 **tối là chế độ chính** (mặc định cho người chưa chọn, xem
+ * `vo/theme.ts`); sáng giữ nguyên vai trò token, chỉ đảo giá trị.
+ *
+ * SPEC mục 14 không nói gì về chế độ tối (`cau-hoi-spec.md` #125); cái SPEC đòi
+ * là **đọc được** (d.411 "dùng tốt", d.408 "báo lỗi ghi rõ lý do" — một câu lỗi
+ * tàng hình thì không ghi rõ gì cả). Nên luật ở đây là: **không component nào
+ * chọn màu**, chúng chỉ gọi tên vai trò của màu; bảng màu thật nằm trong file
+ * này, hai cột.
+ *
+ * ## Vì sao ĐẢO CHÍNH RAMP `neutral`, không rải `dark:` khắp component
+ *
+ * Mã đã có ~300 chỗ dùng `text-neutral-500`, `border-neutral-200`,
+ * `bg-neutral-900`… Khai `--color-neutral-*` **bằng biến CSS** và cho biến đó
+ * đảo chiều theo `[data-theme]`: một chỗ sửa, mọi chỗ dùng đúng theo, kể cả mã
+ * lượt sau. Hệ quả phải nhớ: `neutral-50` là "gần nền" và `neutral-900` là "gần
+ * chữ" **ở cả hai chế độ** — nó là một thang **tương phản**, không phải một
+ * thang độ sáng. Vì vậy một nút `bg-neutral-900` cần chữ `text-nen` (nền
+ * trang), **không** `text-white`: `white` không đảo.
+ *
+ * Màu **mang nghĩa** (lỗi, cảnh báo, sức sống, trạng thái, mức gấp, màu nhấn)
+ * thì KHÔNG đảo máy móc: mỗi cái có hai giá trị chọn tay, đo tương phản ở cả hai
+ * chế độ trong `test/vo-linear.test.tsx`.
+ */
+
+@theme inline {
+  /* Thang tương phản trung tính — đảo chiều ở chế độ tối. */
+  --color-neutral-50: var(--t-n50);
+  --color-neutral-100: var(--t-n100);
+  --color-neutral-200: var(--t-n200);
+  --color-neutral-300: var(--t-n300);
+  --color-neutral-400: var(--t-n400);
+  --color-neutral-500: var(--t-n500);
+  --color-neutral-600: var(--t-n600);
+  --color-neutral-700: var(--t-n700);
+  --color-neutral-800: var(--t-n800);
+  --color-neutral-900: var(--t-n900);
+  --color-neutral-950: var(--t-n950);
+
+  /* Token ngữ nghĩa — tên nói vai trò, không nói màu. */
+  --color-nen: var(--t-nen);
+  --color-nen-lop: var(--t-nen-lop);
+  --color-nen-noi: var(--t-nen-noi);
+  --color-chu: var(--t-chu);
+  --color-chu-mo: var(--t-chu-mo);
+  /** Chữ mờ hơn: số đếm, ngày, mã phụ. KHÔNG cho chữ mang thông tin chính. */
+  --color-chu-mo-hon: var(--t-chu-mo-hon);
+  --color-vien: var(--t-vien);
+  --color-loi: var(--t-loi);
+  --color-loi-nen: var(--t-loi-nen);
+  --color-canh: var(--t-canh);
+  --color-canh-nen: var(--t-canh-nen);
+  --color-tot: var(--t-tot);
+  /*
+   * Lớp phủ sau hộp nổi (bảy hộp — THIET-KE "Hộp nổi", BAT-69): đen 50% ở
+   * **cả hai** chế độ — cố ý không đảo (lớp phủ làm tối trang ở cả tối lẫn
+   * sáng). Không phải màu chữ/nền của cặp nào, nên lưới tương phản không đo nó.
+   */
+  --color-lop-phu: var(--t-lop-phu);
+
+  /*
+   * **Màu nhấn duy nhất** (tím-chàm): nút chính, mục đang chọn, focus ring,
+   * liên kết. Không dùng để trang trí — xem "Quy tắc màu nhấn" ở `THIET-KE.md`.
+   *   * `nhan-manh`      — nền nút chính, focus ring, vạch chọn;
+   *   * `nhan-manh-dam`  — hover của nút chính (đậm hơn: chữ trắng vẫn đọc tốt);
+   *   * `nhan-manh-nen`  — nền nhạt (chip/hàng đang chọn có màu nhấn);
+   *   * `nhan-manh-chu`  — CHỮ màu nhấn trên nền trang (liên kết) — sáng hơn
+   *                        `nhan-manh` ở chế độ tối để đạt 4.5:1;
+   *   * `tren-nhan-manh` — chữ đặt TRÊN nền `nhan-manh`.
+   */
+  --color-nhan-manh: var(--t-nhan-manh);
+  --color-nhan-manh-dam: var(--t-nhan-manh-dam);
+  --color-nhan-manh-nen: var(--t-nhan-manh-nen);
+  --color-nhan-manh-chu: var(--t-nhan-manh-chu);
+  --color-tren-nhan-manh: var(--t-tren-nhan-manh);
+
+  /* Màu icon trạng thái ticket (`IconTrangThai` ở `vo/icon.tsx`). */
+  --color-tt-cho: var(--t-tt-cho);
+  --color-tt-dang-lam: var(--t-tt-dang-lam);
+  --color-tt-kiem-chung: var(--t-tt-kiem-chung);
+  --color-tt-xong: var(--t-tt-xong);
+  --color-tt-huy: var(--t-tt-huy);
+
+  /* Màu mức gấp Cần Chủ (`ChamMucGap` ở `vo/icon.tsx`). */
+  --color-gap-khan: var(--t-gap-khan);
+  --color-gap-hom-nay: var(--t-gap-hom-nay);
+  --color-gap-sau: var(--t-gap-sau);
+
+  /*
+   * **Sáu cặp màu nhãn** — mỗi cặp là một **nền** và một **chữ** đi với nhau.
+   * SPEC không có bảng màu nhãn (`cau-hoi-spec.md` #135): màu được **suy từ chữ
+   * của nhãn** bằng một băm ổn định (`vo/mau-the.ts`). Từng cặp được **đo tương
+   * phản** ở cả hai chế độ (lưới trong `test/vo-linear.test.tsx`).
+   */
+  --color-nhan1-nen: var(--t-nhan1-nen);
+  --color-nhan1-chu: var(--t-nhan1-chu);
+  --color-nhan2-nen: var(--t-nhan2-nen);
+  --color-nhan2-chu: var(--t-nhan2-chu);
+  --color-nhan3-nen: var(--t-nhan3-nen);
+  --color-nhan3-chu: var(--t-nhan3-chu);
+  --color-nhan4-nen: var(--t-nhan4-nen);
+  --color-nhan4-chu: var(--t-nhan4-chu);
+  --color-nhan5-nen: var(--t-nhan5-nen);
+  --color-nhan5-chu: var(--t-nhan5-chu);
+  --color-nhan6-nen: var(--t-nhan6-nen);
+  --color-nhan6-chu: var(--t-nhan6-chu);
+}
+
+/*
+ * Chữ, bo góc, bóng, chuyển động — giá trị của `THIET-KE.md`.
+ *
+ * `--font-sans`: Inter **chỉ khi máy đã cài sẵn** — không `@font-face`, không
+ * CDN, không gói font (lượt này cấm thêm thư viện). Không có Inter thì rơi về
+ * sans của hệ thống.
+ *
+ * `--text-sm` = 13px: cỡ cơ sở. Mã đã dùng `text-sm` khắp nơi, nên đổi token
+ * là đổi cả giao diện về một thang, không mỗi trang một cỡ.
+ *
+ * `--radius` = 6px: `rounded` trơn (nút, ô nhập, chip). Thẻ, menu, modal dùng
+ * `rounded-lg` (8px, mặc định của Tailwind).
+ */
+@theme {
+  --font-sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.5;
+  --radius: 6px;
+  --shadow-lg: 0 4px 16px rgb(0 0 0 / 0.16);
+  --default-transition-duration: 120ms;
+}
+
+/*
+ * Cột SÁNG — áp khi `<html data-theme="sang">`. (Chưa có JS thì KHÔNG phải cột
+ * này: xem khối tối bên dưới.)
+ */
+:root {
+  --t-n50: #fafafa;
+  --t-n100: #f5f5f5;
+  --t-n200: #e5e5e5;
+  --t-n300: #d4d4d4;
+  --t-n400: #a1a1a1;
+  /*
+   * `#6e6e6e`, không `#737373` của bảng Tailwind: chữ mờ (`text-neutral-500`)
+   * cũng xuất hiện **trên lớp hover** `--t-nen-noi`, và ở đó `#737373` chỉ đạt
+   * 4.2:1 — dưới mức AA cho chữ nhỏ. Có ca test ghim cả ba nền.
+   */
+  --t-n500: #6e6e6e;
+  --t-n600: #525252;
+  --t-n700: #404040;
+  --t-n800: #262626;
+  --t-n900: #171717;
+  --t-n950: #0a0a0a;
+
+  --t-nen: #ffffff;
+  --t-nen-lop: #fafafa;
+  --t-nen-noi: #f1f1f2;
+  --t-chu: #171717;
+  /** Bằng `--t-n500`, cùng lý do ghi ở đó. */
+  --t-chu-mo: #6e6e6e;
+  /** ≥ 4.5:1 trên `nen` và `nen-lop`; ≥ 3:1 trên lớp hover. Xem `THIET-KE.md`. */
+  --t-chu-mo-hon: #737373;
+  --t-vien: rgb(0 0 0 / 0.09);
+  --t-loi: #b91c1c;
+  --t-loi-nen: #fee2e2;
+  --t-canh: #a4530a;
+  --t-canh-nen: #fef3c7;
+  --t-tot: #047857;
+  --t-lop-phu: rgb(0 0 0 / 0.5);
+
+  --t-nhan-manh: #5e6ad2;
+  --t-nhan-manh-dam: #4e5ac0;
+  --t-nhan-manh-nen: #eef0fb;
+  --t-nhan-manh-chu: #4c58c0;
+  --t-tren-nhan-manh: #ffffff;
+
+  --t-tt-cho: #80848b;
+  --t-tt-dang-lam: #a87b00;
+  --t-tt-kiem-chung: #2f7fd6;
+  --t-tt-xong: #5e6ad2;
+  --t-tt-huy: #80848b;
+
+  --t-gap-khan: #c62828;
+  --t-gap-hom-nay: #a87b00;
+  --t-gap-sau: #80848b;
+
+  /* Sáu cặp màu nhãn — nền rất nhạt, chữ rất đậm. */
+  --t-nhan1-nen: #dbeafe;
+  --t-nhan1-chu: #1e3a8a;
+  --t-nhan2-nen: #ede9fe;
+  --t-nhan2-chu: #4c1d95;
+  --t-nhan3-nen: #d1fae5;
+  --t-nhan3-chu: #064e3b;
+  --t-nhan4-nen: #fef3c7;
+  --t-nhan4-chu: #713f12;
+  --t-nhan5-nen: #fce7f3;
+  --t-nhan5-chu: #831843;
+  --t-nhan6-nen: #e5e5e5;
+  --t-nhan6-chu: #333333;
+
+  color-scheme: light;
+}
+
+/*
+ * Cột TỐI — chế độ CHÍNH. Gắn vào hai bộ chọn:
+ *
+ *   * `[data-theme='toi']` — chủ đã chọn tối, hoặc chưa chọn gì (mặc định từ
+ *     29/10), hoặc "theo máy" giải ra tối — script nội tuyến của `index.html`
+ *     đặt trước khi React vẽ;
+ *   * `:root:not([data-theme])` — ca **chưa có JS** (script chưa chạy, bị chặn,
+ *     hoặc `localStorage` ném). Mặc định là tối nên vế này cũng tối, **không**
+ *     hỏi `prefers-color-scheme`: chưa có JS thì không đọc được lựa chọn nào,
+ *     và lựa chọn mặc định là tối.
+ */
+:root[data-theme='toi'],
+:root[data-theme='toi'] ::backdrop,
+:root:not([data-theme]),
+:root:not([data-theme]) ::backdrop {
+  --t-n50: #17181a;
+  --t-n100: #1e1f22;
+  --t-n200: #26272b;
+  --t-n300: #34363b;
+  --t-n400: #6b6f76;
+  --t-n500: #8a8f98;
+  --t-n600: #a9adb5;
+  --t-n700: #c8cad0;
+  --t-n800: #dfe0e4;
+  --t-n900: #ededef;
+  --t-n950: #f7f8f8;
+
+  --t-nen: #0f1011;
+  --t-nen-lop: #17181a;
+  --t-nen-noi: #1e1f22;
+  --t-chu: #ededef;
+  --t-chu-mo: #8a8f98;
+  /*
+   * `#7f838a`, không `#62666d` của bản mô tả: `#62666d` chỉ đạt 3.3:1 trên nền
+   * trang — số đếm và ngày vẫn là chữ chủ cần đọc. Nâng tới mức 4.5:1 trên
+   * `nen`/`nen-lop` (≥ 3:1 trên lớp hover). Lý do ghi ở `THIET-KE.md`.
+   */
+  --t-chu-mo-hon: #7f838a;
+  --t-vien: rgb(255 255 255 / 0.08);
+  --t-loi: #eb5757;
+  --t-loi-nen: #40181b;
+  --t-canh: #f2c94c;
+  --t-canh-nen: #3b2a06;
+  --t-tot: #4cb782;
+  /** Cùng giá trị cột sáng — lớp phủ không đảo theo chế độ. */
+  --t-lop-phu: rgb(0 0 0 / 0.5);
+
+  --t-nhan-manh: #5e6ad2;
+  --t-nhan-manh-dam: #4e5ac0;
+  --t-nhan-manh-nen: #1f2238;
+  --t-nhan-manh-chu: #8f98ec;
+  --t-tren-nhan-manh: #ffffff;
+
+  --t-tt-cho: #8a8f98;
+  --t-tt-dang-lam: #f2c94c;
+  --t-tt-kiem-chung: #4ea7fc;
+  --t-tt-xong: #5e6ad2;
+  --t-tt-huy: #6b6f76;
+
+  --t-gap-khan: #eb5757;
+  --t-gap-hom-nay: #f2c94c;
+  --t-gap-sau: #8a8f98;
+
+  /* Sáu cặp màu nhãn — nền rất tối, chữ rất nhạt (KHÔNG đảo cặp sáng). */
+  --t-nhan1-nen: #16284a;
+  --t-nhan1-chu: #bfdbfe;
+  --t-nhan2-nen: #2a1e4d;
+  --t-nhan2-chu: #ddd6fe;
+  --t-nhan3-nen: #0d3a2c;
+  --t-nhan3-chu: #a7f3d0;
+  --t-nhan4-nen: #3b2a06;
+  --t-nhan4-chu: #fcd34d;
+  --t-nhan5-nen: #45112c;
+  --t-nhan5-chu: #fbcfe8;
+  --t-nhan6-nen: #2a2a2f;
+  --t-nhan6-chu: #d9d9df;
+
+  color-scheme: dark;
+}
+
+/*
+ * Nền và chữ của **cả tài liệu**, không chỉ của vỏ: trang đăng nhập, trang
+ * "Không có trang này" và khoảng trống dưới chân trang cũng phải đúng chế độ.
+ */
+html {
+  background-color: var(--t-nen);
+}
+
+/*
+ * Vùng chạm tối thiểu ~44px trên điện thoại (SPEC mục 14 d.411): nút và ô chọn
+ * cao ít nhất 2.75rem dưới `md` (768px). Từ `md` trở lên giữ cỡ gọn như cũ.
+ * Đặt trong `@layer base` để một lớp tiện ích (`min-h-0`) vẫn ghi đè được khi
+ * một chỗ cần thật sự nhỏ.
+ */
+@layer base {
+  @media (max-width: 767px) {
+    button,
+    select,
+    [role='button'] {
+      min-height: 2.75rem;
+    }
+  }
+
+  /*
+   * **Focus ring dùng màu nhấn**, chỉ khi focus bằng bàn phím (`:focus-visible`)
+   * — bàn phím trước (THIET-KE.md). Một chỗ cho mọi phần tử; component không
+   * tự vẽ vòng focus riêng.
+   */
+  :focus-visible {
+    outline: 2px solid var(--t-nhan-manh);
+    outline-offset: 1px;
+  }
+
+  a {
+    text-underline-offset: 2px;
+  }
+}
+
+/*
+ * Mã ticket / T-số (`SAI-74`, `T-105`): xám, 12px, chữ số cùng bề rộng để cột
+ * mã thẳng hàng. Một tiện ích, không chép bốn thuộc tính ở mỗi chỗ.
+ */
+@utility ma-ticket {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--t-chu-mo);
+  font-variant-numeric: tabular-nums;
+}
+
+body {
+  background-color: var(--t-nen);
+  color: var(--t-chu);
+  font-family: var(--font-sans);
+  /* Cỡ cơ sở 13px — một thang, không mỗi trang một cỡ. */
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}

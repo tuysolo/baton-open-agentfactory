@@ -1,0 +1,40 @@
+{
+  "name": "baton",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Baton — nơi điều hành công việc cho một người chủ cùng một đội agent AI",
+  "workspaces": [
+    "packages/shared",
+    "packages/client",
+    "packages/cli",
+    "packages/api",
+    "packages/web"
+  ],
+  "scripts": {
+    "build": "npm run build:ts && npm run build:web",
+    "build:ts": "tsc --build packages/shared packages/client packages/cli packages/api",
+    "build:web": "vite build packages/web",
+    "typecheck": "tsc --build --force packages/shared packages/client packages/cli packages/api packages/cli/test && tsc -p packages/web",
+    "lint": "eslint .",
+    "test": "npm run test:api && npm run test:web",
+    "test:api": "vitest run --root packages/api",
+    "test:web": "vitest run --root packages/web",
+    "kiem-ban-build": "npm run build && vitest run --root packages/cli",
+    "do-hieu-nang": "vitest run --root packages/api --config hieu-nang/vitest.config.ts",
+    "do-hieu-nang-500": "vitest run --root packages/api --config hieu-nang/vitest-500.config.ts",
+    "clean": "tsc --build --clean packages/shared packages/client packages/cli packages/api packages/cli/test"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.19",
+    "@cloudflare/workers-types": "^4.20250204.0",
+    "@eslint/js": "^9.19.0",
+    "eslint": "^9.19.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.23.0",
+    "vitest": "~3.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
