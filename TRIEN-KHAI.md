@@ -449,7 +449,7 @@ trong mọi tiến trình của máy, dưới dạng chữ thường, trong mộ
 node packages/cli/dist/bin.js whoami
 ```
 
-Gõ nhiều thì thêm một alias: `alias baton='node ~/…/baton-open/packages/cli/dist/bin.js'`.
+Gõ nhiều thì thêm một alias: `alias baton='node ~/…/baton-open-agentfactory/packages/cli/dist/bin.js'`.
 Từ đây tài liệu viết `baton` cho ngắn.
 
 ---
