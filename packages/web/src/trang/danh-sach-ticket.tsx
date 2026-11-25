@@ -17,7 +17,7 @@
  * | d.415 `A` giao (chọn agent) trên ticket đang chọn | `phimA` → `HopGiaoViec` (`vo/giao-viec.tsx`) |
  * | d.398–401 nội dung chi tiết trong panel | `PanelChiTiet` → `ThanChiTietTicket` |
  *
- * ## Phần ngoài SPEC (brief BAT-6 đợt 2) — `cau-hoi-spec.md` #131–#136
+ * ## Phần ngoài SPEC (brief BAT-6 đợt 2) — `spec-questions.md` #131–#136
  *
  * | Vế của brief | Ở đâu | Câu hỏi SPEC |
  * |---|---|---|
@@ -233,7 +233,7 @@ export const CAU_KHONG_CO_DU_AN = 'Không có dự án này.';
  * thái khi tạo" cho phép (T-108 = B). SPEC mục 14 (T-111 = A, 29/10; BAT-64):
  * `+` cột Backlog mở hộp Tạo việc với **Backlog chọn sẵn**, `+` cột Cần làm mở
  * không tuỳ chọn (⇒ Cần làm, mặc định khi tạo). Lý do bốn cột kia không có: xem
- * ghi chú đầu cột ở `CotBang`; `cau-hoi-spec.md` #179, #180.
+ * ghi chú đầu cột ở `CotBang`; `spec-questions.md` #179, #180.
  */
 export const COT_CO_NUT_TAO: readonly TrangThaiTicket[] = ['backlog', 'todo'];
 
@@ -303,7 +303,7 @@ export const CAU_LOI_XEM_THEM = 'Không tải được trang tiếp theo. Danh s
  * dòng "Còn trang sau".
  *
  * Lọc nhanh Active/Backlog/All và "Ẩn Xong cũ" không gửi được xuống máy chủ
- * (`cau-hoi-spec.md` #132, #133), nên khi còn trang sau, "Backlog: 3" nghĩa là 3
+ * (`spec-questions.md` #132, #133), nên khi còn trang sau, "Backlog: 3" nghĩa là 3
  * **trong các dòng đã tải** (mỗi lần "Xem thêm" nối thêm một trang 200 dòng),
  * không phải 3 trong cả workspace. Một màn hình im lặng ở đó nói sai với chủ —
  * cùng lý lẽ làm dòng "Còn trang sau" tồn tại.
@@ -493,7 +493,7 @@ export function TrangDanhSachTicket({
 
   /*
    * **Hai phép lọc chạy ở máy khách**, trên trang đã tải: lọc nhanh
-   * Active/Backlog/All (`cau-hoi-spec.md` #133 — đường đọc chỉ nhận **một** mã
+   * Active/Backlog/All (`spec-questions.md` #133 — đường đọc chỉ nhận **một** mã
    * trạng thái) và "ẩn Xong cũ" (#132 — không có bộ lọc máy chủ nào cho nó).
    * Cả hai là **hàm thuần** ở `loc-ticket.ts`, và cả hai đi **trước** khi gom
    * nhóm, nên số đếm ở đầu mỗi cột là số đếm của thứ **đang thấy** — một cột ghi
@@ -790,7 +790,7 @@ export function TrangDanhSachTicket({
     <>
     <div inert={panel_phu_kin} className="flex flex-col gap-3 p-4 sm:p-6">
       {/*
-       * **Hàng tiêu đề đầu trang** (hệ thiết kế 29/10, `THIET-KE.md`): tiêu đề →
+       * **Hàng tiêu đề đầu trang** (hệ thiết kế 29/10, `DESIGN.md`): tiêu đề →
        * tab-pill lọc nhanh + Lọc + Ẩn Xong cũ → hai nút kiểu xem bên phải. Không
        * đẩy lên thanh trên (không portal/context — brief UI-B).
        */}
@@ -1442,7 +1442,7 @@ function ThanhChonNhieu({
    * **Giá trị chờ** của ba ô (sửa theo reviewer BAT-35; BAT-39). Ô KHÔNG áp ở
    * `onChange`: trên Chrome/Edge Windows và Firefox, `↑`/`↓` trên một `<select>`
    * đang đóng bắn `change` ngay — một phím lỡ tay sẽ áp cho cả tập thẻ. Ô cũng
-   * KHÔNG áp ở `Enter` (BAT-39, `cau-hoi-spec.md` #164): trên Chromium, `Enter` để
+   * KHÔNG áp ở `Enter` (BAT-39, `spec-questions.md` #164): trên Chromium, `Enter` để
    * **đóng danh sách đã mở** (sau khi chọn bằng mũi tên) vẫn tới `keydown` của
    * `<select>` — 19/10 đã áp nhầm "Đang làm" cho 2 thẻ trên production. Nên ô
    * (chuột, mũi tên, Space, gõ chữ, `Enter`) **chỉ đặt giá trị chờ**; **chỉ nút
@@ -1670,7 +1670,7 @@ export function hopXacNhanApDangMo(): boolean {
 }
 
 /**
- * **Hộp "Áp cho N thẻ?"** (BAT-38, `cau-hoi-spec.md` #159, Chủ chốt T-38 = A) —
+ * **Hộp "Áp cho N thẻ?"** (BAT-38, `spec-questions.md` #159, Chủ chốt T-38 = A) —
  * chỉ mở khi N ≥ `NGUONG_HOI_AP`. Cùng khuôn hộp xác nhận của `trang/token-agent.tsx`:
  * `role="dialog"` + `aria-modal`, focus vào **Huỷ** khi mở (Enter vô ý không là
  * "xác nhận" cho N thẻ), `Esc` = Huỷ (trừ lúc IME), Tab vòng trong hộp, phím ngoài
@@ -2102,7 +2102,7 @@ function ThanhNhanh({
         )}
       </div>
 
-      {/* Ẩn/hiện **Xong cũ** — `cau-hoi-spec.md` #132. Không phải bộ lọc của
+      {/* Ẩn/hiện **Xong cũ** — `spec-questions.md` #132. Không phải bộ lọc của
           d.396 (máy chủ không có nó), nên nó ở ngoài menu. */}
       <button
         type="button"
@@ -2245,7 +2245,7 @@ function ThanhLocTicket({
        * không có bảng mã nào, và không có đường API nào liệt kê chúng. Một ô chọn
        * ở đây sẽ phải đoán danh sách.
        *
-       * BAT-41 (tạm, `cau-hoi-spec.md` #167): danh sách không có ô tìm chữ, nên
+       * BAT-41 (tạm, `spec-questions.md` #167): danh sách không có ô tìm chữ, nên
        * chủ hay gõ mã ticket vào đây. Giá trị **đúng dạng mã** ⇒ thêm một dòng
        * "Mở MÃ" tới trang chi tiết. Chỉ là dòng thêm: lọc nhãn giữ nguyên (giá
        * trị vẫn lên URL, vẫn lọc). Không gọi API — trang chi tiết tự lo 404.
@@ -2588,7 +2588,7 @@ export function NoiDungThe({
    */
   ten_nguoi_cam?: string | null;
   /**
-   * Hình vẽ (hệ thiết kế 29/10, `THIET-KE.md`) — **cùng** tám thứ, hai bố cục:
+   * Hình vẽ (hệ thiết kế 29/10, `DESIGN.md`) — **cùng** tám thứ, hai bố cục:
    *   * `'the'` (mặc định — bảng, Tổng quan): hàng đầu icon trạng thái + mã →
    *     tiêu đề 2 dòng → hàng chip nhỏ, thời gian xám ở cuối;
    *   * `'dong'` (danh sách): MỘT hàng ~36px — icon trạng thái trước tiêu đề,
@@ -3005,7 +3005,7 @@ function BangKeo({
    * **Sáu cột** (Backlog đầu — T-111 A, BAT-64), không bảy trạng thái —
    * `gomTheoCotChu`. `duplicate` hiện trong cột Huỷ. Đường tới **bảy** trạng thái
    * nay là **panel chi tiết** và phím `S` (d.404), không còn ô "Chuyển cột" trên
-   * thẻ. Xem `cau-hoi-spec.md` #131, #137.
+   * thẻ. Xem `spec-questions.md` #131, #137.
    */
   const nhom = useMemo(() => gomTheoCotChu(trang.items), [trang.items]);
 
@@ -3104,7 +3104,7 @@ function CotBang({
        * Trạng thái của hộp ở **Cần làm**, mặc định khi tạo (mục 4); cột Backlog
        * (BAT-64, T-111 A) mở với **Backlog chọn sẵn** — cùng đường
        * `taoViec({ trang_thai: 'backlog' })` với `+` nhóm Backlog kiểu Danh sách
-       * (BAT-63, vẫn giữ). `cau-hoi-spec.md` #179, #180.
+       * (BAT-63, vẫn giữ). `spec-questions.md` #179, #180.
        *
        * Bốn cột còn lại **không** có `+`: mục 4 "Trạng thái khi tạo" cấm đặt
        * chúng lúc tạo (`INVALID_INPUT`), vì mỗi cột có luật riêng mà một ticket

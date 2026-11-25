@@ -47,7 +47,7 @@ function ghepUrl(baseUrl: string, path: string, query: YeuCauBaton['query']): st
  * **Lỗi hạ tầng ra `INTERNAL`, tức mã thoát 2.** Hai ca đi nhánh này: HTTP
  * **≥ 500**, và thân phản hồi **không** phải dạng lỗi Baton (một gateway hay CDN
  * trả HTML). Bản đầu dựng `INVALID_INPUT` cho ca thứ hai, tức **mã thoát 1 "lỗi
- * nghiệp vụ"** — đúng cái hại mà `quyet-dinh.md` 01/10 viện ra để đẩy `INTERNAL`
+ * nghiệp vụ"** — đúng cái hại mà `decisions.md` 01/10 viện ra để đẩy `INTERNAL`
  * lên mã 2: "ra mã 1 thì agent tưởng dữ liệu mình gửi sai và đi sửa dữ liệu
  * mãi". Một `502` kèm HTML không phải lỗi dữ liệu của người gọi, và thử lại y
  * nguyên là việc đúng nên làm.

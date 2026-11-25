@@ -259,7 +259,7 @@ describe('mục 8 d.235–239 — 4 loại mục tạo được, mỗi loại đ
 });
 
 /* ================================================================== *
- * A2. Lệnh đi được với MỌI loại — d.250 vs d.237; `cau-hoi-spec.md` #130
+ * A2. Lệnh đi được với MỌI loại — d.250 vs d.237; `spec-questions.md` #130
  * ================================================================== */
 
 describe('mục 8 d.250 — MỌI loại mang được lệnh, và đường đọc trả lại đúng lệnh đó', () => {
@@ -732,7 +732,7 @@ describe('mục 8 d.229 + bảng quyền mục 3 — ai tạo được mục C�
     expect(dem).toBeNull();
   });
 
-  // BAT-58 (19.12 câu 15, `cau-hoi-spec.md` #176): trước là 403; nay ticket người
+  // BAT-58 (19.12 câu 15, `spec-questions.md` #176): trước là 403; nay ticket người
   // gọi không thấy ra 404 GIỐNG HỆT id bịa — 403 cho id thật là một máy dò.
   it('ticket liên quan ngoài phạm vi dự án của agent → 404 giống hệt id bịa (BAT-58), không tạo mục', async () => {
     const tk_khac = await dungTicket(PJ_KHAC, 1, 'Việc của dự án khác');

@@ -41,7 +41,7 @@
  * chính việc **chủ đổi `trang_thai`**" — danh sách trừ có **một** mục, và ba
  * lệnh của file này không phải nó. Đường **tạo** mục (`handlerTaoCanChu`) theo
  * đúng câu 25; đường **xử lý** thì cố ý **không**, và đó là một lệch phải do chủ
- * chốt, không do file này tự quyết: **`cau-hoi-spec.md` #75**.
+ * chốt, không do file này tự quyết: **`spec-questions.md` #75**.
  *
  * Lý lẽ của hướng đang cài: một mục đã được tạo lúc dự án còn sống là một **câu
  * hỏi đang treo trước mặt chủ**, và nếu chủ không trả lời được nó thì (a) nó nằm
@@ -252,8 +252,8 @@ export function cauLenhPhienThoiCho(
  *     `can_chu`, không chuỗi `'T-18'`. Bảng `nhat_ky_can_cu` của 0014 được dựng
  *     đúng cho chỗ này.
  *
- * **"Vì sao"** là trường bắt buộc của mục 10 (d.306, `cau-hoi-spec.md` #71),
- * nhưng d.279 **không** nói dòng tự sinh lấy "vì sao" ở đâu (`cau-hoi-spec.md`
+ * **"Vì sao"** là trường bắt buộc của mục 10 (d.306, `spec-questions.md` #71),
+ * nhưng d.279 **không** nói dòng tự sinh lấy "vì sao" ở đâu (`spec-questions.md`
  * **#74**). Mặc định ở đây là
  * **tiêu đề của chính mục** — nó đúng nghĩa là lý do tồn tại của quyết định
  * ("vì có câu hỏi này"), nó luôn có (tiêu đề là trường bắt buộc của d.233), và

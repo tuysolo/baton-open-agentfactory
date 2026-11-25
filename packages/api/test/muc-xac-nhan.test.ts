@@ -481,7 +481,7 @@ describe('19.12 câu 57 gạch 3 — Bỏ qua và việc dựng lại', () => {
     /*
      * **GHIM: một lần dựng lại TỰ ĐỘNG không ghi dòng Nhật ký nào, cũng không
      * bình luận "mở lại".** Đây là một **lệch có chủ ý** so với 19.9 **d.542**,
-     * khai ở `cau-hoi-spec.md` #78 — lý do nằm trong khối chú thích của
+     * khai ở `spec-questions.md` #78 — lý do nằm trong khối chú thích của
      * `cauDungLai` (`muc-xac-nhan.ts`): `nhat_ky.nguoi_loai` không có `'system'`,
      * nên nửa Nhật ký của d.542 chỉ viết được bằng cách gán cho **chủ**, một việc
      * chủ không làm, và d.309 làm dòng đó **vĩnh viễn**.

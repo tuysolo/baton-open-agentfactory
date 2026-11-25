@@ -1,8 +1,8 @@
-<title>Bản đồ dự án Chủ</title>
+<title>Owner project map</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: 1) WIP + Cần Chủ  2) bản đồ (4 kiểu) | thẻ dự án chia Đang đẩy / Hàng chờ / Tạm dừng, có hill chart  3) dải Khu vực duy trì (Area) tách khỏi dự án */
+/* Layout: 1) WIP + Needs Owner  2) map (4 styles) | project cards split into Pushing / Queue / Paused, with hill chart  3) Maintenance areas strip (Area) separated from projects */
 :root{
   --bg:#f7f6f2; --panel:#ffffff; --fg:#1d1f24; --muted:#6b6f7a; --line:#e3e1da;
   --accent:#2f4bd8; --accent-bg:#e8ecfb;
@@ -81,7 +81,7 @@ h1{font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balan
 .card h3{margin:0;font-size:15px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap;letter-spacing:.03em}
 .pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.wait{background:var(--wait-bg);color:var(--wait)}.pill.pause{background:var(--pause-bg);color:var(--pause)}
-.row{display:grid;grid-template-columns:72px 1fr;gap:8px;margin-top:8px;font-size:13.5px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:8px;margin-top:8px;font-size:13.5px}
 .row dt{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
 .row dd{margin:0;min-width:0}
 .row dd.need{color:var(--wait);font-weight:500}
@@ -105,8 +105,8 @@ h1{font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balan
 <div class="wrap">
   <header class="head">
     <div>
-      <h1>Bản đồ dự án</h1>
-      <p class="sub">Chỉ dự án (có đích, có kết thúc) mới lên bản đồ. Việc duy trì dài hạn nằm ở dải dưới cùng. Tối đa 3 dự án được đẩy mạnh cùng lúc, phần còn lại ở hàng chờ.</p>
+      <h1>Project map</h1>
+      <p class="sub">Only projects (with a goal and an end) go on the map. Long-term maintenance work sits in the strip at the bottom. At most 3 projects are pushed hard at once, the rest are in the queue.</p>
     </div>
     <div class="wip" id="wip"></div>
   </header>
@@ -116,96 +116,96 @@ h1{font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balan
   <div class="main">
     <section class="map">
       <div class="tabs" role="tablist">
-        <button type="button" role="tab" data-view="bubble" aria-selected="false">Cây tròn</button>
+        <button type="button" role="tab" data-view="bubble" aria-selected="false">Radial tree</button>
         <button type="button" role="tab" data-view="mindmap" aria-selected="false">Mind map</button>
-        <button type="button" role="tab" data-view="treemap" aria-selected="true">Ô vuông</button>
-        <button type="button" role="tab" data-view="icicle" aria-selected="false">Thanh tầng</button>
-        <button type="button" role="tab" data-view="sunburst" aria-selected="false">Vòng tròn</button>
+        <button type="button" role="tab" data-view="treemap" aria-selected="true">Squares</button>
+        <button type="button" role="tab" data-view="icicle" aria-selected="false">Tiered bars</button>
+        <button type="button" role="tab" data-view="sunburst" aria-selected="false">Circle</button>
       </div>
       <p class="view-note" id="view-note"></p>
       <div class="ctl" id="ctl" hidden>
-        <button type="button" data-act="back" id="btn-back" hidden>← Quay lại bản đồ</button>
-        <button type="button" data-act="focus">Chỉ giữ 3 đang đẩy</button>
-        <button type="button" data-act="open">Mở hết</button>
-        <button type="button" data-act="close">Thu gọn hết</button>
+        <button type="button" data-act="back" id="btn-back" hidden>← Back to the map</button>
+        <button type="button" data-act="focus">Keep only the 3 being pushed</button>
+        <button type="button" data-act="open">Expand all</button>
+        <button type="button" data-act="close">Collapse all</button>
       </div>
       <div id="viz"></div>
       <div class="legend">
-        <span><i class="dot ok"></i>Đang chạy</span>
-        <span><i class="dot wait"></i>Chờ Chủ</span>
-        <span><i class="dot pause"></i>Tạm dừng</span>
-        <span><i class="dot dim"></i>Mờ = hàng chờ, không đẩy</span>
+        <span><i class="dot ok"></i>Running</span>
+        <span><i class="dot wait"></i>Waiting for Owner</span>
+        <span><i class="dot pause"></i>Paused</span>
+        <span><i class="dot dim"></i>Dimmed = queue, not pushed</span>
       </div>
-      <p class="hint" id="hint">Đang xem toàn bộ. Bấm vào một mảng để lọc.</p>
+      <p class="hint" id="hint">Viewing everything. Click a domain to filter.</p>
     </section>
 
     <section class="panel">
       <div class="panel-head">
-        <h2 id="panel-title">Tất cả dự án</h2>
-        <button type="button" id="reset" hidden>← Xem tất cả</button>
+        <h2 id="panel-title">All projects</h2>
+        <button type="button" id="reset" hidden>← View all</button>
       </div>
       <div id="lanes"></div>
     </section>
   </div>
 
   <section class="areas">
-    <h2 id="areas-title">Khu vực duy trì</h2>
-    <p>Trách nhiệm dài hạn, không có ngày kết thúc (theo PARA gọi là Area). Không chiếm chỗ trên bản đồ, chỉ cần biết đang ổn hay cần để mắt.</p>
+    <h2 id="areas-title">Maintenance areas</h2>
+    <p>Long-term responsibilities with no end date (called an Area in PARA). They take no space on the map; you only need to know whether they are fine or need watching.</p>
     <div class="chips" id="areas"></div>
   </section>
 
-  <p class="note">Mockup tĩnh với dữ liệu mẫu hư cấu, chưa nối Baton. Việc chọn 3 dự án đẩy mạnh, mức ưu tiên và vị trí trên đồi chỉ là ví dụ.</p>
+  <p class="note">Static mockup with fictional sample data, not connected to Baton. The choice of the 3 projects pushed hard, the priority levels and the positions on the hill are only examples.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 const WIP_LIMIT=3;
-// blocks: s = done | doing | todo; h = vị trí trên đồi 0..100 (0–50 đang tìm cách, 50–100 đã rõ cách, đang làm)
+// blocks: s = done | doing | todo; h = position on the hill 0..100 (0–50 figuring out how, 50–100 the way is clear, doing it)
 const DATA = {
-  name:"Chủ", children:[
-    {name:"Cửa hàng", hue:220, children:[
-      {name:"Web bán hàng", status:"wait", priority:5, push:true, doing:"Giỏ hàng và trang thanh toán", need:"Chọn cổng thanh toán", next:"Mở cho 10 khách đầu tiên", owner:"M-Shop",
-        blocks:[{n:"Khung trang + đăng nhập",s:"done"},{n:"Danh mục sản phẩm",s:"done"},{n:"Giỏ hàng",s:"doing",h:38},{n:"Thanh toán",s:"todo"},{n:"Ra mắt",s:"todo"}]},
-      {name:"Bot chăm sóc khách", status:"ok", priority:2, doing:"Đã chạy, đang theo dõi lỗi", need:"", next:"Hết 2 tuần theo dõi → chuyển sang duy trì", owner:"W-builder"},
+  name:"Owner", children:[
+    {name:"Store", hue:220, children:[
+      {name:"Online store", status:"wait", priority:5, push:true, doing:"Cart and checkout page", need:"Choose a payment gateway", next:"Open to the first 10 customers", owner:"M-Shop",
+        blocks:[{n:"Page shell + login",s:"done"},{n:"Product catalog",s:"done"},{n:"Cart",s:"doing",h:38},{n:"Checkout",s:"todo"},{n:"Launch",s:"todo"}]},
+      {name:"Customer care bot", status:"ok", priority:2, doing:"Live, watching for errors", need:"", next:"After 2 weeks of monitoring → move to maintenance", owner:"W-builder"},
     ]},
-    {name:"Khoá học", hue:280, children:[
-      {name:"Khoá học trực tuyến", status:"ok", priority:4, push:true, doing:"Quay xong 6/10 bài", need:"", next:"Mở đăng ký đợt 1", owner:"Chủ + CoS",
-        blocks:[{n:"Đề cương",s:"done"},{n:"Bài 1–3",s:"done"},{n:"Bài 4–6",s:"done"},{n:"Bài 7–10",s:"doing",h:72},{n:"Trang đăng ký",s:"todo"},{n:"Mở đợt 1",s:"todo"}]},
-      {name:"Cộng đồng học viên", status:"wait", priority:2, doing:"Soạn nội quy nhóm", need:"Duyệt nội quy", next:"Mời 20 người đầu", owner:"Chủ"},
+    {name:"Course", hue:280, children:[
+      {name:"Online course", status:"ok", priority:4, push:true, doing:"6/10 lessons recorded", need:"", next:"Open round 1 enrolment", owner:"Owner + CoS",
+        blocks:[{n:"Syllabus",s:"done"},{n:"Lessons 1–3",s:"done"},{n:"Lessons 4–6",s:"done"},{n:"Lessons 7–10",s:"doing",h:72},{n:"Enrolment page",s:"todo"},{n:"Open round 1",s:"todo"}]},
+      {name:"Student community", status:"wait", priority:2, doing:"Drafting the group rules", need:"Approve the rules", next:"Invite the first 20 people", owner:"Owner"},
     ]},
-    {name:"Nghiên cứu", hue:30, children:[
-      {name:"Khảo sát thị trường", status:"wait", priority:3, push:true, doing:"Phỏng vấn xong 8 khách", need:"Chọn 1 hướng để build", next:"Bản đặc tả v0.1", owner:"Chủ",
-        blocks:[{n:"Danh sách đối thủ",s:"done"},{n:"Phỏng vấn khách",s:"done"},{n:"Chọn hướng",s:"doing",h:30},{n:"Đặc tả",s:"todo"},{n:"Bán thử",s:"todo"}]},
-      {name:"Phân rã đối thủ A", status:"pause", priority:1, doing:"Tạm dừng", need:"", next:"Khi Chủ gọi", owner:"—"},
+    {name:"Research", hue:30, children:[
+      {name:"Market survey", status:"wait", priority:3, push:true, doing:"8 customers interviewed", need:"Choose 1 direction to build", next:"Spec v0.1", owner:"Owner",
+        blocks:[{n:"Competitor list",s:"done"},{n:"Customer interviews",s:"done"},{n:"Choose a direction",s:"doing",h:30},{n:"Spec",s:"todo"},{n:"Trial sale",s:"todo"}]},
+      {name:"Competitor A teardown", status:"pause", priority:1, doing:"Paused", need:"", next:"When the Owner calls", owner:"—"},
     ]},
-    {name:"App cá nhân", hue:200, children:[
-      {name:"App ghi chú", status:"wait", priority:3, doing:"Đợt 3 đã xong", need:"Duyệt đợt 4", next:"Đợt 4", owner:"Chủ",
-        blocks:[{n:"Đợt 1",s:"done"},{n:"Đợt 2",s:"done"},{n:"Đợt 3",s:"done"},{n:"Đợt 4",s:"doing",h:18}]},
-      {name:"App thu chi", status:"ok", priority:2, doing:"Đang dùng thử 1 tuần", need:"", next:"Sửa theo góp ý", owner:"W-builder"},
+    {name:"Personal apps", hue:200, children:[
+      {name:"Notes app", status:"wait", priority:3, doing:"Batch 3 is done", need:"Approve batch 4", next:"Batch 4", owner:"Owner",
+        blocks:[{n:"Batch 1",s:"done"},{n:"Batch 2",s:"done"},{n:"Batch 3",s:"done"},{n:"Batch 4",s:"doing",h:18}]},
+      {name:"Expense tracker app", status:"ok", priority:2, doing:"In a 1-week trial", need:"", next:"Fix per feedback", owner:"W-builder"},
     ]},
-    {name:"Nội dung", hue:350, children:[
-      {name:"Blog kể chuyện build", status:"wait", priority:3, doing:"Đang soạn bài", need:"Duyệt bài đầu", next:"Bài đầu tiên", owner:"Chủ + CoS"},
-      {name:"Kênh video ngắn", status:"pause", priority:1, doing:"Kế hoạch 30 ngày đã xong", need:"Quyết ngân sách", next:"Khi có quyết định", owner:"—"},
+    {name:"Content", hue:350, children:[
+      {name:"Build story blog", status:"wait", priority:3, doing:"Drafting posts", need:"Approve the first post", next:"First post", owner:"Owner + CoS"},
+      {name:"Short video channel", status:"pause", priority:1, doing:"30-day plan is done", need:"Decide the budget", next:"When there is a decision", owner:"—"},
     ]},
   ]};
 
-// Area: không có đích, chỉ có "ổn / cần để mắt"
+// Area: no goal, only "fine / needs watching"
 const AREAS=[
-  {name:"Sổ sách hằng tháng", group:"Cửa hàng", health:"ok", note:"Đầu tháng"},
-  {name:"Trả lời khách", group:"Cửa hàng", health:"wait", note:"Chủ duyệt tay từng tin"},
-  {name:"Báo cáo tuần", group:"Nội dung", health:"ok", note:"Sáng thứ 4"},
-  {name:"Đội CoS → Manager → Worker", group:"Hạ tầng", health:"wait", note:"Phiên duyệt tối nay"},
-  {name:"Baton", group:"Hạ tầng", health:"ok", note:"Đang chạy"},
-  {name:"Sao lưu", group:"Hạ tầng", health:"ok", note:"Tự chạy mỗi đêm"},
+  {name:"Monthly bookkeeping", group:"Store", health:"ok", note:"Start of the month"},
+  {name:"Replying to customers", group:"Store", health:"wait", note:"Owner approves each message by hand"},
+  {name:"Weekly report", group:"Content", health:"ok", note:"Wednesday morning"},
+  {name:"CoS → Manager → Worker team", group:"Infrastructure", health:"wait", note:"Approval session tonight"},
+  {name:"Baton", group:"Infrastructure", health:"ok", note:"Running"},
+  {name:"Backup", group:"Infrastructure", health:"ok", note:"Runs by itself every night"},
 ];
 
-const LABEL={ok:"Đang chạy",wait:"Chờ Chủ",pause:"Tạm dừng"};
+const LABEL={ok:"Running",wait:"Waiting for Owner",pause:"Paused"};
 const NOTES={
-  bubble:"Cây tròn: bong bóng to nhỏ theo ưu tiên, vòng xanh quanh bong bóng = phần khối việc đã xong. Bấm mảng để thu gọn/mở; bấm dự án để phóng vào các khối việc của nó.",
-  mindmap:"Sơ đồ cây: Chủ ở gốc, nhánh là mảng, lá là dự án. Chữ đậm = ưu tiên cao, mờ = hàng chờ.",
-  treemap:"Ô vuông: diện tích = ưu tiên, màu = trạng thái. Ô sáng rõ = đang đẩy, ô mờ = hàng chờ.",
-  icicle:"Thanh tầng: cột trái là mảng, cột phải là dự án. Đọc như mục lục.",
-  sunburst:"Vòng tròn: gọn, đẹp, nhưng chữ xoay theo cung."
+  bubble:"Radial tree: bubbles sized by priority, the green ring around a bubble = the share of work blocks done. Click a domain to collapse/expand; click a project to zoom into its work blocks.",
+  mindmap:"Tree diagram: the Owner at the root, branches are domains, leaves are projects. Bold text = high priority, dimmed = queue.",
+  treemap:"Squares: area = priority, colour = status. A bright cell = being pushed, a dimmed cell = queue.",
+  icicle:"Tiered bars: the left column is domains, the right column is projects. Reads like a table of contents.",
+  sunburst:"Circle: compact, good-looking, but the text rotates along the arc."
 };
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const allProjects=DATA.children.flatMap(g=>g.children.map(p=>({...p,group:g.name})));
@@ -218,17 +218,17 @@ const groupText=d=>`hsl(${d.data.hue} 35% ${isDark()?80:30}%)`;
 const pushing=allProjects.filter(p=>p.push);
 document.getElementById("wip").innerHTML=
   `<div class="slots">${Array.from({length:Math.max(WIP_LIMIT,pushing.length)},(_,i)=>`<i class="${i<pushing.length?(i>=WIP_LIMIT?"over":"on"):""}"></i>`).join("")}</div>
-   <div><b>${pushing.length}/${WIP_LIMIT}</b> đang đẩy mạnh<small>Muốn đẩy thêm một dự án thì phải đưa một dự án về hàng chờ.</small></div>`;
+   <div><b>${pushing.length}/${WIP_LIMIT}</b> being pushed hard<small>To push one more project, you must move one project back to the queue.</small></div>`;
 
-// Cần Chủ: dự án + area
-const needs=[...allProjects.filter(p=>p.need).map(p=>({...p,push:!!p.push})),...AREAS.filter(a=>a.health==="wait").map(a=>({name:a.name,need:a.note,group:a.group+" · duy trì"}))];
+// Needs Owner: projects + areas
+const needs=[...allProjects.filter(p=>p.need).map(p=>({...p,push:!!p.push})),...AREAS.filter(a=>a.health==="wait").map(a=>({name:a.name,need:a.note,group:a.group+" · maintenance"}))];
 needs.sort((a,b)=>(b.push?1:0)-(a.push?1:0));
 document.getElementById("alert").innerHTML=
-  `<h2>Cần Chủ quyết · ${needs.length} việc</h2><ul>`+
-  needs.map(p=>`<li><strong>${p.name}</strong>: ${p.need} <span>(${p.group}${p.push?" · đang đẩy":""})</span></li>`).join("")+`</ul>`;
+  `<h2>Needs Owner decision · ${needs.length} items</h2><ul>`+
+  needs.map(p=>`<li><strong>${p.name}</strong>: ${p.need} <span>(${p.group}${p.push?" · pushing":""})</span></li>`).join("")+`</ul>`;
 
 // Areas
-document.getElementById("areas-title").textContent=`Khu vực duy trì · ${AREAS.length}`;
+document.getElementById("areas-title").textContent=`Maintenance areas · ${AREAS.length}`;
 document.getElementById("areas").innerHTML=AREAS.map(a=>`<span class="chip"><i class="dot ${a.health}"></i>${a.name}<small>${a.note}</small></span>`).join("");
 
 // Hill chart
@@ -241,56 +241,56 @@ function hillSVG(blocks){
   return `<svg viewBox="0 -4 ${W} ${H+6}">
     <line x1="${W/2}" y1="8" x2="${W/2}" y2="52" stroke="${css("--line")}" stroke-dasharray="2 3"/>
     <path d="${d} L${W},52 L0,52 Z" fill="${css("--bg")}"/><path d="${d}" fill="none" stroke="${css("--line")}" stroke-width="1.5"/>
-    ${todo?`<circle cx="4" cy="50" r="4" fill="${css("--pause")}"/><text x="11" y="54" font-size="8" fill="${css("--muted")}">${todo} chưa tới</text>`:""}
-    ${done?`<circle cx="196" cy="50" r="4" fill="${css("--ok")}"/><text x="189" y="54" font-size="8" fill="${css("--muted")}" text-anchor="end">${done} xong</text>`:""}
+    ${todo?`<circle cx="4" cy="50" r="4" fill="${css("--pause")}"/><text x="11" y="54" font-size="8" fill="${css("--muted")}">${todo} not reached</text>`:""}
+    ${done?`<circle cx="196" cy="50" r="4" fill="${css("--ok")}"/><text x="189" y="54" font-size="8" fill="${css("--muted")}" text-anchor="end">${done} done</text>`:""}
     ${dots}
-    <text x="4" y="4" font-size="7.5" fill="${css("--muted")}">TÌM CÁCH</text>
-    <text x="196" y="4" font-size="7.5" fill="${css("--muted")}" text-anchor="end">ĐANG LÀM XONG</text>
+    <text x="4" y="4" font-size="7.5" fill="${css("--muted")}">FIGURING IT OUT</text>
+    <text x="196" y="4" font-size="7.5" fill="${css("--muted")}" text-anchor="end">GETTING IT DONE</text>
   </svg>`;
 }
-function hillText(b){ if(!b) return "—"; return b.h<50?`<b>${b.n}</b> · sườn trái, chưa rõ cách làm`:`<b>${b.n}</b> · sườn phải, đã rõ cách`; }
+function hillText(b){ if(!b) return "—"; return b.h<50?`<b>${b.n}</b> · left slope, the way is not yet clear`:`<b>${b.n}</b> · right slope, the way is clear`; }
 
-// Thẻ dự án theo làn
+// Project cards by lane
 const lanes=document.getElementById("lanes"), title=document.getElementById("panel-title"),
       reset=document.getElementById("reset"), hint=document.getElementById("hint");
 const card=p=>`
   <article class="card ${p.status} ${p.push?"":"maintain"}" data-name="${p.name}">
     <h3><span>${p.name}</span><span class="pill ${p.status}">${LABEL[p.status]}</span></h3>
     <dl class="row">
-      <dt>Đang làm</dt><dd>${p.doing}</dd>
-      <dt>Chờ Chủ</dt><dd class="${p.need?"need":""}">${p.need||"Không"}</dd>
-      <dt>Mốc tới</dt><dd>${p.next}</dd>
+      <dt>In progress</dt><dd>${p.doing}</dd>
+      <dt>Waiting for Owner</dt><dd class="${p.need?"need":""}">${p.need||"None"}</dd>
+      <dt>Next milestone</dt><dd>${p.next}</dd>
     </dl>
     ${p.blocks?`<div class="hill">${hillSVG(p.blocks)}<div class="hill-label"><span>${hillText(p.blocks.find(b=>b.s==="doing"))}</span><span>${p.blocks.filter(b=>b.s==="done").length}/${p.blocks.length}</span></div></div>`:""}
-    <div class="meta"><span>${p.group}</span><span>${p.owner} · ưu tiên ${p.priority}</span></div>
+    <div class="meta"><span>${p.group}</span><span>${p.owner} · priority ${p.priority}</span></div>
   </article>`;
 function renderLanes(list,heading){
   title.textContent=heading;
   const L=[
-    {cls:"push",t:"Đang đẩy mạnh",items:list.filter(p=>p.push)},
-    {cls:"next",t:"Hàng chờ · chạy chậm, không mở việc mới",items:list.filter(p=>!p.push&&p.status!=="pause")},
-    {cls:"pause",t:"Tạm dừng",items:list.filter(p=>!p.push&&p.status==="pause")},
+    {cls:"push",t:"Being pushed hard",items:list.filter(p=>p.push)},
+    {cls:"next",t:"Queue · running slowly, no new work opened",items:list.filter(p=>!p.push&&p.status!=="pause")},
+    {cls:"pause",t:"Paused",items:list.filter(p=>!p.push&&p.status==="pause")},
   ].filter(l=>l.items.length);
   lanes.innerHTML=L.map(l=>`<section class="lane ${l.cls}"><h3 class="lane-title">${l.t} <b>${l.items.length}</b></h3><div class="cards">${l.items.map(card).join("")}</div></section>`).join('<div style="height:16px"></div>');
 }
-renderLanes(allProjects,"Tất cả dự án");
+renderLanes(allProjects,"All projects");
 
-// Chọn mảng
+// Select a domain
 let selected=null, applyDim=()=>{};
 function select(grpName){
   selected = (selected===grpName)?null:grpName;
   applyDim();
   if(selected){
     renderLanes(allProjects.filter(p=>p.group===selected),selected);
-    hint.textContent=`Đang lọc: ${selected}. Bấm lại để bỏ lọc.`; reset.hidden=false;
+    hint.textContent=`Filtering: ${selected}. Click again to clear the filter.`; reset.hidden=false;
   }else{
-    renderLanes(allProjects,"Tất cả dự án");
-    hint.textContent="Đang xem toàn bộ. Bấm vào một mảng để lọc."; reset.hidden=true;
+    renderLanes(allProjects,"All projects");
+    hint.textContent="Viewing everything. Click a domain to filter."; reset.hidden=true;
   }
 }
 reset.addEventListener("click",()=>select(selected));
 const inSel=d=>!selected||d.data.name===selected||(d.parent&&d.parent.data.name===selected);
-const base=d=>d.depth===2&&!d.data.push?.45:1;      // hàng chờ thì mờ
+const base=d=>d.depth===2&&!d.data.push?.45:1;      // queued projects are dimmed
 const dimOf=d=>inSel(d)?base(d):.12;
 const grpOf=d=>d.depth===1?d.data.name:d.parent.data.name;
 const trunc=(s,n)=>s.length>n?s.slice(0,n-1)+"…":s;
@@ -307,7 +307,7 @@ function drawTreemap(){
   const leaf=svg.selectAll("g.leaf").data(root.leaves()).join("g").attr("class","cell").on("click",(e,d)=>select(d.parent.data.name));
   leaf.append("rect").attr("x",d=>d.x0).attr("y",d=>d.y0).attr("width",d=>d.x1-d.x0).attr("height",d=>d.y1-d.y0).attr("rx",4).attr("fill",d=>statusColor(d.data.status))
     .attr("stroke",d=>d.data.push?css("--fg"):"none").attr("stroke-width",2);
-  leaf.append("title").text(d=>`${d.data.name} · ${LABEL[d.data.status]}${d.data.push?" · đang đẩy":""}`);
+  leaf.append("title").text(d=>`${d.data.name} · ${LABEL[d.data.status]}${d.data.push?" · pushing":""}`);
   leaf.each(function(d){
     const w=d.x1-d.x0,h=d.y1-d.y0; if(w<48||h<22) return;
     const g=d3.select(this), words=d.data.name.split(" "), lines=[]; let cur="";
@@ -330,12 +330,12 @@ function drawIcicle(){
   const cell=svg.selectAll("g").data(nodes).join("g").attr("class","cell").on("click",(e,d)=>select(grpOf(d)));
   cell.append("rect").attr("x",x).attr("y",d=>d.x0).attr("width",w).attr("height",d=>d.x1-d.x0).attr("rx",4)
     .attr("fill",d=>d.depth===1?groupColor(d):statusColor(d.data.status)).attr("stroke",d=>d.data.push?css("--fg"):"none").attr("stroke-width",2);
-  cell.append("title").text(d=>d.depth===1?`${d.data.name}: ${d.children.length} dự án`:`${d.data.name} · ${LABEL[d.data.status]}`);
+  cell.append("title").text(d=>d.depth===1?`${d.data.name}: ${d.children.length} projects`:`${d.data.name} · ${LABEL[d.data.status]}`);
   cell.append("text").attr("x",d=>x(d)+8).attr("y",d=>(d.x0+d.x1)/2).attr("dy",".35em")
     .attr("font-size",d=>d.depth===1?12:11).attr("font-weight",d=>d.depth===1||d.data.push?700:500)
     .attr("fill",d=>d.depth===1?groupText(d):"#fff").text(d=>(d.x1-d.x0)<13?"":d.depth===1?d.data.name:trunc(d.data.name,40));
   cell.filter(d=>d.depth===2&&(d.x1-d.x0)>=13).append("text").attr("x",W-8).attr("y",d=>(d.x0+d.x1)/2).attr("dy",".35em")
-    .attr("text-anchor","end").attr("font-size",10).attr("fill","#fff").attr("opacity",.85).text(d=>d.data.push?"ĐANG ĐẨY":LABEL[d.data.status]);
+    .attr("text-anchor","end").attr("font-size",10).attr("fill","#fff").attr("opacity",.85).text(d=>d.data.push?"PUSHING":LABEL[d.data.status]);
   applyDim=()=>cell.attr("opacity",dimOf);
 }
 
@@ -348,15 +348,15 @@ function drawSunburst(){
   const paths=g.selectAll("path").data(root.descendants().filter(d=>d.depth>0)).join("path").attr("d",arc)
     .attr("fill",d=>d.depth===1?groupColor(d):statusColor(d.data.status)).attr("stroke",d=>d.data.push?css("--fg"):css("--panel")).attr("stroke-width",d=>d.data.push?2.5:1.5)
     .on("click",(e,d)=>select(grpOf(d)));
-  paths.append("title").text(d=>d.depth===1?`${d.data.name}: ${d.children.length} dự án`:`${d.data.name} · ${LABEL[d.data.status]}`);
+  paths.append("title").text(d=>d.depth===1?`${d.data.name}: ${d.children.length} projects`:`${d.data.name} · ${LABEL[d.data.status]}`);
   const rot=(d,r)=>{const a=(d.x0+d.x1)/2*180/Math.PI-90;return `rotate(${a}) translate(${r},0) rotate(${a>90?180:0})`};
   g.selectAll("text.grp").data(root.children).join("text").attr("transform",d=>rot(d,R*.45)).attr("text-anchor","middle").attr("dy",".35em")
     .attr("font-size",d=>(d.x1-d.x0)>.5?12:10).attr("font-weight",600).attr("fill",groupText).text(d=>d.data.name);
   g.selectAll("text.prj").data(root.leaves().filter(d=>(d.x1-d.x0)>.22)).join("text").attr("transform",d=>rot(d,R*.8)).attr("text-anchor","middle").attr("dy",".35em")
     .attr("font-size",9.5).attr("fill","#fff").attr("font-weight",500).text(d=>trunc(d.data.name,18));
   const c=g.append("text").attr("text-anchor","middle").attr("fill",css("--fg")).attr("font-weight",700).attr("font-size",14);
-  c.append("tspan").attr("x",0).attr("dy","-.2em").text(`${allProjects.length} dự án`);
-  c.append("tspan").attr("x",0).attr("dy","1.3em").attr("font-size",11).attr("font-weight",400).attr("fill",css("--muted")).text(`${pushing.length} đang đẩy`);
+  c.append("tspan").attr("x",0).attr("dy","-.2em").text(`${allProjects.length} projects`);
+  c.append("tspan").attr("x",0).attr("dy","1.3em").attr("font-size",11).attr("font-weight",400).attr("fill",css("--muted")).text(`${pushing.length} pushing`);
   applyDim=()=>paths.attr("opacity",dimOf);
 }
 
@@ -372,13 +372,13 @@ function drawMindmap(){
     .attr("stroke",d=>d.depth===2&&d.data.push?css("--fg"):"none").attr("stroke-width",2);
   node.append("text").attr("x",d=>d.depth===0?-12:10).attr("dy",".35em").attr("text-anchor",d=>d.depth===0?"end":"start")
     .attr("font-size",d=>d.depth===0?14:d.depth===1?12.5:11).attr("font-weight",d=>d.depth<2||d.data.push?700:400)
-    .attr("fill",d=>d.depth===1?groupText(d):d.depth===2&&d.data.status==="pause"?css("--muted"):css("--fg")).text(d=>d.depth===0?"Chủ":d.data.name);
-  node.filter(d=>d.depth===2&&d.data.need).append("text").attr("x",10).attr("y",-9).attr("font-size",8.5).attr("fill",css("--wait")).attr("font-weight",600).text("● chờ Chủ");
-  node.append("title").text(d=>d.depth===2?`${d.data.name} · ${LABEL[d.data.status]} · ưu tiên ${d.data.priority}`:d.data.name);
+    .attr("fill",d=>d.depth===1?groupText(d):d.depth===2&&d.data.status==="pause"?css("--muted"):css("--fg")).text(d=>d.depth===0?"Owner":d.data.name);
+  node.filter(d=>d.depth===2&&d.data.need).append("text").attr("x",10).attr("y",-9).attr("font-size",8.5).attr("fill",css("--wait")).attr("font-weight",600).text("● waiting for Owner");
+  node.append("title").text(d=>d.depth===2?`${d.data.name} · ${LABEL[d.data.status]} · priority ${d.data.priority}`:d.data.name);
   applyDim=()=>node.attr("opacity",d=>d.depth===0?1:dimOf(d));
 }
 
-// ---- Cây tròn (radial bubble tree) ----
+// ---- Radial tree (radial bubble tree) ----
 const collapsed=new Set();
 function focusProject(name){
   const p=allProjects.find(x=>x.name===name); if(!p) return;
@@ -397,7 +397,7 @@ function drawZoom(){
   const svg=viz.append("svg").attr("viewBox",`${-W/2} ${-H/2} ${W} ${H}`),g=svg.append("g");
   bl.forEach((b,i)=>{const [x,y]=pos(i);g.append("path").attr("d",`M0,0 Q${x*.5},${y*.5} ${x},${y}`).attr("fill","none")
     .attr("stroke",`hsl(${grp.hue} 30% ${isDark()?32:82}%)`).attr("stroke-width",b.s==="todo"?3:6).attr("stroke-dasharray",b.s==="todo"?"4 6":null).attr("stroke-linecap","round");});
-  // tâm = dự án; bấm để quay lại
+  // centre = the project; click to go back
   const c=g.append("g").attr("class","cell").on("click",()=>{zoomed=null;render();});
   const f=bl.filter(b=>b.s==="done").length/(n||1);
   c.append("circle").attr("r",64).attr("fill","none").attr("stroke",css("--line")).attr("stroke-width",1);
@@ -406,9 +406,9 @@ function drawZoom(){
   const lines=wrapWords(p.name,14).slice(0,3);
   const t=c.append("text").attr("text-anchor","middle").attr("fill","#fff").attr("font-weight",700).attr("font-size",11);
   lines.forEach((l,i)=>t.append("tspan").attr("x",0).attr("y",(i-(lines.length-1)/2)*13-6).text(l));
-  c.append("text").attr("text-anchor","middle").attr("y",lines.length*6.5+10).attr("fill","#fff").attr("font-size",10).attr("opacity",.9).text(n?`${bl.filter(b=>b.s==="done").length}/${n} khối xong`:"chưa chia khối");
-  c.append("title").text("Bấm để quay lại bản đồ");
-  // khối việc
+  c.append("text").attr("text-anchor","middle").attr("y",lines.length*6.5+10).attr("fill","#fff").attr("font-size",10).attr("opacity",.9).text(n?`${bl.filter(b=>b.s==="done").length}/${n} blocks done`:"no blocks yet");
+  c.append("title").text("Click to go back to the map");
+  // work blocks
   bl.forEach((b,i)=>{const [x,y]=pos(i),side=x>=-1?1:-1,r=b.s==="doing"?27:22;
     const nb=g.append("g").attr("transform",`translate(${x},${y})`);
     nb.append("circle").attr("r",r).attr("fill",b.s==="done"?css("--ok"):b.s==="doing"?css("--wait"):css("--pause-bg")).attr("stroke",b.s==="doing"?css("--fg"):css("--panel")).attr("stroke-width",b.s==="doing"?2.5:2);
@@ -416,10 +416,10 @@ function drawZoom(){
     const lb=nb.append("text").attr("x",side*(r+8)).attr("text-anchor",side>0?"start":"end").attr("font-size",11).attr("font-weight",b.s==="doing"?700:500).attr("fill",b.s==="todo"?css("--muted"):css("--fg"));
     lb.append("tspan").attr("x",side*(r+8)).attr("y",-2).text(trunc(b.n,28));
     lb.append("tspan").attr("x",side*(r+8)).attr("y",12).attr("font-size",9.5).attr("font-weight",400).attr("fill",b.s==="doing"?css("--wait"):css("--muted"))
-      .text(b.s==="done"?"Xong":b.s==="doing"?`Đang làm · ${b.h<50?"chưa rõ cách":"đã rõ cách"}`:"Chưa tới");
+      .text(b.s==="done"?"Done":b.s==="doing"?`In progress · ${b.h<50?"way not yet clear":"way is clear"}`:"Not reached");
     nb.append("title").text(b.n);
   });
-  if(!n) g.append("text").attr("y",110).attr("text-anchor","middle").attr("fill",css("--muted")).attr("font-size",12).text("Dự án này chưa chia khối việc lớn.");
+  if(!n) g.append("text").attr("y",110).attr("text-anchor","middle").attr("fill",css("--muted")).attr("font-size",12).text("This project has not been split into large work blocks yet.");
   applyDim=()=>{};
 }
 function drawBubble(){
@@ -440,27 +440,27 @@ function drawBubble(){
       if(d.depth===1){ collapsed.has(d.data.name)?collapsed.delete(d.data.name):collapsed.add(d.data.name); render(); }
       else if(d.depth===2){ zoomed=d.data.name; focusProject(d.data.name); render(); }
     });
-  // vòng tiến độ
+  // progress ring
   node.filter(d=>d.depth===2&&d.data.blocks).append("path").attr("fill","none").attr("stroke",css("--ok")).attr("stroke-width",3.5).attr("stroke-linecap","round")
     .attr("d",d=>{const f=d.data.blocks.filter(b=>b.s==="done").length/d.data.blocks.length;return d3.arc()({innerRadius:rad(d)+4,outerRadius:rad(d)+4,startAngle:0,endAngle:f*2*Math.PI});});
   node.filter(d=>d.depth===2&&d.data.blocks).append("circle").attr("r",d=>rad(d)+4).attr("fill","none").attr("stroke",css("--line")).attr("stroke-width",1).lower();
   node.append("circle").attr("r",rad)
     .attr("fill",d=>d.depth===0?css("--accent"):d.depth===1?`hsl(${d.data.hue} 45% ${isDark()?40:60}%)`:statusColor(d.data.status))
     .attr("stroke",d=>d.depth===2&&d.data.push?css("--fg"):css("--panel")).attr("stroke-width",d=>d.depth===2&&d.data.push?2.5:2);
-  // chữ trong bong bóng
+  // text inside the bubble
   node.append("text").attr("text-anchor","middle").attr("dy",".35em").attr("fill","#fff").attr("font-weight",700)
     .attr("font-size",d=>d.depth===0?12:d.depth===1?(collapsed.has(d.data.name)?11:10):9)
-    .text(d=>d.depth===0?"Chủ":d.depth===1?(collapsed.has(d.data.name)?`+${d.data.children.length}`:d.data.children.length):d.data.blocks?`${d.data.blocks.filter(b=>b.s==="done").length}/${d.data.blocks.length}`:"");
-  // nhãn bên cạnh
+    .text(d=>d.depth===0?"Owner":d.depth===1?(collapsed.has(d.data.name)?`+${d.data.children.length}`:d.data.children.length):d.data.blocks?`${d.data.blocks.filter(b=>b.s==="done").length}/${d.data.blocks.length}`:"");
+  // label beside it
   const side=d=>Math.cos(d.x-Math.PI/2)>=0?1:-1;
   const lbl=node.filter(d=>d.depth>0).append("text").attr("dy",".35em")
     .attr("x",d=>side(d)*(rad(d)+(d.depth===2&&d.data.blocks?10:7))).attr("text-anchor",d=>side(d)>0?"start":"end")
     .attr("font-size",d=>d.depth===1?12:11).attr("font-weight",d=>d.depth===1||d.data.push?700:400)
     .attr("fill",d=>d.depth===1?groupText(d):d.data.status==="pause"?css("--muted"):css("--fg"));
   lbl.append("tspan").text(d=>d.depth===1?d.data.name:trunc(d.data.name,24));
-  lbl.filter(d=>d.depth===1).append("tspan").attr("font-weight",400).attr("font-size",10).attr("fill",css("--muted")).text(d=>collapsed.has(d.data.name)?"  · bấm để mở":"  · bấm để thu gọn");
-  lbl.filter(d=>d.depth===2&&d.data.need).append("tspan").attr("x",d=>side(d)*(rad(d)+(d.data.blocks?10:7))).attr("dy","1.2em").attr("font-size",8.5).attr("font-weight",600).attr("fill",css("--wait")).text("● chờ Chủ");
-  node.append("title").text(d=>d.depth===2?`${d.data.name} · ${LABEL[d.data.status]} · ưu tiên ${d.data.priority}`:d.depth===1?`${d.data.name} · ${d.data.children.length} dự án`:"Chủ");
+  lbl.filter(d=>d.depth===1).append("tspan").attr("font-weight",400).attr("font-size",10).attr("fill",css("--muted")).text(d=>collapsed.has(d.data.name)?"  · click to expand":"  · click to collapse");
+  lbl.filter(d=>d.depth===2&&d.data.need).append("tspan").attr("x",d=>side(d)*(rad(d)+(d.data.blocks?10:7))).attr("dy","1.2em").attr("font-size",8.5).attr("font-weight",600).attr("fill",css("--wait")).text("● waiting for Owner");
+  node.append("title").text(d=>d.depth===2?`${d.data.name} · ${LABEL[d.data.status]} · priority ${d.data.priority}`:d.depth===1?`${d.data.name} · ${d.data.children.length} projects`:"Owner");
   applyDim=()=>node.attr("opacity",d=>d.depth===0?1:dimOf(d));
 }
 document.getElementById("ctl").addEventListener("click",e=>{
@@ -478,13 +478,13 @@ try{ const v=localStorage.getItem("ban-do-view"); if(DRAW[v]) view=v; }catch(e){
 function render(){
   viz.selectAll("*").remove(); DRAW[view](); applyDim();
   const z=view==="bubble"&&zoomed;
-  document.getElementById("view-note").textContent=z?`Đang phóng vào: ${zoomed}. Vòng ngoài là các khối việc lớn theo thứ tự; nét đứt = chưa tới. Bấm tâm hoặc "Quay lại" để về bản đồ.`:NOTES[view];
+  document.getElementById("view-note").textContent=z?`Zoomed into: ${zoomed}. The outer ring is the large work blocks in order; dashed = not reached. Click the centre or "Back" to return to the map.`:NOTES[view];
   document.getElementById("ctl").hidden=view!=="bubble";
   document.getElementById("btn-back").hidden=!z;
   document.querySelectorAll('#ctl button:not(#btn-back)').forEach(b=>b.hidden=!!z);
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===view)));
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;try{localStorage.setItem("ban-do-view",view)}catch(e){}render();}));
-matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{render();renderLanes(selected?allProjects.filter(p=>p.group===selected):allProjects,selected||"Tất cả dự án");});
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{render();renderLanes(selected?allProjects.filter(p=>p.group===selected):allProjects,selected||"All projects");});
 render();
 </script>

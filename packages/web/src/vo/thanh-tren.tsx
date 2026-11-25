@@ -40,7 +40,7 @@ export function ThanhTren({
 } = {}): React.JSX.Element {
   return (
     /*
-     * Thanh mảnh (40px từ `md`) theo hệ thiết kế 29/10 (`THIET-KE.md`), hai vùng
+     * Thanh mảnh (40px từ `md`) theo hệ thiết kế 29/10 (`DESIGN.md`), hai vùng
      * từ trái sang phải:
      *   1. breadcrumb (Dự án › Ticket) — co lại và cắt chữ khi hẹp;
      *   2. **nút hành động bên phải** (`data-o="thanh-tren-hanh-dong"`) — vỏ đặt
@@ -74,7 +74,7 @@ export function ThanhTren({
       <div data-o="thanh-tren-hanh-dong" className="ml-auto flex shrink-0 items-center gap-2">
         {/*
          * Nút sáng/tối ở **góc trên phải** — một chỗ duy nhất trong cả giao diện
-         * (xem `quyet-dinh.md` và khối ghi chú đầu `vo/nut-theme.tsx`).
+         * (xem `decisions.md` và khối ghi chú đầu `vo/nut-theme.tsx`).
          */}
         <NutTheme />
       </div>

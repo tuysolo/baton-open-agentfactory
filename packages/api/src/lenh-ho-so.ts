@@ -7,7 +7,7 @@
  *   * `them_loi_da_gap` — thêm một mục vào danh sách **chỉ thêm** của d.299.
  *   * `sua_luat_chung` — trang "Luật chung" của workspace (d.301).
  *
- * ## Ai được ghi: SPEC IM LẶNG, và đây là đề xuất tạm (`cau-hoi-spec.md` #113)
+ * ## Ai được ghi: SPEC IM LẶNG, và đây là đề xuất tạm (`spec-questions.md` #113)
  *
  * Mục 9 không nói ai sửa hồ sơ, và bảng quyền mục 3 **không có hàng nào** cho
  * việc này. Theo nếp 19.12 câu 13 và câu 37, **không mượn** một hàng khác của

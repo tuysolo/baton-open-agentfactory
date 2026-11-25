@@ -975,7 +975,7 @@ describe('SPEC mục 6 d.196 — "bắn 1 thông báo; hồi lại rồi đứng
 
   /* ---------------------------------------------------------------- *
    * d.196 cho `error`: mốc gắn **lần vào `error`**, không gắn tín hiệu
-   * (lỗi reviewer lượt 4; migration 0008, `cau-hoi-spec.md` #50)
+   * (lỗi reviewer lượt 4; migration 0008, `spec-questions.md` #50)
    * ---------------------------------------------------------------- */
 
   it('hàm thuần: `error` + tín hiệu mới mà **chưa ra khỏi `error`** → KHÔNG bắn nữa', () => {
@@ -1066,7 +1066,7 @@ describe('SPEC mục 6 d.196 — "bắn 1 thông báo; hồi lại rồi đứng
      * **Đường ra khỏi `error`** dùng ở đây: agent gửi mục `question` → phiên sang
      * `waiting_assigner` (19.6; `phienSauHoatDong` chỉ trừ `waiting_owner` và
      * `stopping`). SPEC không nói đường nào khác đưa phiên ra khỏi `error` —
-     * `cau-hoi-spec.md` #50.
+     * `spec-questions.md` #50.
      */
     await guiHoatDong(phien, TOKEN.wk, { loai: 'question', noi_dung: 'chạy lại được không?' });
     expect((await phienTrongDb(phien))?.trang_thai).toBe('waiting_assigner');

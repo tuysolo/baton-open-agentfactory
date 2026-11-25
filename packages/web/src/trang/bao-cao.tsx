@@ -34,7 +34,7 @@
  * (`cursor_sau` của máy chủ) vào cuối danh sách, ẩn khi hết; lỗi mạng ở trang sau
  * giữ nguyên danh sách và đổi nút thành "Thử lại". **Chưa có**: cuộn vô hạn tự động.
  *
- * ## Ô ghi 3 trọng tâm + khối "hiện hành" (BAT-11, `cau-hoi-spec.md` #147)
+ * ## Ô ghi 3 trọng tâm + khối "hiện hành" (BAT-11, `spec-questions.md` #147)
  *
  * Báo cáo sáng là bản chụp bất biến lúc 07:30, nên bộ chủ ghi sau đó **không** vào
  * đó. Ô `OGhiTrongTam` ghi qua `POST /v1/trong-tam`; bản chụp **không đổi**. Khi

@@ -57,7 +57,7 @@ export type TrangThaiTicket = keyof typeof TRANG_THAI_TICKET;
 
 /**
  * Trạng thái **đặt được lúc tạo** ticket — SPEC mục 4 "Trạng thái khi tạo" (Chủ
- * chốt T-108 = B, 29/10; BAT-63; `cau-hoi-spec.md` #179): mặc định Cần làm, người
+ * chốt T-108 = B, 29/10; BAT-63; `spec-questions.md` #179): mặc định Cần làm, người
  * tạo được chọn Backlog. Năm trạng thái còn lại đều có luật vào riêng (lượt giao,
  * cổng bằng chứng, lý do, ticket gốc) mà một ticket vừa tạo không thoả, nên không
  * đặt được lúc tạo (`INVALID_INPUT`). Phần tử đầu là mặc định.
@@ -237,7 +237,7 @@ export const LOAI_BANG_CHUNG = {
   note: 'Ghi chú',
   /*
    * **`bao_cao` là mã Baton thêm**, không có trong bảng 0.1 / mục 7 — chủ chốt
-   * T-31 câu 3.4 A (19/10), `cau-hoi-spec.md` #161. Dùng để đóng ticket **không
+   * T-31 câu 3.4 A (19/10), `spec-questions.md` #161. Dùng để đóng ticket **không
    * code** (cờ dự án hoặc cờ ticket) mà không cần chủ xác nhận từng cái; ticket
    * có code thì nó **không mở gì** (xem `congXong`). Trong DB nó mượn `note`/`file`
    * + cột `bao_cao_nguon` (migration 0027); mọi đường đọc thấy `bao_cao`.
@@ -251,7 +251,7 @@ export type LoaiBangChung = keyof typeof LOAI_BANG_CHUNG;
  * `pushed` và `merged` chỉ áp cho bằng chứng loại `commit`.
  *
  * **`not_required` là mã Baton thêm**, không có trong bảng 0.1 —
- * `cau-hoi-spec.md` #55. SPEC d.209–211 ghi cột Xác minh của `test`, `file`,
+ * `spec-questions.md` #55. SPEC d.209–211 ghi cột Xác minh của `test`, `file`,
  * `note` là "Không xác minh" mà 0.1 không cho mã nào cho trạng thái đó. Nhét
  * chúng vào `passed` thì "không cần xác minh" và "đã xác minh **đạt**" thành một
  * giá trị, và cổng Xong (d.214) mất khả năng phân biệt — `passed` của `deploy`

@@ -5,7 +5,7 @@
  * SPEC: 19.12 câu 3 d.594 (mọi lần đặt lại ghi Lịch sử + bắn Telegram), mục 12
  * d.348 (tắt từng loại trong Cài đặt), d.350 (giờ yên lặng: chỉ 🔴), 19.12 câu 6
  * d.604–606 (thử lại, giữ trong chuông, không chặn luồng chính), mục 15 d.425–427;
- * `cau-hoi-spec.md` #148 (đã chốt 17/10, T-125 = A), #98 (bộ đếm sai dùng chung).
+ * `spec-questions.md` #148 (đã chốt 17/10, T-125 = A), #98 (bộ đếm sai dùng chung).
  *
  * Mọi ca đi **đường thật** (HTTP → cửa ghi → D1 → cron gửi) với kênh Telegram
  * **giả lập** (`datNguonTelegram`) — không một lời gọi mạng nào (CLAUDE.md mục 3).

@@ -936,7 +936,7 @@ describe('KHÔNG BAO GIỜ IN TOKEN — token có ký tự đặc biệt (SPEC d
 /**
  * **Lỗi hạ tầng không mang dạng Baton → mã thoát 2**, không phải 1.
  *
- * `quyet-dinh.md` 01/10 đẩy `INTERNAL` lên mã 2 vì "ra mã 1 thì agent tưởng dữ
+ * `decisions.md` 01/10 đẩy `INTERNAL` lên mã 2 vì "ra mã 1 thì agent tưởng dữ
  * liệu mình gửi sai và đi sửa dữ liệu mãi". Một `502` kèm HTML là đúng ca đó, mà
  * `@baton/client` bản đầu dựng `INVALID_INPUT` ⇒ **mã 1**.
  */

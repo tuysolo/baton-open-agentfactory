@@ -8,7 +8,7 @@
  * yếu tố của d.415 = **khoá vĩnh viễn khỏi web**.
  *
  * Ca đầu của file này ghim lý do đường cũ (`DELETE FROM chu_tai_khoan`, từng ghi
- * trong `TRIEN-KHAI.md`) **không chạy được**: khoá ngoài của migration 0017.
+ * trong `DEPLOYMENT.md`) **không chạy được**: khoá ngoài của migration 0017.
  *
  * Luật được ghim:
  *   * mục 15 d.417 — `otpauth` mới ra **đúng một lần**; secret cũ không dùng lại.
@@ -91,7 +91,7 @@ interface RaDatLai {
 describe('vì sao đường này phải tồn tại', () => {
   it('đường cũ KHÔNG chạy được: khoá ngoài 0017 chặn DELETE FROM chu_tai_khoan sau lần đăng nhập đầu', async () => {
     /*
-     * `TRIEN-KHAI.md` của lượt trước dạy chủ gõ câu `DELETE` này khi mất URI
+     * `DEPLOYMENT.md` của lượt trước dạy chủ gõ câu `DELETE` này khi mất URI
      * otpauth. Ca này là bằng chứng nó sai: `chu_phien.workspace_id` khai
      * `REFERENCES chu_tai_khoan(workspace_id)` **không có `ON DELETE`** (0017 dòng
      * 124), và 0017 khai chính sách "không xoá dòng `chu_phien` khi đăng xuất"
@@ -329,7 +329,7 @@ describe('cookie phiên KHÔNG vào được các đường chỉ-TOKEN_CHU', ()
    * Ba đường `chu/*` cộng `/v1/khoi-tao` đều kiểm cờ `qua_token_chu`, **không**
    * `ai.loai === 'chu'`. Lý do: từ phần 6, một **cookie phiên** cũng dựng ra
    * `{ loai: 'chu' }` trong `xacThuc`, nên điều kiện kia sẽ cho một phiên web đi
-   * vào ba đường mà `TRIEN-KHAI.md` dựng ra làm **cửa thoát của máy chủ**.
+   * vào ba đường mà `DEPLOYMENT.md` dựng ra làm **cửa thoát của máy chủ**.
    *
    * Lượt trước lá chắn này được khai là "phòng thủ tầng hai, KHÔNG có test" cho
    * `/v1/chu/thiet-lap`. Giờ nó có test, cho cả bốn đường — và với

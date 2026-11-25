@@ -1,6 +1,6 @@
 /**
  * **Ranh giới `/v1/*` ↔ SPA** — SPEC mục 13 (API) và mục 14 (giao diện web),
- * `quyet-dinh.md` 05/10: một Worker phục vụ cả hai.
+ * `decisions.md` 05/10: một Worker phục vụ cả hai.
  *
  * Hai luật cứng, và chúng kéo nhau ngược chiều:
  *

@@ -8,7 +8,7 @@
  * ở **hai** chỗ của SPEC — mục Cần Chủ (mục 8, 19.12 câu 4) và dòng Nhật ký
  * quyết định (mục 10; câu 4 nói rõ "dòng Nhật ký tự sinh từ một mục Chung để
  * **trống** trường dự án"). Và **SPEC không nói lớp đó hiện cho ai** — xem
- * `cau-hoi-spec.md` **#69**.
+ * `spec-questions.md` **#69**.
  *
  * Nên luật này là một **đề xuất tạm chờ chủ chốt**, và điều kiện bắt buộc của
  * một đề xuất tạm là: đổi được ở **đúng một chỗ**. Đó là file này. Hai đường

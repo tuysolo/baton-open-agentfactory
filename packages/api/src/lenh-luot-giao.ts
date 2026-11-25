@@ -91,7 +91,7 @@ interface DongNguoiNhan {
  * tồn tại thì `NOT_FOUND`: đó là một id sai, không phải một luật bị vi phạm.
  *
  * **Agent ngoài phạm vi người gọi = không tồn tại** (BAT-48; SPEC mục 13 d.399,
- * 19.12 câu 15; `cau-hoi-spec.md` #172). Câu tra lọc bằng **đúng** `locPhamViAgent`
+ * 19.12 câu 15; `spec-questions.md` #172). Câu tra lọc bằng **đúng** `locPhamViAgent`
  * mà `GET /v1/agent` dùng, nên agent người gọi không thấy cho `d === null` và đi
  * qua **cùng một dòng `throw`** với id không có — cùng mã, cùng thông điệp, cùng
  * 404. Trước BAT-48 câu tra cả workspace, nên id của agent ngoài phạm vi ra

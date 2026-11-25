@@ -227,7 +227,7 @@ export interface KetQuaHandler<T> {
   loi_sau_ghi?: { ma: MaLoi; message: string };
   /**
    * **Lượt giao mà lệnh này gắn rõ** — BAT-57, thu hẹp 19.12 câu 41 cho ca nhiều
-   * phiên (`cau-hoi-spec.md`). Khai thì cửa ghi nhích tín hiệu **chỉ** phiên của
+   * phiên (`spec-questions.md`). Khai thì cửa ghi nhích tín hiệu **chỉ** phiên của
    * lượt này (và chỉ khi đó là phiên của chính agent gọi). Bỏ trống = lệnh
    * **chung** (bình luận, sửa ticket…): cửa ghi chỉ nhích khi agent có đúng 1
    * phiên mở. Xem `WorkspaceGate.#cauLenhTinHieuPhien`.
@@ -255,7 +255,7 @@ export function batBuocLaChu(ai: AiGoi, viec: string): void {
  *
  * Dùng cho những việc bảng quyền SPEC mục 3 **không có hàng riêng**, mà SPEC vẫn
  * cho agent làm: bình luận (mục 4 "của chủ hoặc agent", mục 6 tính bình luận là
- * tín hiệu của phiên). Xem `cau-hoi-spec.md` #22. Không mượn một hàng khác của
+ * tín hiệu của phiên). Xem `spec-questions.md` #22. Không mượn một hàng khác của
  * bảng quyền: mượn là âm thầm đổi nghĩa của hàng đó.
  */
 export function batBuocVaoDuocDuAn(ai: AiGoi, project_id: string, viec: string): void {

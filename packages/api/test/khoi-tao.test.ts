@@ -30,7 +30,7 @@ const { it } = caQuaSo(bay);
 
 const MAT_KHAU = 'mat-khau-gia-cua-chu-2026';
 
-/** Thân đầy đủ, giống hệt cái chủ sẽ gõ lúc deploy (xem `TRIEN-KHAI.md`). */
+/** Thân đầy đủ, giống hệt cái chủ sẽ gõ lúc deploy (xem `DEPLOYMENT.md`). */
 const THAN = {
   ten_chu: 'Chủ',
   mat_khau: MAT_KHAU,

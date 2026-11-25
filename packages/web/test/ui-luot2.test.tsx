@@ -1,8 +1,8 @@
 /**
- * **UI lượt 2 (BAT-61)** — các trang còn lại theo `THIET-KE.md`, và bốn góp ý
+ * **UI lượt 2 (BAT-61)** — các trang còn lại theo `DESIGN.md`, và bốn góp ý
  * reviewer của BAT-60. Không ca nào ở đây kiểm hành vi SPEC: hành vi không đổi,
  * các ca hành vi của từng trang vẫn ở file test của trang ấy. Ca ở đây ghim
- * **quy tắc trình bày** đã ghi vào `THIET-KE.md`, để một lượt sau gõ lại
+ * **quy tắc trình bày** đã ghi vào `DESIGN.md`, để một lượt sau gõ lại
  * `text-xl` hay một vòng nhập là một ca đỏ.
  *
  * Nguồn đọc qua `import.meta.glob(..., '?raw')` — cùng nếp lưới "không mã màu

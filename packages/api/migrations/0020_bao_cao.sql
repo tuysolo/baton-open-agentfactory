@@ -15,7 +15,7 @@
 -- Bộ tiền xử lý của `wrangler d1 execute --remote` xoá `--…` tới hết dòng **kể cả
 -- bên trong** một khối chú thích kiểu C. Nên một khối như vậy có chứa dấu hai gạch
 -- bị cắt mất dấu đóng, và câu lệnh ngay sau đó vỡ. Lỗi đó đã xảy ra một lần trong
--- dự án này (xem `quyet-dinh.md`), và `TEST_VAN_BAN_MIGRATION` ở `vitest.config.ts`
+-- dự án này (xem `decisions.md`), và `TEST_VAN_BAN_MIGRATION` ở `vitest.config.ts`
 -- giờ quét cả thư mục để nó không xảy ra lần hai.
 --
 -- File này **không chứa một dấu mở khối nào**, kể cả trong chữ của chú thích: phép

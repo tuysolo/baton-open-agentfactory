@@ -41,7 +41,7 @@ import { lienKet, luotGiao, manHinhTicket, ticketCon, ticketDayDu } from './than
 import { manHinhPhien } from './than-agent';
 import { cauDuAnKhongChayTuSpec, mucSpec, specDoiDienThoai } from './doc-spec';
 import HTML_GOC from '../index.html?raw';
-import SPEC_VAN from '../../../SPEC.md?raw';
+import SPEC_VAN from '../../../docs/vi/SPEC.md?raw';
 
 /**
  * Một bước của SPEC 17 ("Định nghĩa xong"), kể cả các dòng con thụt lề — cắt từ

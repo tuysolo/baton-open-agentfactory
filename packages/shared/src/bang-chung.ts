@@ -146,7 +146,7 @@ export interface BangChungNote {
 
 /**
  * `bao_cao` — **Báo cáo** để đóng ticket **không code** (T-31 câu 3.4 A,
- * `cau-hoi-spec.md` #161). Không có trong bảng d.204–211.
+ * `spec-questions.md` #161). Không có trong bảng d.204–211.
  *
  * Giá trị: đường dẫn báo cáo **và/hoặc** nội dung báo cáo (ít nhất một). Người ký
  * = người gửi, và **quyền ký giống hệt `review`** (d.210 + bảng quyền mục 3):
@@ -319,7 +319,7 @@ export const CHU_KY_KIEM_LAI_COMMIT_MS = 10 * 60 * 1000;
  * này thành một câu `UPDATE`.
  *
  * `so_lan_thu_truoc` là số **lần thử lại** đã ghi trước lần này. Lần chạy ngay khi
- * gửi (d.219) **không** tính là một lần thử lại — xem `quyet-dinh.md` — nên một
+ * gửi (d.219) **không** tính là một lần thử lại — xem `decisions.md` — nên một
  * bằng chứng đi tối đa: 1 lần lúc gửi + 3 lần Cron = 4 lần gọi mạng.
  */
 export interface QuyetDinhThuLai {
@@ -379,7 +379,7 @@ export const NHAN_CHUA_MERGE_7_NGAY = 'chưa merge sau 7 ngày';
  * **1 lần**".
  *
  * **Mốc, không cờ** — cùng nếp `canhBaoDung` của `phien.ts` (SPEC mục 6 d.196,
- * `cau-hoi-spec.md` #46). Mốc là `theo_doi_den_luc` của **cửa sổ theo dõi vừa hết
+ * `spec-questions.md` #46). Mốc là `theo_doi_den_luc` của **cửa sổ theo dõi vừa hết
  * hạn**, tức "lần chuyển sang" của luật này. Lý do đầy đủ ở đầu migration 0010.
  */
 export interface QuyetDinhBaoChuaMerge {
@@ -533,7 +533,7 @@ const TEN_MIEN_CHAN = ['localhost', 'ip6-localhost', 'ip6-loopback'] as const;
 
 /**
  * **Hậu tố tên miền chỉ-nội-bộ** — thêm ở lượt 2 sửa review, xem
- * `cau-hoi-spec.md` #58.
+ * `spec-questions.md` #58.
  *
  * Vì sao phải có: `TEN_MIEN_CHAN` chặn **đúng tên** `localhost`, và nhánh "tên
  * miền không có dấu chấm" ở cuối `laHostBiChan` chặn nhãn đơn như `router`. Cả

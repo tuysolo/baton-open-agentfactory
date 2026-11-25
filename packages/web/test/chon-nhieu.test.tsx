@@ -2,7 +2,7 @@
  * **BAT-35 việc 2 — `X` chọn nhiều, áp S/P/L/A cho nhiều ticket.** SPEC mục 14
  * d.415 (S/P/L/A trên ticket đang chọn), d.416 ("`X` chọn; áp một phím cho nhiều
  * ticket; `?` hiện bảng phím"), d.418 (lạc quan; máy chủ từ chối ⇒ hoàn + toast lý
- * do). Phần SPEC không nói: `cau-hoi-spec.md` #156–#158.
+ * do). Phần SPEC không nói: `spec-questions.md` #156–#158.
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';

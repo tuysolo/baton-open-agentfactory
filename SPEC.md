@@ -1,1009 +1,1009 @@
 # Baton: SPEC v0.1
 
-**Baton** là nơi điều hành công việc cho **một người chủ cùng một đội agent AI**, trải trên **nhiều dự án**.
-Người chủ quyết định và duyệt. Agent nhận việc, làm, chuyền việc cho nhau và nộp bằng chứng.
-Tên lấy từ gậy tiếp sức: việc được chuyền tay qua nhiều chặng, nhưng luôn biết đang ở tay ai.
+**Baton** is the place where **one owner and a team of AI agents** run their work, across **many projects**.
+The owner decides and approves. Agents take work, do it, hand it off to each other and submit evidence.
+The name comes from the relay baton: work is passed hand to hand through many legs, but it is always known whose hand it is in.
 
-Tài liệu này là thứ **duy nhất** phiên build được đọc. Nó mô tả hành vi, không mô tả cách cài đặt.
-Mỗi tính năng ghi: người dùng nhận được gì · kích hoạt · vào và ra · trạng thái · lỗi · KHÔNG làm.
+This document is the **only** thing the build session is allowed to read. It describes behaviour, not implementation.
+Each feature states: what the user gets · trigger · inputs and outputs · states · errors · what is NOT done.
 
 ---
 
-## 0. Nguyên tắc sản phẩm
-1. **Không giới hạn** số dự án, số ticket, số agent. Mục tiêu hiệu năng: 200 dự án, 200.000 ticket, 100 agent mà vẫn mượt.
-2. **"Không có ticket Đang làm = dự án đang đứng."** Trạng thái trên Baton phải phản ánh đúng việc thật.
-3. **Xong phải có bằng chứng.** "Xong" nghĩa là đã merge hoặc đã live, và có bằng chứng kèm theo.
-4. **Người chủ không bị hỏi lẻ tẻ.** Mọi thứ cần người chủ nằm ở một chỗ duy nhất (**Cần Chủ**), duyệt theo phiên sáng và tối.
-5. **Agent là công dân hạng nhất.** Agent có danh tính, quyền, lịch sử, nhịp tim riêng. Agent chạy CLI trên máy vẫn dùng được, không cần máy chủ nhận webhook.
-6. **Người luôn chịu trách nhiệm cuối cùng.** Agent làm và đề xuất, người chủ quyết những việc nằm trong danh sách phải hỏi.
-7. **Nhanh.** Mọi thao tác hiện kết quả ngay trên màn hình. Mọi việc thường dùng đều có phím tắt.
-8. Giao diện **tiếng Việt** mặc định (có sẵn chỗ cho tiếng Anh sau này), giờ Việt Nam (UTC+7), **nền sáng**.
+## 0. Product principles
+1. **No limit** on the number of projects, tickets or agents. Performance target: 200 projects, 200,000 tickets, 100 agents, still smooth.
+2. **"No ticket In progress = the project is stalled."** Status on Baton must reflect the real work.
+3. **Done requires evidence.** "Done" means merged or live, with evidence attached.
+4. **The owner is not asked piecemeal.** Everything that needs the owner lives in one single place (**"Cần Chủ"**, Needs Owner), approved in morning and evening sessions.
+5. **Agents are first-class citizens.** An agent has its own identity, permissions, history and heartbeat. Agents running a CLI on a local machine still work; no server receiving webhooks is needed.
+6. **A human is always ultimately responsible.** Agents do and propose; the owner decides the things on the must-ask list.
+7. **Fast.** Every action shows its result on screen immediately. Every frequent action has a keyboard shortcut.
+8. The interface is **Vietnamese** by default (with room for English later), Vietnam time (UTC+7), **light background**.
 
-## 0.1 Mã máy (tiếng Anh) và nhãn hiển thị (tiếng Việt)
-Mọi mã trong API, CLI, MCP, cơ sở dữ liệu và log dùng **tiếng Anh**. Giao diện, thông báo và thông điệp lỗi hiển thị **nhãn tiếng Việt** theo bảng này.
+## 0.1 Machine codes (English) and display labels (Vietnamese)
+Every code in the API, CLI, MCP, database and logs is in **English**. The interface, notifications and error messages show the **Vietnamese label** from this table.
 
-| Nhóm | Mã → Nhãn |
+| Group | Code → Label |
 |---|---|
-| Vai trò agent | `coordinator` Điều phối · `manager` Quản lý · `worker` Người làm · `reviewer` Người duyệt |
-| Trạng thái dự án | `active` Đang chạy · `paused` Tạm dừng · `archived` Lưu trữ |
-| Trạng thái agent | `busy` Đang làm · `waiting_owner` Chờ Chủ · `stalled` Đứng · `idle` Rảnh · `disabled` Đã tắt |
-| Trạng thái ticket | `backlog` Backlog · `todo` Cần làm · `in_progress` Đang làm · `verifying` Chờ kiểm chứng · `done` Xong · `canceled` Huỷ · `duplicate` Trùng |
-| Nhóm trạng thái ticket | `planned` chờ (backlog, todo) · `active` chạy (in_progress, verifying) · `closed` kết (done, canceled, duplicate) |
-| Ưu tiên | `urgent` Khẩn · `high` Cao · `medium` Vừa · `low` Thấp · `none` Không |
-| Loại lượt giao | `work` Làm · `review` Review |
-| Trạng thái lượt giao | `pending` Chờ nhận · `in_progress` Đang làm · `submitted` Đã nộp · `accepted` Đạt · `returned` Trả lại · `canceled` Đã huỷ |
-| Kết quả nộp | `done` Xong · `partial` Xong một phần · `blocked` Không làm được |
-| Trạng thái phiên | `running` Đang chạy · `waiting_owner` Chờ Chủ · `waiting_assigner` Chờ người giao · `stalled` Đứng · `error` Lỗi · `stopping` Đang dừng · `closed` Đã đóng |
-| Loại hoạt động | `thought` Suy nghĩ · `action` Thao tác · `question` Hỏi · `result` Kết quả · `error` Lỗi |
-| Tín hiệu gửi agent | `STOP` Dừng |
-| Loại bằng chứng | `commit` · `deploy` · `review` · `test` · `file` · `note` Ghi chú · `bao_cao` Báo cáo |
-| Cờ "không code" | `project.khong_code` Dự án không code · `ticket.khong_code` Ticket không code |
-| Xác minh bằng chứng | `pending` Đang kiểm · `passed` Đạt · `failed` Trượt · `withdrawn` Đã rút; riêng commit: `pushed` · `merged` |
-| Kết luận review | `pass` Đạt · `fail` Không đạt |
-| Mức Cần Chủ | `urgent` 🔴 Gấp · `today` 🟡 Trong ngày · `later` ⚪ Không gấp |
-| Loại Cần Chủ | `decision` Quyết định · `run_command` Chủ chạy lệnh · `review` Chủ review · `fyi` Chỉ để biết |
-| Trạng thái Cần Chủ | `open` Chờ · `resolved` Đã xử lý · `skipped` Bỏ qua |
+| Agent role | `coordinator` Điều phối (Coordinator) · `manager` Quản lý (Manager) · `worker` Người làm (Worker) · `reviewer` Người duyệt (Reviewer) |
+| Project status | `active` Đang chạy (Running) · `paused` Tạm dừng (Paused) · `archived` Lưu trữ (Archived) |
+| Agent status | `busy` Đang làm (Working) · `waiting_owner` Chờ Chủ (Waiting for Owner) · `stalled` Đứng (Stalled) · `idle` Rảnh (Idle) · `disabled` Đã tắt (Disabled) |
+| Ticket status | `backlog` Backlog · `todo` Cần làm (To do) · `in_progress` Đang làm (In progress) · `verifying` Chờ kiểm chứng (Awaiting verification) · `done` Xong (Done) · `canceled` Huỷ (Canceled) · `duplicate` Trùng (Duplicate) |
+| Ticket status group | `planned` chờ (waiting: backlog, todo) · `active` chạy (running: in_progress, verifying) · `closed` kết (closed: done, canceled, duplicate) |
+| Priority | `urgent` Khẩn (Urgent) · `high` Cao (High) · `medium` Vừa (Medium) · `low` Thấp (Low) · `none` Không (None) |
+| Assignment type | `work` Làm (Work) · `review` Review |
+| Assignment status | `pending` Chờ nhận (Awaiting claim) · `in_progress` Đang làm (In progress) · `submitted` Đã nộp (Submitted) · `accepted` Đạt (Accepted) · `returned` Trả lại (Returned) · `canceled` Đã huỷ (Canceled) |
+| Submission result | `done` Xong (Done) · `partial` Xong một phần (Partly done) · `blocked` Không làm được (Could not do) |
+| Session status | `running` Đang chạy (Running) · `waiting_owner` Chờ Chủ (Waiting for Owner) · `waiting_assigner` Chờ người giao (Waiting for assigner) · `stalled` Đứng (Stalled) · `error` Lỗi (Error) · `stopping` Đang dừng (Stopping) · `closed` Đã đóng (Closed) |
+| Activity type | `thought` Suy nghĩ (Thought) · `action` Thao tác (Action) · `question` Hỏi (Question) · `result` Kết quả (Result) · `error` Lỗi (Error) |
+| Signal sent to agent | `STOP` Dừng (Stop) |
+| Evidence type | `commit` · `deploy` · `review` · `test` · `file` · `note` Ghi chú (Note) · `bao_cao` Báo cáo (Report) |
+| "No code" flag | `project.khong_code` Dự án không code (No-code project) · `ticket.khong_code` Ticket không code (No-code ticket) |
+| Evidence verification | `pending` Đang kiểm (Checking) · `passed` Đạt (Passed) · `failed` Trượt (Failed) · `withdrawn` Đã rút (Withdrawn); commit only: `pushed` · `merged` |
+| Review verdict | `pass` Đạt (Pass) · `fail` Không đạt (Fail) |
+| Needs Owner level | `urgent` 🔴 Gấp (Urgent) · `today` 🟡 Trong ngày (Today) · `later` ⚪ Không gấp (Not urgent) |
+| Needs Owner type | `decision` Quyết định (Decision) · `run_command` Chủ chạy lệnh (Owner runs command) · `review` Chủ review (Owner review) · `fyi` Chỉ để biết (FYI) |
+| Needs Owner status | `open` Chờ (Waiting) · `resolved` Đã xử lý (Resolved) · `skipped` Bỏ qua (Skipped) |
 
-Trong SPEC, các chữ như "Đang làm", "Chờ kiểm chứng", "🔴 Gấp" là **nhãn**; mã tương ứng tra ở bảng trên.
+In this SPEC, words such as "In progress" ("Đang làm"), "Awaiting verification" ("Chờ kiểm chứng"), "🔴 Urgent" ("🔴 Gấp") are **labels**; look up the matching code in the table above.
 
-## 1. Khái niệm
-| Khái niệm | Là gì |
+## 1. Concepts
+| Concept | What it is |
 |---|---|
-| **Workspace** | Không gian của một người chủ. v0.1 chỉ có 1 workspace, nhưng dữ liệu phải tách theo workspace từ đầu để sau này ship nhiều khách. |
-| **Chủ** | Người thật duy nhất, quyền cao nhất, tên hiển thị tuỳ đặt (mặc định "Chủ"). Mục "Cần Chủ" dùng tên này: đổi tên chủ thì tên mục đổi theo. |
-| **Agent** | Danh tính máy: tên (vd `CoS`, `M-Sample`, `W-builder`, `W-reviewer`), **vai trò**, model (chữ tự do), mô tả, danh sách dự án được vào, quyền, token. |
-| **Vai trò agent** | `coordinator` (kiểu CoS), `manager` (Manager một dự án), `worker` (Worker làm), `reviewer` (Worker review). Một agent có đúng 1 vai trò. |
-| **Dự án** | Có tên, **mã** 2–6 chữ in hoa (vd `SAI`, `INC`, `COS`), mô tả, màu, trạng thái (đang chạy, tạm dừng, lưu trữ), agent quản lý, **hồ sơ dự án** (mục 9). |
-| **Ticket** | Đơn vị việc, thuộc đúng 1 dự án. Mã `MÃ-số`, số tăng dần trong dự án, không tái dùng. |
-| **Lượt giao** | Một lần chuyền việc: ai giao, cho ai, kèm brief nào, lúc nào, kết quả ra sao. Một ticket có thể có nhiều lượt. |
-| **Phiên** | Khoảng thời gian một agent thực sự làm một lượt giao. Có trạng thái sống và dòng hoạt động. |
-| **Bằng chứng** | Thứ chứng minh việc đã làm: commit, deploy, kết quả test, review đạt, file, ghi chú. |
-| **Cần Chủ (mục T)** | Việc chỉ người chủ quyết hoặc làm được. Mã `T-số`. |
-| **Quyết định** | Một dòng trong Nhật ký quyết định. Chỉ thêm, không sửa. |
+| **Workspace** | The space of one owner. v0.1 has only 1 workspace, but data must be separated by workspace from the start so that it can later ship to many customers. |
+| **Owner** | The single real person, with the highest permissions; the display name is configurable (default "Chủ", Owner). The "Cần Chủ" (Needs Owner) section uses this name: change the owner's name and the section name changes with it. |
+| **Agent** | A machine identity: name (e.g. `CoS`, `M-Sample`, `W-builder`, `W-reviewer`), **role**, model (free text), description, list of projects it may enter, permissions, token. |
+| **Agent role** | `coordinator` (CoS-style), `manager` (Manager of one project), `worker` (Worker that does the work), `reviewer` (Worker that reviews). An agent has exactly 1 role. |
+| **Project** | Has a name, a **code** of 2–6 uppercase letters (e.g. `SAI`, `INC`, `COS`), description, colour, status (running, paused, archived), managing agent, **project profile** (section 9). |
+| **Ticket** | The unit of work, belonging to exactly 1 project. Code `CODE-number`; the number increases within the project and is never reused. |
+| **Assignment** | One hand-off: who assigned, to whom, with which brief, when, and what the result was. A ticket can have several assignments. |
+| **Session** | The period during which an agent is actually working an assignment. It has a live status and an activity stream. |
+| **Evidence** | Something that proves the work was done: commit, deploy, test result, passing review, file, note. |
+| **Needs Owner (T item)** | Work that only the owner can decide or do. Code `T-number`. |
+| **Decision** | One row in the Decision log. Append-only, never edited. |
 
-## 2. Dự án
-**Người dùng nhận được:** bao nhiêu dự án cũng được. Mỗi dự án có trang riêng cho biết đang chạy hay đang đứng, ai quản lý, cần đọc gì trước.
+## 2. Projects
+**What the user gets:** as many projects as they like. Each project has its own page showing whether it is running or stalled, who manages it, and what to read first.
 
-- **Tạo:** chủ tạo (UI hoặc CLI). Tên và mã bắt buộc. Mã duy nhất trong workspace và **không đổi được** sau khi tạo; tên đổi được.
-- **Trạng thái:**
-  - `active`: bình thường.
-  - `paused`: agent không nhận việc mới trong dự án.
-  - `archived`: ẩn khỏi sidebar, chỉ đọc.
-- **Chỉ báo sức sống** (tự tính, hiện ở sidebar và Tổng quan):
-  - 🟢 có ít nhất 1 ticket Đang làm, và phiên của nó đang chạy hoặc có nhịp tim trong ngưỡng.
-  - 🟡 có ticket Đang làm nhưng phiên bị đứng hoặc lỗi.
-  - ⚪ không có ticket Đang làm nào. Hiện chữ "Dự án không chạy".
-- **Nhóm dự án** (tuỳ chọn): gom dự án vào nhóm để xếp sidebar, ví dụ "Sample", "INC", "Nội bộ". Chỉ để hiển thị.
-- **Lỗi:** mã trùng hoặc sai định dạng thì báo "Mã dự án đã có" hoặc "Mã chỉ gồm 2–6 chữ A–Z".
-- **KHÔNG làm:** team; phân quyền theo người (chỉ có 1 người); giới hạn số dự án.
+- **Create:** the owner creates it (UI or CLI). Name and code are required. The code is unique in the workspace and **cannot be changed** after creation; the name can.
+- **Status:**
+  - `active`: normal.
+  - `paused`: agents take no new work in the project.
+  - `archived`: hidden from the sidebar, read-only.
+- **Health indicator** (computed automatically, shown in the sidebar and on the Overview):
+  - 🟢 at least 1 ticket In progress, and its session is running or has a heartbeat within the threshold.
+  - 🟡 there is a ticket In progress but its session is stalled or in error.
+  - ⚪ no ticket In progress at all. Shows the text "Dự án không chạy" (Project is not running).
+- **Project groups** (optional): put projects into groups to arrange the sidebar, for example "Sample", "INC", "Internal". Display only.
+- **Errors:** a duplicate or malformed code reports "Mã dự án đã có" (English: "Project code already exists") or "Mã chỉ gồm 2–6 chữ A–Z" (English: "The code consists of 2–6 letters A–Z only").
+- **NOT done:** teams; per-person permissions (there is only 1 person); a limit on the number of projects.
 
-## 3. Agent
-**Người dùng nhận được:** biết đội mình có ai, mỗi agent đang làm gì, được phép làm gì, lần cuối lên tiếng lúc nào.
+## 3. Agents
+**What the user gets:** knowing who is on the team, what each agent is doing, what it is allowed to do, and when it last spoke.
 
-- **Tạo agent:** chủ nhập tên (duy nhất), vai trò, model, mô tả, danh sách dự án được vào (hoặc "tất cả"), quyền.
-- **Token:** hiện **một lần duy nhất** khi tạo. Sau đó chỉ hiện 4 ký tự cuối. Có nút tạo lại token (token cũ hết hiệu lực ngay) và nút thu hồi. Server chỉ lưu token dạng băm.
-- **Quyền theo vai trò** (mặc định; chủ chỉnh được từng agent):
+- **Create an agent:** the owner enters a name (unique), role, model, description, list of projects it may enter (or "all"), permissions.
+- **Token:** shown **exactly once**, at creation. After that only the last 4 characters are shown. There is a button to regenerate the token (the old token stops working immediately) and a revoke button. The server stores the token only as a hash.
+- **Permissions by role** (defaults; the owner can adjust each agent):
 
-| Việc | coordinator | manager | worker | reviewer |
+| Action | coordinator | manager | worker | reviewer |
 |---|---|---|---|---|
-| Tạo ticket | mọi dự án được vào | dự án mình quản lý | ticket con của lượt mình đang làm | — |
-| Giao việc (tạo lượt giao) | cho manager, worker, reviewer | cho worker, reviewer trong dự án | — | — |
-| Đổi trạng thái ticket | có | trong dự án | ticket của lượt mình | — |
-| Nộp bằng chứng | có | có | có | có |
-| Ghi kết quả review | có, trừ ticket mình đã nhận lượt `work` | trong dự án, bắt buộc kèm đường dẫn báo cáo của reviewer độc lập | — | có |
-| Tạo mục Cần Chủ | có | có | — | — |
-| Ghi Nhật ký quyết định | có | có | — | — |
-| Xoá bất cứ thứ gì | không bao giờ | không bao giờ | không bao giờ | không bao giờ |
-| Quyết mục Cần Chủ | không bao giờ | không bao giờ | không bao giờ | không bao giờ |
+| Create ticket | every project it may enter | projects it manages | child tickets of the assignment it is working | — |
+| Assign work (create an assignment) | to manager, worker, reviewer | to worker, reviewer in the project | — | — |
+| Change ticket status | yes | in the project | tickets of its own assignment | — |
+| Submit evidence | yes | yes | yes | yes |
+| Record a review result | yes, except on tickets where it has taken a `work` assignment | in the project, must include the path to an independent reviewer's report | — | yes |
+| Create a Needs Owner item | yes | yes | — | — |
+| Write to the Decision log | yes | yes | — | — |
+| Delete anything | never | never | never | never |
+| Decide a Needs Owner item | never | never | never | never |
 
-- **Trạng thái agent** (tự tính):
-  - `busy`: có phiên đang chạy.
-  - `waiting_owner`: có phiên đang chờ một mục Cần Chủ.
-  - `stalled`: có phiên bị đứng.
-  - `idle`: không có phiên mở.
-  - `disabled`: chủ đã tắt agent. Agent bị tắt gọi API sẽ bị từ chối.
-- **Trang agent:** thông tin, phiên đang mở, lịch sử lượt giao (dạng bảng), tỉ lệ nộp lại đạt review, lần cuối lên tiếng.
-- **KHÔNG làm:** Baton không chạy agent, không gọi model, không giữ API key của model. Agent chạy ở nơi khác và nói chuyện với Baton qua CLI, MCP hoặc API.
+- **Agent status** (computed automatically):
+  - `busy`: has a running session.
+  - `waiting_owner`: has a session waiting on a Needs Owner item.
+  - `stalled`: has a stalled session.
+  - `idle`: has no open session.
+  - `disabled`: the owner has turned the agent off. A disabled agent calling the API is rejected.
+- **Agent page:** details, open sessions, assignment history (as a table), rate of resubmissions passing review, last time it spoke.
+- **NOT done:** Baton does not run agents, does not call models, does not hold model API keys. Agents run elsewhere and talk to Baton through the CLI, MCP or API.
 
-## 4. Ticket
-**Người dùng nhận được:** mỗi việc có mã ngắn để người và agent cùng gọi tên, có đủ bối cảnh để giao, và luôn biết đang ở tay ai.
+## 4. Tickets
+**What the user gets:** every piece of work has a short code that people and agents both use to refer to it, has enough context to be assigned, and it is always known whose hand it is in.
 
-**Trường:**
-- Mã (tự sinh), tiêu đề (bắt buộc, 1–200 ký tự sau khi cắt khoảng trắng), mô tả (markdown).
-- **Brief** (có cấu trúc, tuỳ chọn): Mục tiêu · Bối cảnh · Phạm vi · File và nguồn liên quan · Điều cấm · Xong là gì · Cách kiểm chứng · Nộp lại.
-- Trạng thái, ưu tiên, nhãn.
-- **Người chịu trách nhiệm** (chủ hoặc một agent `manager`/`coordinator`; mặc định là agent quản lý của dự án, nếu dự án không có thì là chủ). Không đặt được agent đã tắt (`FORBIDDEN`); ticket đã gán trước khi agent bị tắt **hoặc đổi vai trò** giữ nguyên, và sửa ticket gửi lại đúng người chịu trách nhiệm hiện tại thì không kiểm lại tắt/vai trò — chỉ kiểm khi đổi sang người khác (Chủ chốt T-58 = A, 22/10; BAT-50).
-- **Người đang cầm** (agent đang cầm lượt giao mở; tự tính từ mục 5, không sửa tay).
-- Ticket cha, ticket con, liên quan (hai chiều, **được khác dự án** — với người thấy cả hai dự án, 19.12 câu 15), chặn và bị chặn.
-- Hạn (tuỳ chọn), người tạo, các mốc thời gian (tạo, cập nhật, bắt đầu, xong).
+**Fields:**
+- Code (auto-generated), title (required, 1–200 characters after trimming whitespace), description (markdown).
+- **Brief** (structured, optional): Goal · Context · Scope · Related files and sources · Prohibitions · Definition of done · How to verify · What to submit.
+- Status, priority, labels.
+- **Responsible party** (the owner or a `manager`/`coordinator` agent; defaults to the project's managing agent, or the owner if the project has none). A disabled agent cannot be set (`FORBIDDEN`); a ticket assigned before the agent was disabled **or changed role** stays as is, and editing a ticket while sending the same current responsible party does not re-check disabled/role — the check only runs when changing to someone else (Owner decided T-58 = A, 22/10; BAT-50).
+- **Current holder** (the agent holding the open assignment; computed from section 5, not editable by hand).
+- Parent ticket, child tickets, related (two-way, **may cross projects** — for someone who can see both projects, 19.12 item 15), blocks and blocked by.
+- Due date (optional), creator, timestamps (created, updated, started, done).
 
-**Ưu tiên:** 5 mức cố định theo thứ tự: `Khẩn`, `Cao`, `Vừa`, `Thấp`, `Không`. Mặc định `Không`.
+**Priority:** 5 fixed levels in order: `Khẩn` (Urgent), `Cao` (High), `Vừa` (Medium), `Thấp` (Low), `Không` (None). Default None.
 
-**Trạng thái** (7, cố định ở v0.1):
+**Status** (7, fixed in v0.1):
 
-| Trạng thái | Nhóm | Nghĩa |
+| Status | Group | Meaning |
 |---|---|---|
-| Backlog | chờ | Giai đoạn xa, ý tưởng |
-| Cần làm | chờ | Đã lên kế hoạch (mặc định khi tạo) |
-| Đang làm | chạy | Có lượt giao đang mở, hoặc chủ đang tự làm |
-| Chờ kiểm chứng | chạy | Người làm báo xong; chưa đủ bằng chứng hoặc chưa qua review |
-| Xong | kết | Đủ bằng chứng hợp lệ (mục 7) |
-| Huỷ | kết | Không làm nữa; bắt buộc có lý do |
-| Trùng | kết | Trùng ticket khác; bắt buộc trỏ tới ticket gốc |
+| Backlog | waiting | Far-off stage, ideas |
+| Cần làm (To do) | waiting | Planned (default at creation) |
+| Đang làm (In progress) | running | Has an open assignment, or the owner is doing it personally |
+| Chờ kiểm chứng (Awaiting verification) | running | The doer reports done; not enough evidence yet, or not yet through review |
+| Xong (Done) | closed | Enough valid evidence (section 7) |
+| Huỷ (Canceled) | closed | No longer to be done; a reason is required |
+| Trùng (Duplicate) | closed | Duplicates another ticket; must point to the original ticket |
 
-**Trạng thái khi tạo:** mặc định **Cần làm**; người tạo được chọn **Backlog**. Mọi trạng thái khác không đặt được lúc tạo (`INVALID_INPUT`) — tạo rồi chuyển theo luật dưới đây. Quyền tạo không đổi theo trạng thái chọn. (Chủ chốt T-108 = B, 29/10; BAT-63)
+**Status at creation:** default **To do**; the creator may choose **Backlog**. No other status can be set at creation (`INVALID_INPUT`) — create first, then transition under the rules below. Creation permission does not vary with the chosen status. (Owner decided T-108 = B, 29/10; BAT-63)
 
-**Luật chuyển trạng thái** (server kiểm, client không được bỏ qua):
-- Mở một lượt giao cho ticket ở nhóm `planned` thì ticket tự sang **Đang làm**.
-- Vào **Xong** phải qua cổng bằng chứng (mục 7). Thiếu thì bị từ chối với lỗi `EVIDENCE_REQUIRED`, và ticket được đưa sang Chờ kiểm chứng.
-- Ticket cha không vào Xong khi còn ticket con chưa kết (`CHILDREN_OPEN`).
-- Vào Huỷ phải có lý do (`REASON_REQUIRED`). Vào Trùng phải có ticket gốc hợp lệ (`INVALID_DUPLICATE_TARGET`).
-- Mở lại ticket nhóm `closed` (về Cần làm) chỉ chủ làm được.
-- Ticket ở Đang làm quá 24 giờ mà không có lượt giao mở và không phải chủ tự làm thì gắn cờ **"Đang làm mà không ai cầm"** và hiện ở Tổng quan.
+**Status transition rules** (checked by the server; the client must not bypass them):
+- Opening an assignment for a ticket in the `planned` group moves the ticket to **In progress** automatically.
+- Entering **Done** must pass the evidence gate (section 7). If something is missing it is rejected with error `EVIDENCE_REQUIRED`, and the ticket is moved to Awaiting verification.
+- A parent ticket does not enter Done while it still has unclosed child tickets (`CHILDREN_OPEN`).
+- Entering Canceled requires a reason (`REASON_REQUIRED`). Entering Duplicate requires a valid original ticket (`INVALID_DUPLICATE_TARGET`).
+- Reopening a ticket in the `closed` group (back to To do) can only be done by the owner.
+- A ticket that has been In progress for more than 24 hours with no open assignment, and that the owner is not doing personally, is flagged **"Đang làm mà không ai cầm"** (In progress with no holder) and shown on the Overview.
 
-**Ticket điều phối:** agent `coordinator` giao việc cho `manager` bằng cách tạo ticket trong dự án điều phối (vd `COS`), tiêu đề tự đặt dạng `[Giao M-Sample] <tiêu đề>`, và nối loại `dieu_phoi` (19.4) với ticket của dự án. Cả hai ticket cùng đổi trạng thái theo lượt giao. Xem ticket nào cũng thấy ticket kia.
+**Coordination tickets:** a `coordinator` agent assigns work to a `manager` by creating a ticket in the coordination project (e.g. `COS`), with a self-chosen title of the form `[Giao M-Sample] <title>` ("Giao" = Assign), and links it with type `dieu_phoi` (19.4) to the project's ticket. Both tickets change status together following the assignment. Viewing either ticket shows the other.
 
-**Lịch sử:** mọi thay đổi ghi 1 dòng (ai, lúc nào, trường, cũ → mới). Không sửa hay xoá được.
+**History:** every change records 1 row (who, when, field, old → new). It cannot be edited or deleted.
 
-**Bình luận:** markdown, của chủ hoặc agent. Tác giả tự sửa được (có ghi "đã sửa"). Agent không xoá được.
+**Comments:** markdown, by the owner or an agent. The author can edit their own (marked "đã sửa", edited). Agents cannot delete.
 
-**Xoá ticket:** chỉ chủ. Ticket đã xoá khôi phục được trong 30 ngày; mã không bao giờ dùng lại.
+**Deleting a ticket:** owner only. A deleted ticket can be restored within 30 days; its code is never reused.
 
-**Lỗi:** tiêu đề rỗng bị từ chối (`INVALID_INPUT`); dự án đang tạm dừng hoặc lưu trữ thì agent không tạo được ticket (`PROJECT_NOT_ACCEPTING`).
+**Errors:** an empty title is rejected (`INVALID_INPUT`); when the project is paused or archived an agent cannot create tickets (`PROJECT_NOT_ACCEPTING`).
 
-**KHÔNG làm v0.1:** ước lượng điểm; sprint hoặc cycle; trường tuỳ biến (`khoi_lon`, `doi` của mục 20 là trường cố định, không phải trường tuỳ biến); trạng thái tuỳ biến; nhiều người chịu trách nhiệm.
+**NOT done in v0.1:** point estimates; sprints or cycles; custom fields (`khoi_lon` and `doi` of section 20 are fixed fields, not custom fields); custom statuses; multiple responsible parties.
 
-## 5. Lượt giao (chuyền việc)
-**Người dùng nhận được:** thấy cả chuỗi việc được chuyền: CoS giao Manager, Manager giao Worker, Worker nộp, Reviewer duyệt, Manager nghiệm thu. Ai giao, lúc nào, kèm brief gì, kết quả ra sao.
+## 5. Assignments (handing off work)
+**What the user gets:** seeing the whole chain of work being handed off: CoS assigns the Manager, the Manager assigns a Worker, the Worker submits, the Reviewer reviews, the Manager does acceptance. Who assigned, when, with what brief, and what the result was.
 
-- **Tạo lượt giao:** người giao (chủ hoặc agent có quyền) chọn ticket và người nhận (agent), gửi kèm brief. Brief lấy từ ticket nếu có, cho sửa riêng cho lượt này. Có thể đặt **hạn phản hồi** (mặc định 15 phút).
-- Mỗi ticket chỉ có tối đa **1 lượt giao mở** tại một thời điểm, trừ lượt review (mục 7) được mở song song với lượt làm đã nộp.
-- **Trạng thái lượt giao:**
-  - `pending`: vừa giao, người nhận chưa nhận.
-  - `in_progress`: người nhận đã nhận.
-  - `submitted`: người nhận đã nộp báo cáo.
-  - `accepted`: người giao nghiệm thu đạt.
-  - `returned`: người giao trả lại, bắt buộc có lý do. Tạo lượt mới cùng người nhận, số lượt tăng.
-  - `canceled`: người giao huỷ, hoặc chủ huỷ.
-- **Nhận việc:** người nhận gọi lệnh "nhận". Quá hạn phản hồi mà chưa nhận thì lượt hiện **"Không phản hồi"** ở Tổng quan (lượt không tự huỷ).
-- **Báo cáo nộp** (có cấu trúc, bắt buộc khi nộp):
-  - Kết quả: `done` (Xong), `partial` (Xong một phần) hoặc `blocked` (Không làm được).
-  - Đã làm · Kiểm chứng · Nhánh và commit · Rủi ro, điều cần xem kỹ · Việc phát sinh (không tự làm).
-- **Việc phát sinh** trong báo cáo có nút (cho người giao) "Tạo ticket từ việc phát sinh".
-- **Nghiệm thu:** người giao chọn `accepted` hoặc `returned`. `accepted` không tự làm ticket Xong; ticket Xong chỉ khi qua cổng bằng chứng.
-- **Luật:**
-  - Agent `worker` không tạo được lượt giao.
-  - Không giao cho agent đang `disabled`, hoặc agent không có quyền vào dự án đó (`FORBIDDEN`).
-  - Không giao cho chính mình.
-- **KHÔNG làm:** Baton không tự khởi động agent khi có lượt giao. Agent phải tự hỏi việc (mục 13). Tự khởi động để v0.2.
+- **Create an assignment:** the assigner (the owner or an agent with permission) picks a ticket and an assignee (an agent), and sends a brief with it. The brief is taken from the ticket if it has one, and can be edited for this assignment only. A **response deadline** can be set (default 15 minutes).
+- Each ticket has at most **1 open assignment** at a time, except that a review assignment (section 7) may be open in parallel with a work assignment that has been submitted.
+- **Assignment status:**
+  - `pending`: just assigned, the assignee has not claimed it.
+  - `in_progress`: the assignee has claimed it.
+  - `submitted`: the assignee has submitted the report.
+  - `accepted`: the assigner accepted it.
+  - `returned`: the assigner returned it; a reason is required. Creates a new round with the same assignee; the round number increases.
+  - `canceled`: canceled by the assigner, or by the owner.
+- **Claiming work:** the assignee calls the "claim" command. If the response deadline passes without a claim, the assignment shows **"Không phản hồi"** (No response) on the Overview (the assignment is not canceled automatically).
+- **Submission report** (structured, required on submit):
+  - Result: `done` (Done), `partial` (Partly done) or `blocked` (Could not do).
+  - Done · Verification · Branch and commit · Risks, things to look at closely · Follow-up work (not done on own initiative).
+- **Follow-up work** in the report has a button (for the assigner) "Tạo ticket từ việc phát sinh" (Create ticket from follow-up work).
+- **Acceptance:** the assigner chooses `accepted` or `returned`. `accepted` does not by itself make the ticket Done; the ticket is Done only when it passes the evidence gate.
+- **Rules:**
+  - A `worker` agent cannot create an assignment.
+  - Work cannot be assigned to an agent that is `disabled`, or to an agent without access to that project (`FORBIDDEN`).
+  - Work cannot be assigned to oneself.
+- **NOT done:** Baton does not start an agent when an assignment exists. The agent must ask for work itself (section 13). Auto-start is left for v0.2.
 
-## 6. Phiên và nhịp tim
-**Người dùng nhận được:** biết agent **có thật đang chạy** hay đã chết giữa chừng, không phải chờ tới khi chính mình nhận ra.
+## 6. Sessions and heartbeat
+**What the user gets:** knowing whether an agent **is really running** or has died midway, without waiting until they notice it themselves.
 
-- **Phiên** mở khi agent nhận một lượt giao, đóng khi nộp, bị huỷ hoặc bị dừng.
-- **Tự đóng:** phiên đóng ngay khi **lượt giao của nó nộp báo cáo**, và khi **ticket của lượt đó sang Chờ kiểm chứng hoặc Xong** — kể cả khi phiên đang `stalled` hoặc `error`. Lý do đóng ghi vào lịch sử phiên ("việc đã xong"). Hệ quả bắt buộc: một việc đã xong **không bao giờ** còn hiện ở "Cần chú ý" dưới dạng phiên đứng, và agent không còn "cầm" nó.
-- **Trạng thái phiên:**
-  - `running`: có tín hiệu trong ngưỡng.
-  - `waiting_owner`: phiên gắn với một mục Cần Chủ đang chờ; không tính đứng.
-  - `waiting_assigner`: agent đã gửi hoạt động `question` và đang chờ người giao trả lời; không tính đứng, nhưng quá 60 phút thì hiện ở "Cần chú ý" (19.6). Có câu trả lời thì phiên về `running`.
-  - `stalled`: quá ngưỡng không có tín hiệu.
-  - `error`: agent báo lỗi.
-  - `stopping`: chủ bấm dừng, chờ agent xác nhận.
+- A **session** opens when an agent claims an assignment, and closes when it submits, is canceled or is stopped.
+- **Auto-close:** the session closes as soon as **its assignment submits its report**, and when **that assignment's ticket moves to Awaiting verification or Done** — even if the session is `stalled` or `error`. The close reason is recorded in the session history ("việc đã xong", the work is done). Mandatory consequence: a finished piece of work **never** still shows under "Cần chú ý" (Needs attention) as a stalled session, and the agent no longer "holds" it.
+- **Session status:**
+  - `running`: a signal within the threshold.
+  - `waiting_owner`: the session is attached to a waiting Needs Owner item; not counted as stalled.
+  - `waiting_assigner`: the agent has sent a `question` activity and is waiting for the assigner's reply; not counted as stalled, but after 60 minutes it shows under "Needs attention" (19.6). When a reply arrives the session returns to `running`.
+  - `stalled`: no signal for longer than the threshold.
+  - `error`: the agent reported an error.
+  - `stopping`: the owner pressed stop, waiting for the agent to confirm.
   - `closed`.
-- **Tín hiệu** = mọi lệnh ghi của agent trên phiên đó (nhịp tim, hoạt động, bằng chứng, bình luận, nộp). Lệnh đọc không tính. Lệnh nhích phiên nào khi agent có nhiều phiên mở: 19.12 câu 41.
-- **Ngưỡng đứng:** mặc định 30 phút; chỉnh theo dự án hoặc theo agent (5–1440 phút).
-- **Dòng hoạt động của phiên:** agent gửi các mục loại `thought`, `action` (tên, tham số, kết quả), `question` (hỏi người giao; nếu cần chủ thì tạo mục Cần Chủ), `result`, `error`. Mục có thể đánh dấu tạm thời (bị mục kế thay chỗ trên màn hình; vẫn lưu trong lịch sử). Mục đã gửi không sửa được.
-- **Kế hoạch của phiên:** danh sách bước, mỗi bước có trạng thái chờ, đang làm, xong hoặc huỷ. Agent gửi lại toàn bộ danh sách mỗi lần cập nhật.
-- **Dừng:**
-  - Chủ bấm "Dừng" thì phiên sang `stopping`. Lần gọi kế tiếp của agent nhận về tín hiệu `STOP`; agent phải ngưng việc và gửi một mục `result` hoặc `error`.
-  - Sau 10 phút không xác nhận, phiên tự đóng với lý do "agent không xác nhận dừng".
-  - Mọi lệnh ghi sau khi phiên đóng bị từ chối (`SESSION_CLOSED`).
-- **Cảnh báo:** phiên chuyển sang `stalled` hoặc `error` thì bắn 1 thông báo (mục 12). Phiên hồi lại rồi đứng lần nữa thì bắn lại.
-- **KHÔNG làm:** đọc log hay màn hình của agent; tự khởi động lại agent.
+- **Signal** = every write command by the agent on that session (heartbeat, activity, evidence, comment, submit). Read commands do not count. Which session a command bumps when the agent has several open sessions: 19.12 item 41.
+- **Stall threshold:** default 30 minutes; adjustable per project or per agent (5–1440 minutes).
+- **Session activity stream:** the agent sends entries of type `thought`, `action` (name, parameters, result), `question` (asks the assigner; if the owner is needed, create a Needs Owner item), `result`, `error`. An entry can be marked transient (replaced on screen by the next entry; still kept in history). A sent entry cannot be edited.
+- **Session plan:** a list of steps, each with a status of waiting, in progress, done or canceled. The agent resends the whole list on every update.
+- **Stop:**
+  - The owner presses "Dừng" (Stop) and the session moves to `stopping`. The agent's next call receives the `STOP` signal; the agent must cease work and send a `result` or `error` entry.
+  - After 10 minutes without confirmation, the session closes itself with the reason "agent không xác nhận dừng" (agent did not confirm the stop).
+  - Every write command after the session has closed is rejected (`SESSION_CLOSED`).
+- **Alerts:** a session moving to `stalled` or `error` fires 1 notification (section 12). If the session recovers and then stalls again, it fires again.
+- **NOT done:** reading the agent's logs or screen; restarting the agent automatically.
 
-## 7. Bằng chứng và cổng kiểm chứng
-**Người dùng nhận được:** "Xong" trên Baton là xong thật.
+## 7. Evidence and the verification gate
+**What the user gets:** "Done" on Baton is really done.
 
-**Loại bằng chứng:**
+**Evidence types:**
 
-| Loại | Giá trị | Xác minh | Mở cổng Xong? |
+| Type | Value | Verification | Opens the Done gate? |
 |---|---|---|---|
-| `commit` | hash (≥7 ký tự) + repo (lấy từ hồ sơ dự án nếu không ghi) | Server kiểm qua GitHub API: commit truy cập được từ **nhánh mặc định** thì là **merged**; chỉ có trên nhánh khác thì là **pushed**; không tìm thấy thì trượt. **Ngoại lệ repo chưa push:** nếu GitHub **đã được hỏi về chính commit này** và trả lời "không có", mà CLI gửi kèm lời khai `merged_cuc_bo` (chính CLI đã chạy `git merge-base --is-ancestor <sha> <nhánh mặc định>` trong repo), thì kết luận là **merged** với **nguồn xác minh `local`**; nguồn đó phải hiện ra ở API, web và CLI. Lời khai **không** được nhận ở mọi ca khác: repo sai hình dạng, `GET /repos/<repo>` trả 404, lỗi mạng, kết luận `pushed`, hay server thiếu `GITHUB_TOKEN` | Chỉ khi là **merged** (kể cả merged nguồn `local`) |
-| `deploy` | URL + mã phiên bản tuỳ chọn (vd `e91efbeb`) | Server gọi URL; mã 2xx hoặc 3xx là đạt. Chỉ nhận `https://`, không nhận IP nội bộ hay localhost. **URL trỏ vào chính Baton** (host **bằng đúng** host công khai của Baton) thì không gọi mạng mà định tuyến vào chính router của app và lấy mã HTTP thật từ đó; chỉ mã của một **route thật** được nhận (không đi qua bước rơi về `index.html` của SPA), nên một URL trỏ tới đường giao diện sẽ **trượt** | Có |
-| `review` | Kết luận ĐẠT hoặc KHÔNG ĐẠT + ghi chú, do agent `reviewer` **khác** người làm gửi; hoặc do agent `manager` của dự án gửi **kèm đường dẫn báo cáo của reviewer độc lập** (xem bảng quyền mục 3); hoặc do agent `coordinator` gửi (không bắt buộc báo cáo) | Kiểm vai trò và danh tính người gửi; review do `manager` gửi mang **nguồn `manager`**, do `coordinator` gửi mang **nguồn `coordinator`**, và nguồn đó hiện ra ở mọi đường đọc | Không tự mở cổng; là điều kiện phụ (xem dưới) |
-| `test` | Tóm tắt (vd "42 passed, 0 failed") + cờ đạt | Không xác minh | Không |
-| `file` | Đường dẫn hoặc link (vd link file:// trên máy chủ) | Không | Không |
-| `note` | Chữ | Không | Không |
-| `bao_cao` (Báo cáo) | Đường dẫn báo cáo và/hoặc nội dung báo cáo (ít nhất một). Người ký = người gửi, **quyền ký giống hệt `review`**: agent `reviewer` khác người làm; agent `manager` của dự án **kèm đường dẫn báo cáo của reviewer độc lập**; agent `coordinator`; hoặc chủ. Nguồn ký (`reviewer` · `manager` · `coordinator` · `owner`) hiện ra ở mọi đường đọc | Không (chỉ kiểm vai trò và danh tính người ký, như `review`) | Không tự mở cổng; với **ticket không code** thì mở cổng **thay** cho chủ xác nhận (xem dưới). Với ticket có code: không mở gì |
+| `commit` | hash (≥7 characters) + repo (taken from the project profile if not given) | The server checks through the GitHub API: a commit reachable from the **default branch** is **merged**; one only on another branch is **pushed**; not found means failed. **Exception for a repo not yet pushed:** if GitHub **was asked about this very commit** and answered "does not exist", and the CLI sent the declaration `merged_cuc_bo` along with it (the CLI itself ran `git merge-base --is-ancestor <sha> <default branch>` in the repo), then the conclusion is **merged** with **verification source `local`**; that source must be shown in the API, web and CLI. The declaration is **not** accepted in any other case: malformed repo, `GET /repos/<repo>` returning 404, network error, a `pushed` conclusion, or the server lacking `GITHUB_TOKEN` | Only when **merged** (including merged with source `local`) |
+| `deploy` | URL + optional version code (e.g. `e91efbeb`) | The server calls the URL; a 2xx or 3xx code passes. Only `https://` is accepted, no internal IPs or localhost. A **URL pointing at Baton itself** (host **exactly equal to** Baton's public host) is not called over the network but routed into the app's own router, and the real HTTP code is taken from there; only the code of a **real route** is accepted (not passing through the SPA's fallback to `index.html`), so a URL pointing at a UI path will **fail** | Yes |
+| `review` | Verdict PASS or FAIL + note, sent by a `reviewer` agent **other than** the doer; or sent by the project's `manager` agent **with the path to an independent reviewer's report** (see the permission table in section 3); or sent by a `coordinator` agent (report not required) | Checks the sender's role and identity; a review sent by a `manager` carries **source `manager`**, one sent by a `coordinator` carries **source `coordinator`**, and that source is shown on every read path | Does not open the gate by itself; it is a secondary condition (see below) |
+| `test` | Summary (e.g. "42 passed, 0 failed") + pass flag | Not verified | No |
+| `file` | Path or link (e.g. a file:// link on the host machine) | No | No |
+| `note` | Text | No | No |
+| `bao_cao` (Báo cáo, Report) | Report path and/or report content (at least one). Signer = sender, **signing rights identical to `review`**: a `reviewer` agent other than the doer; the project's `manager` agent **with the path to an independent reviewer's report**; a `coordinator` agent; or the owner. The signing source (`reviewer` · `manager` · `coordinator` · `owner`) is shown on every read path | No (only the signer's role and identity are checked, as for `review`) | Does not open the gate by itself; for a **no-code ticket** it opens the gate **in place of** the owner's confirmation (see below). For a ticket with code: opens nothing |
 
-**Cổng vào Xong:**
-- Cần **ít nhất 1** bằng chứng `commit` đã merged, hoặc `deploy` đạt.
-- Nếu dự án bật "bắt buộc review" (mặc định **bật**) thì cần thêm 1 `review` ĐẠT gửi sau commit hoặc deploy cuối cùng.
-- **Chủ được ép Xong** kèm lý do. Ticket đó mang nhãn hệ thống "xong không bằng chứng".
-- **Ticket không code** (cờ dự án **hoặc** cờ ticket, **chỉ chủ đổi**; ví dụ việc HR, giấy tờ, hay một ticket nghiên cứu trong dự án có code): cổng đổi thành **một trong hai** đường:
-  - 1 `file` hoặc `note` cộng **chủ xác nhận**, tức một mục Cần Chủ loại Review tự sinh (19.12 câu 57); hoặc
-  - **≥1 `bao_cao` chưa rút do người khác người làm ký** (người làm = người nhận của bất kỳ lượt `work` nào trên ticket, như luật "khác người làm" của `review`). Khi cổng đã đủ nhờ báo cáo thì **không** sinh mục xác nhận.
-  - Cờ **dự án** nằm ở hồ sơ dự án (mục 9). Cờ **ticket** (`ticket.khong_code`) chỉ chủ bật/tắt (agent ⇒ `FORBIDDEN`), có ghi Lịch sử, và **không kéo trạng thái** (19.12 câu 58). Cả hai cờ đọc **tại thời điểm kiểm** (19.10).
-  - Một `bao_cao` **không** được tính là `file` hay `note` của đường thứ nhất, và ngược lại.
-  - Ticket sang Xong bằng **bất kỳ** đường nào (đủ nhờ `bao_cao`, chủ xác nhận, chủ ép Xong, tự lên Xong, …) thì mục xác nhận tự sinh của chính ticket đó còn `Chờ` **tự đóng** cùng lúc (xem mục 8 và 19.12 câu 57).
-  - **Gửi `bao_cao` không tự đưa ticket lên Xong** từ Chờ kiểm chứng (như `file`/`note`/`review`): người có quyền "Đổi trạng thái ticket" theo bảng quyền mục 3 (người làm với ticket của lượt mình, `manager` trong dự án, `coordinator`, chủ) đổi sang Xong, cổng được kiểm lúc đổi (Chủ chốt T-38 = A, 19/10). Chi tiết: 19.12 câu 66.
+**Gate into Done:**
+- Requires **at least 1** `commit` evidence that is merged, or a passing `deploy`.
+- If the project has "bắt buộc review" (review required) on (default **on**), 1 PASS `review` sent after the last commit or deploy is also required.
+- **The owner may force Done** with a reason. That ticket carries the system label "xong không bằng chứng" (done without evidence).
+- **No-code ticket** (project flag **or** ticket flag, **changed by the owner only**; for example HR work, paperwork, or a research ticket in a project that has code): the gate becomes **one of two** paths:
+  - 1 `file` or `note` plus **owner confirmation**, i.e. an auto-generated Needs Owner item of type Review (19.12 item 57); or
+  - **≥1 non-withdrawn `bao_cao` signed by someone other than the doer** (the doer = the assignee of any `work` assignment on the ticket, as in the "other than the doer" rule of `review`). When the gate is already satisfied by a report, **no** confirmation item is generated.
+  - The **project** flag is in the project profile (section 9). The **ticket** flag (`ticket.khong_code`) is turned on/off by the owner only (agent ⇒ `FORBIDDEN`), is recorded in History, and **does not pull the status** (19.12 item 58). Both flags are read **at the time of the check** (19.10).
+  - A `bao_cao` does **not** count as the `file` or `note` of the first path, and vice versa.
+  - When a ticket moves to Done by **any** path (satisfied by `bao_cao`, owner confirmation, owner forces Done, auto-Done, …), that ticket's own auto-generated confirmation item still in `Chờ` (Waiting) **closes itself** at the same time (see section 8 and 19.12 item 57).
+  - **Sending a `bao_cao` does not move the ticket to Done by itself** from Awaiting verification (like `file`/`note`/`review`): someone with the "Change ticket status" permission in the section 3 permission table (the doer for tickets of its own assignment, the `manager` in the project, the `coordinator`, the owner) changes it to Done, and the gate is checked at that change (Owner decided T-38 = A, 19/10). Details: 19.12 item 66.
 
-**Xác minh:**
-- Chạy ngay khi gửi, trả kết quả trong tối đa 10 giây. Lỗi mạng hoặc token GitHub có vấn đề thì trạng thái là `pending`, tự thử lại sau 5 phút, tối đa 3 lần, rồi thành `failed` với lý do.
-- **Tự lên Xong:** ticket ở Chờ kiểm chứng mà vừa đủ điều kiện cổng (ví dụ commit từ pushed thành merged) thì tự sang Xong, lịch sử ghi người làm là "hệ thống". Server kiểm lại các commit `pushed` mỗi 10 phút trong 7 ngày.
-- Bằng chứng **không sửa, không xoá**. Chỉ có thể "rút lại" kèm lý do (người gửi hoặc chủ). Bằng chứng đã rút không được tính. Ticket đã Xong không bị hạ tự động.
-- **KHÔNG làm:** tự quét repo tìm commit; tự deploy; chạy test.
+**Verification:**
+- Runs immediately on sending and returns a result within at most 10 seconds. On a network error or a problem with the GitHub token the status is `pending`, retried automatically after 5 minutes, at most 3 times, then becomes `failed` with a reason.
+- **Auto-Done:** a ticket in Awaiting verification that has just met the gate conditions (for example a commit going from pushed to merged) moves to Done by itself, and history records the actor as "hệ thống" (system). The server re-checks `pushed` commits every 10 minutes for 7 days.
+- Evidence is **not edited, not deleted**. It can only be "withdrawn" with a reason (by the sender or the owner). Withdrawn evidence does not count. A ticket already Done is not demoted automatically.
+- **NOT done:** scanning the repo for commits; deploying; running tests.
 
-## 8. Cần Chủ
-**Người dùng nhận được:** **một chỗ duy nhất** gom mọi thứ cần người chủ quyết hoặc làm. Nhìn là biết cái gì gấp, mỗi mục đủ bối cảnh để quyết trong một lần đọc, quyết bằng một phím, và Baton tự báo kết quả về cho agent.
+## 8. Needs Owner
+**What the user gets:** **one single place** collecting everything that needs the owner's decision or action. At a glance it is clear what is urgent, each item has enough context to be decided in one read, it is decided with one key, and Baton reports the result back to the agent by itself.
 
-**Tạo:** agent `coordinator` hoặc `manager` (CLI, MCP, API), hoặc chủ tự tạo để ghi nhớ.
+**Create:** a `coordinator` or `manager` agent (CLI, MCP, API), or the owner creates one as a reminder.
 
-**Trường:**
-- Mã `T-số` tăng dần toàn workspace, không tái dùng.
-- Tiêu đề; **dự án** (bắt buộc, hoặc "Chung").
-- **Mức:** 🔴 `Gấp`, 🟡 `Trong ngày`, ⚪ `Không gấp`.
-- **Loại:**
-  - `Quyết định`: bắt buộc 2–5 phương án (mỗi phương án có nhãn A, B, C… và 1–3 dòng), cộng phương án đề xuất và lý do.
-  - `Chủ chạy lệnh`: bắt buộc có lệnh hoặc script. Hiện trong khối code có nút Copy, kèm ghi chú "chạy ở terminal thật" nếu agent đánh dấu cần TTY.
-  - `Chủ review`: bắt buộc có ít nhất 1 file hoặc link để xem.
-  - `Chỉ để biết`: không cần làm gì, chỉ cần xác nhận đã đọc.
-- **Bối cảnh** (markdown, có link file:// và link ticket); **ticket liên quan** (nhiều); **phiên liên quan** (nếu có, phiên sang `waiting_owner`).
-- **Hạn** (tuỳ chọn). Nếu không đặt: 🔴 là 4 giờ, 🟡 là 20:00 cùng ngày.
+**Fields:**
+- Code `T-number`, increasing across the whole workspace, never reused.
+- Title; **project** (required, or "Chung", General).
+- **Level:** 🔴 `Gấp` (Urgent), 🟡 `Trong ngày` (Today), ⚪ `Không gấp` (Not urgent).
+- **Type:**
+  - `Quyết định` (Decision): requires 2–5 options (each option has a label A, B, C… and 1–3 lines), plus the recommended option and the reason.
+  - `Chủ chạy lệnh` (Owner runs command): requires a command or script. Shown in a code block with a Copy button, with the note "chạy ở terminal thật" (run in a real terminal) if the agent marks it as needing a TTY.
+  - `Chủ review` (Owner review): requires at least 1 file or link to look at.
+  - `Chỉ để biết` (FYI): nothing to do, only confirm it has been read.
+- **Context** (markdown, with file:// links and ticket links); **related tickets** (several); **related session** (if any, the session moves to `waiting_owner`).
+- **Deadline** (optional). If not set: 🔴 is 4 hours, 🟡 is 20:00 the same day.
 
-**Trạng thái:**
-- `Chờ` → `Đã xử lý` (có **kết quả**: phương án đã chọn và/hoặc chữ tự do, vd "đã chạy", "A, ngưỡng 500") hoặc `Bỏ qua` (có lý do).
-- Chỉ chủ chuyển trạng thái. Agent chỉ đọc được kết quả. **Ngoại lệ duy nhất:** mục xác nhận tự sinh của ticket không code (19.12 câu 57) tự sang `Đã xử lý` với kết quả "ticket đã Xong", **không** mang Đạt/Cần sửa, khi ticket của nó sang Xong (Chủ chốt T-38 = A, T-43 = A; #163).
-- Mở lại được: từ Đã xử lý về Chờ, có ghi lịch sử.
+**Status:**
+- `Chờ` (Waiting) → `Đã xử lý` (Resolved; with a **result**: the chosen option and/or free text, e.g. "đã chạy" (ran it), "A, ngưỡng 500" (A, threshold 500)) or `Bỏ qua` (Skipped; with a reason).
+- Only the owner changes the status. Agents can only read the result. **The single exception:** the auto-generated confirmation item of a no-code ticket (19.12 item 57) moves to Resolved by itself with the result "ticket đã Xong" (ticket is Done), carrying **no** Pass/Needs fixing verdict, when its ticket moves to Done (Owner decided T-38 = A, T-43 = A; #163).
+- Can be reopened: from Resolved back to Waiting, recorded in history.
 
-**Màn hình Cần Chủ** (mục thứ hai của sidebar, sau Tổng quan — xem mục 14; huy hiệu đếm số `Chờ` màu theo mức cao nhất):
-- 3 khối **🔴 Gấp · 🟡 Trong ngày · ⚪ Không gấp**. Trong khối sắp theo hạn, rồi theo lúc tạo. Mục quá hạn có viền đỏ và chữ "quá hạn X giờ".
-- Mỗi thẻ hiện đủ: mã, dự án, loại, tiêu đề, bối cảnh (mặc định gập sau 6 dòng), phương án thành nút (phương án đề xuất có nhãn "Đề xuất"), lệnh có nút Copy, file có link, ticket liên quan.
-- Dưới cùng là bảng **Đã xử lý**: ngày, mã, tiêu đề ngắn, kết quả. Lọc được theo dự án và theo khoảng ngày.
-- Lọc theo dự án, theo loại.
+**Needs Owner screen** (second entry of the sidebar, after the Overview — see section 14; the badge counts `Chờ` (Waiting) items, coloured by the highest level):
+- 3 blocks **🔴 Gấp (Urgent) · 🟡 Trong ngày (Today) · ⚪ Không gấp (Not urgent)**. Within a block, sorted by deadline, then by creation time. An overdue item has a red border and the text "quá hạn X giờ" (overdue by X hours).
+- Each card shows everything: code, project, type, title, context (collapsed after 6 lines by default), options as buttons (the recommended option has the label "Đề xuất", Recommended), the command with a Copy button, files as links, related tickets.
+- At the bottom is the **Đã xử lý** (Resolved) table: date, code, short title, result. Filterable by project and by date range.
+- Filter by project, by type.
 
-**Trả lời bằng nút rồi bấm Gửi** (không cần gõ gì trong terminal hay chat):
-- Mỗi thẻ có đủ nút để trả lời ngay trên Baton, trên máy tính lẫn điện thoại:
+**Answer with buttons, then press Send** (no need to type anything in a terminal or chat):
+- Each card has all the buttons needed to answer right on Baton, on desktop and phone alike:
 
-| Loại | Trên thẻ có | Gửi |
+| Type | On the card | Send |
 |---|---|---|
-| `decision` | Mỗi phương án là **một nút chọn** (A, B, C…; phương án đề xuất có nhãn "Đề xuất"). Bấm để chọn, bấm phương án khác để đổi. Ô "ghi thêm" tuỳ chọn | Nút **Gửi duyệt**, mờ cho tới khi đã chọn 1 phương án |
-| `run_command` | Lệnh trong khối code có nút Copy; ô "kết quả" tuỳ chọn (vd dán mã phiên bản) | Nút **Đã chạy · Gửi** |
-| `review` | Nút mở file hoặc link; 2 nút chọn **Đạt** hoặc **Cần sửa** (Cần sửa thì bắt buộc ghi chú) | Nút **Gửi duyệt** |
-| `fyi` | — | Nút **Đã đọc** |
+| `decision` | Each option is **a choice button** (A, B, C…; the recommended option has the label "Đề xuất", Recommended). Press to choose, press another option to change. Optional "ghi thêm" (additional note) box | Button **Gửi duyệt** (Send approval), dimmed until 1 option has been chosen |
+| `run_command` | The command in a code block with a Copy button; optional "kết quả" (result) box (e.g. paste the version code) | Button **Đã chạy · Gửi** (Ran it · Send) |
+| `review` | Button to open the file or link; 2 choice buttons **Đạt** (Pass) or **Cần sửa** (Needs fixing) (Needs fixing requires a note) | Button **Gửi duyệt** (Send approval) |
+| `fyi` | — | Button **Đã đọc** (Read) |
 
-- Mọi thẻ có thêm link nhỏ "Bỏ qua", bắt buộc nhập lý do rồi Gửi.
-- **Bấm Gửi là xong phía chủ.** Thẻ chuyển ngay xuống "Đã xử lý" và hiện kết quả. Chủ không phải báo lại cho agent ở bất cứ đâu.
-- **Agent tự nhận kết quả:**
-  - Agent đang chờ bằng `baton result T-x --wait` (hoặc công cụ MCP tương đương) nhận kết quả **trong vòng 3 giây** sau khi chủ bấm Gửi.
-  - Agent không đang chờ thì nhận kết quả ở lần gọi kế tiếp (`heartbeat`, `tasks` hay bất kỳ lệnh nào), trong trường `resolved_asks`.
-  - Phiên liên quan tự về `running`.
-- **Phím tắt** (tuỳ chọn, cho máy tính): `1`–`5` chọn phương án; `Cmd/Ctrl+Enter` gửi; `D` là nút chính của loại lệnh, review, fyi; `S` bỏ qua; `J`/`K` lên xuống.
-- **Ô trả lời hàng loạt** (tuỳ chọn, nằm trên Baton): dán nhiều dòng dạng `T-18: đã xem` hay `T-52: A, ngưỡng 500`. Baton tách từng mã, khớp phương án nếu có chữ cái đầu hợp lệ, cho xem trước rồi áp một lần. Dòng không hiểu thì báo đỏ, không áp.
+- Every card also has a small link "Bỏ qua" (Skip), which requires entering a reason and then Send.
+- **Pressing Send is the end of it on the owner's side.** The card moves straight down to "Resolved" and shows the result. The owner does not have to report back to the agent anywhere.
+- **The agent receives the result by itself:**
+  - An agent waiting with `baton result T-x --wait` (or the equivalent MCP tool) receives the result **within 3 seconds** of the owner pressing Send.
+  - An agent that is not waiting receives the result on its next call (`heartbeat`, `tasks` or any command), in the `resolved_asks` field.
+  - The related session returns to `running` by itself.
+- **Keyboard shortcuts** (optional, for desktop): `1`–`5` choose an option; `Cmd/Ctrl+Enter` send; `D` is the main button for the command, review and fyi types; `S` skip; `J`/`K` up and down.
+- **Bulk answer box** (optional, on Baton): paste several lines of the form `T-18: đã xem` or `T-52: A, ngưỡng 500`. Baton splits out each code, matches an option if there is a valid leading letter, shows a preview and then applies everything at once. A line it does not understand is marked red and not applied.
 
-**Phiên duyệt:**
-- Nút "Bắt đầu phiên duyệt" hiện từng thẻ `Chờ` theo thứ tự 🔴 → 🟡 → ⚪.
-- Cuối phiên hiện tóm tắt: đã xử lý N, bỏ qua M, còn lại K.
-- Lịch nhắc phiên duyệt mặc định 08:00 và 20:00 (chỉnh được).
+**Approval session:**
+- The button "Bắt đầu phiên duyệt" (Start approval session) shows each `Chờ` (Waiting) card in the order 🔴 → 🟡 → ⚪.
+- At the end of the session a summary is shown: resolved N, skipped M, remaining K.
+- The approval session reminder schedule defaults to 08:00 and 20:00 (adjustable).
 
-**Khi một mục được xử lý:**
-- Tự ghi 1 dòng vào Nhật ký quyết định (mục 10): người là chủ, cùng dự án, nội dung là kết quả, căn cứ là `T-số`.
-- Tự thêm bình luận "T-số đã xử lý: <kết quả>" vào mọi ticket liên quan.
-- **Ngoại lệ (tạm):** mục xác nhận tự sinh **tự đóng vì ticket đã Xong** (19.12 câu 57, #163) **không** ghi Nhật ký và **không** thêm bình luận — chủ không xử lý mục đó, nên dòng "người là chủ" sẽ sai sự thật. Chờ chốt: `cau-hoi-spec.md` #166.
-- Phiên liên quan hết `waiting_owner`. Lần gọi kế tiếp của agent nhận được kết quả (mục 13).
+**When an item is resolved:**
+- 1 row is written to the Decision log automatically (section 10): the person is the owner, same project, the content is the result, the reference is `T-number`.
+- A comment "T-số đã xử lý: <kết quả>" (English: "T-number resolved: <result>") is added automatically to every related ticket.
+- **Exception (temporary):** an auto-generated confirmation item that **closes itself because the ticket is Done** (19.12 item 57, #163) writes **no** Decision log row and adds **no** comment — the owner did not handle that item, so a row saying "the person is the owner" would be untrue. Pending decision: `spec-questions.md` #166.
+- The related session leaves `waiting_owner`. The agent's next call receives the result (section 13).
 
-**Thông báo:** mục 🔴 mới thì bắn ngay (ngay = trong một nhịp cron, ≤ 60 giây — Chủ chốt T-50 = A, 22/10, `cau-hoi-spec.md` #170). 🔴 chưa xử lý sau 2 giờ thì nhắc 1 lần. 🟡 và ⚪ chỉ vào tóm tắt sáng và tối.
+**Notifications:** a new 🔴 item fires immediately (immediately = within one cron tick, ≤ 60 seconds — Owner decided T-50 = A, 22/10, `spec-questions.md` #170). A 🔴 not handled after 2 hours gets 1 reminder. 🟡 and ⚪ only go into the morning and evening summaries.
 
-**Lỗi:**
-- Loại `Quyết định` mà thiếu phương án: `OPTIONS_REQUIRED`.
-- Loại `Chủ chạy lệnh` mà thiếu lệnh: `COMMAND_REQUIRED`.
-- Agent `worker` hoặc `reviewer` tạo mục: `FORBIDDEN`.
-- Trùng tiêu đề với một mục `Chờ` cùng dự án trong 24 giờ: vẫn tạo, nhưng gắn cờ "có thể trùng T-x".
+**Errors:**
+- Type Decision missing options: `OPTIONS_REQUIRED`.
+- Type Owner runs command missing a command: `COMMAND_REQUIRED`.
+- A `worker` or `reviewer` agent creating an item: `FORBIDDEN`.
+- Same title as a Waiting item in the same project within 24 hours: still created, but flagged "có thể trùng T-x" (may duplicate T-x).
 
-**KHÔNG làm:** agent tự quyết mục Cần Chủ; tự chạy lệnh thay chủ; nhắc lặp nhiều lần.
+**NOT done:** agents deciding Needs Owner items themselves; running commands on the owner's behalf; repeated reminders.
 
-## 9. Hồ sơ dự án (bản đồ dự án)
-**Người dùng nhận được:** mỗi dự án có một trang "đọc trước" cho agent và cho chủ. Agent mới vào dự án chỉ cần đọc trang này.
+## 9. Project profile (project map)
+**What the user gets:** each project has a "read first" page for agents and for the owner. An agent new to the project only needs to read this page.
 
-- **Trường** (markdown từng mục):
-  - "Là gì", thư mục hoặc nguồn (đường dẫn máy), repo GitHub (chủ sở hữu/tên, nhánh mặc định), stack.
-  - "Đọc trước" (danh sách link), cách deploy và ai chạy, danh sách cấm riêng của dự án.
-  - **Lỗi đã gặp** (danh sách chỉ thêm: ngày, lỗi, cách tránh).
-  - Cờ "dự án không code" và cờ "bắt buộc review".
-- **Chung toàn workspace:** trang "Luật chung", gồm danh sách cấm chung và checklist trước khi giao. Agent đọc được qua CLI hoặc MCP.
-- **Trang Bản đồ:** bảng mọi dự án: tên, agent quản lý, thư mục, số ticket Đang làm, chỉ báo sức sống, cập nhật cuối. Bản đồ trực quan nằm trên Tổng quan (mục 20); trang này giữ dạng bảng, thêm cột Nhóm, Ưu tiên, Đang đẩy, Duy trì.
-- Mỗi lần sửa hồ sơ ghi lịch sử phiên bản.
+- **Fields** (markdown per section):
+  - "Là gì" (What it is), folder or source (local path), GitHub repo (owner/name, default branch), stack.
+  - "Đọc trước" (Read first; a list of links), how to deploy and who runs it, the project's own forbidden list.
+  - **Known pitfalls** (append-only list: date, pitfall, how to avoid it).
+  - The "no-code project" flag and the "review required" flag.
+- **Workspace-wide:** the "Luật chung" (Common rules) page, containing the common forbidden list and the pre-assignment checklist. Agents can read it through the CLI or MCP.
+- **Map page:** a table of every project: name, managing agent, folder, number of tickets In progress, health indicator, last update. The visual map is on the Overview (section 20); this page keeps the table form, with added columns Group, Priority, Pushing, Maintenance.
+- Every edit to the profile records a version history.
 
-## 10. Nhật ký quyết định
-**Người dùng nhận được:** trả lời được câu "ai đã quyết cái này, vì sao, lúc nào", không sợ bị sửa lén.
+## 10. Decision log
+**What the user gets:** being able to answer "who decided this, why, and when", with no fear of it being quietly edited.
 
-- **Dòng:** lúc (ngày giờ), ai (chủ hoặc agent), dự án, quyết định, vì sao, căn cứ (link T-số, mã ticket, dòng cũ).
-- **Chỉ thêm.** Không sửa, không xoá, kể cả chủ. Muốn đổi thì thêm dòng mới trỏ về dòng cũ; dòng cũ hiện chữ "đã có quyết định mới".
-- Ai được ghi: chủ, `coordinator`, `manager`. Riêng dòng "chủ quyết" chỉ sinh từ Cần Chủ hoặc do chủ tự ghi.
-- **Màn hình:** gom theo ngày, lọc theo dự án và theo ai, tìm theo chữ.
-- **Luật dữ liệu:** trường "quyết định" có cảnh báo khi phát hiện mẫu giống số CCCD, số tài khoản, lương (dãy 9–12 số, cụm "lương"). Chỉ cảnh báo, không chặn. Mục đích là nhắc không đưa dữ liệu nhân sự vào.
+- **Row:** when (date and time), who (owner or agent), project, decision, why, reference (link to a T-number, ticket code, older row).
+- **Append-only.** No edit, no delete, not even by the owner. To change something, add a new row pointing to the old row; the old row shows the text "đã có quyết định mới" (superseded by a new decision).
+- Who may write: the owner, `coordinator`, `manager`. An "owner decided" row, however, is only generated from Needs Owner or written by the owner personally.
+- **Screen:** grouped by day, filter by project and by who, search by text.
+- **Data rule:** the "decision" field warns when it detects patterns resembling a national ID number, bank account number or salary (a run of 9–12 digits, the phrase "lương" (salary)). Warning only, no blocking. The purpose is to remind people not to put HR data in.
 
-## 11. Tổng quan và báo cáo
-**Tổng quan** (trang mặc định) là màn hình **quản lý công việc tổng quát**, không phải hộp thư của chủ. Từ trên xuống:
-1. **Dự án:** Bản đồ dự án (mục 20).
-2. **Việc đang chạy:** thẻ việc của **mọi** dự án đang ở Đang làm và Chờ kiểm chứng (cùng kiểu thẻ với bảng việc ở mục 14), mỗi thẻ ghi ai đang cầm và đã cầm bao lâu.
-3. **Agent đang làm gì:** chỉ agent **đang làm** — mỗi agent một dòng: việc đang cầm và thời gian từ tín hiệu cuối. Agent rảnh gom **một dòng** đếm số.
-4. **Vừa xong:** ticket Xong, chọn cửa sổ **24 giờ** hoặc **7 ngày**, kèm bằng chứng rút gọn (hash 7 ký tự, URL, mã phiên bản).
-5. **Cần chú ý:** phiên đứng hoặc lỗi; lượt giao không phản hồi; ticket "Đang làm mà không ai cầm"; bằng chứng trượt; ticket Chờ kiểm chứng quá 24 giờ. **Gom theo ticket: mỗi ticket đúng MỘT dòng**, các lý do hiện thành nhãn trên dòng đó. Một bằng chứng trượt mà **sau đó** đã có bằng chứng cùng loại Đạt thì không báo nữa.
+## 11. Overview and reports
+The **Overview** (the default page) is the **general work-management** screen, not the owner's inbox. From top to bottom:
+1. **Projects:** the project map (section 20).
+2. **Work in progress:** work cards from **every** project that are In progress or Awaiting verification (the same card style as the work board in section 14); each card says who is holding it and for how long.
+3. **What agents are doing:** only agents that **are working** — one line per agent: the work it is holding and the time since its last signal. Idle agents are collapsed into **one line** with a count.
+4. **Just done:** Done tickets, with a selectable window of **24 hours** or **7 days**, with abbreviated evidence (7-character hash, URL, version code).
+5. **Needs attention:** stalled or errored sessions; assignments with no response; tickets "In progress with no holder"; failed evidence; tickets Awaiting verification for more than 24 hours. **Grouped by ticket: each ticket gets exactly ONE line**, with the reasons shown as labels on that line. A failed piece of evidence for which a Passed piece of evidence of the same type arrived **afterwards** is no longer reported.
 
-**Cần Chủ không nằm đầu Tổng quan.** Nó chỉ là một ô gọn (số mục Chờ theo mức + link tới trang Cần Chủ + nút "Bắt đầu phiên duyệt") ở góc hoặc thanh bên phải của trang; sidebar vẫn có mục Cần Chủ mang huy hiệu đỏ, và đó là đường chính vào việc chờ chủ.
+**Needs Owner is not at the top of the Overview.** It is only a compact box (the number of Waiting items by level + a link to the Needs Owner page + the "Start approval session" button) in the corner or the right-hand bar of the page; the sidebar still has the Needs Owner entry with its red badge, and that is the main way into work waiting on the owner.
 
-**Báo cáo sáng** (tự sinh lúc 07:30, xem trên web và gửi thông báo):
-1. Cần Chủ (đọc trước).
-2. Đề xuất 3 việc trọng tâm hôm nay. Agent `coordinator` ghi qua API; nếu chưa ghi thì để trống kèm chữ "chưa có đề xuất".
-3. Hôm qua đã xong.
-4. Đang chạy.
-5. Rủi ro và lệch (mục Cần chú ý).
-6. Quyết định mới trong Nhật ký.
+**Morning report** (auto-generated at 07:30, viewable on the web and sent as a notification):
+1. Needs Owner (read first).
+2. Proposed 3 focus items for today. The `coordinator` agent writes them through the API; if not yet written, left blank with the text "chưa có đề xuất" (no proposal yet).
+3. Done yesterday.
+4. In progress.
+5. Risks and deviations (the Needs attention section).
+6. New decisions in the Decision log.
 
-**Handoff tối** (tự sinh lúc 20:00):
-- 3 trọng tâm hôm nay: đạt hay chưa (theo trạng thái các ticket được gắn là trọng tâm).
-- Trạng thái từng dự án.
-- Chuyển sang mai.
-- Cần Chủ mới phát sinh.
+**Evening handoff** (auto-generated at 20:00):
+- Today's 3 focus items: achieved or not (by the status of the tickets tagged as focus).
+- Status of each project.
+- Carried over to tomorrow.
+- Newly arisen Needs Owner items.
 
-Báo cáo lưu theo ngày, xem lại được, xuất ra markdown được.
+Reports are stored by day, can be viewed again and can be exported to markdown.
 
-## 12. Thông báo
-- **Kênh v0.1:** Telegram (1 chat của chủ; bot token và chat id cấu hình phía server) + trong app (chuông).
-- **Bắn khi:**
-  - Cần Chủ 🔴 mới, hoặc 🔴 quá 2 giờ.
-  - Phiên đứng hoặc lỗi.
-  - Lượt giao không phản hồi.
-  - Bằng chứng trượt.
-  - Ticket Xong: gom, tối đa 1 tin mỗi 15 phút.
-  - Báo cáo sáng và tối.
-- Mỗi tin có link thẳng tới đúng thẻ hoặc ticket. Có **giờ yên lặng** (mặc định 23:00–07:00): chỉ 🔴 được gửi trong khung này.
-- Tắt từng loại trong Cài đặt.
+## 12. Notifications
+- **Channels in v0.1:** Telegram (1 chat of the owner; bot token and chat id configured on the server side) + in-app (bell).
+- **Fires when:**
+  - A new 🔴 Needs Owner item, or a 🔴 older than 2 hours.
+  - A session stalls or errors.
+  - An assignment gets no response.
+  - Evidence fails.
+  - Ticket Done: batched, at most 1 message every 15 minutes.
+  - Morning and evening reports.
+- Every message has a direct link to the exact card or ticket. There are **quiet hours** (default 23:00–07:00): only 🔴 is sent within this window.
+- Each type can be turned off in Settings.
 
-## 13. Cách agent nói chuyện với Baton
-Ba đường, cùng một bộ quyền: **CLI `baton`**, **MCP server**, **HTTP API** (JSON). Agent xác thực bằng token của mình.
+## 13. How agents talk to Baton
+Three paths, one set of permissions: the **`baton` CLI**, the **MCP server**, the **HTTP API** (JSON). An agent authenticates with its own token.
 
-**Mô hình kéo việc** (không cần webhook): agent tự gọi "việc của tôi" hoặc "chờ việc". Có chế độ chờ dài tới 60 giây; có việc mới hoặc tín hiệu mới thì trả về ngay.
+**Pull model** (no webhook needed): the agent itself calls "my work" or "wait for work". There is a long-wait mode of up to 60 seconds; when new work or a new signal appears it returns immediately.
 
-**Lệnh CLI** (MCP có công cụ tương đương, cùng tên):
+**CLI commands** (MCP has equivalent tools with the same names):
 
-| Lệnh | Hành vi |
+| Command | Behaviour |
 |---|---|
-| `baton whoami` | In agent là ai, vai trò, dự án được vào, luật chung |
-| `baton tasks [--wait 60]` | Liệt kê lượt giao `pending` hoặc `in_progress` của mình; `--wait` thì chờ tới khi có |
-| `baton claim <lượt>` | Nhận lượt giao, mở phiên, in brief, hồ sơ dự án và lỗi đã gặp |
-| `baton heartbeat [ghi chú] [--luot <lượt>]` | Nhịp tim; trả về tín hiệu nếu có (`STOP`, kết quả Cần Chủ mới). Chọn phiên: xem ghi chú `--luot` dưới bảng |
-| `baton log <type> "<nội dung>" [--luot <lượt>]` | Gửi hoạt động: thought, action, question, result, error. Chọn phiên như `heartbeat` |
-| `baton plan <file.json> [--luot <lượt>]` | Cập nhật kế hoạch phiên. Chọn phiên như `heartbeat` |
-| `baton cancel <lượt> --reason "<lý do>"` | Huỷ lượt giao (mục 5 `canceled`, 19.6); chỉ người giao của lượt hoặc chủ; lý do bắt buộc; phiên đang chạy sang `stopping` |
-| `baton evidence <MÃ> <type> <giá trị> [...]` | Gửi bằng chứng; chờ xác minh tối đa 10 giây rồi in kết quả |
-| `baton submit <lượt> <file-bao-cao.md>` | Nộp báo cáo (file theo mẫu 5 mục ở mục 5); đóng phiên |
-| `baton create <DỰ ÁN> "<tiêu đề>" [--brief f.md] [--parent MÃ] [--priority high] [--status backlog]` | Tạo ticket |
-| `baton assign <MÃ> <agent> [--brief f.md] [--timeout 15] [--review]` | Tạo lượt giao; `--review` thì tạo lượt loại `review` (19.3), không cờ là `work`. `<agent>` là **tên hoặc ID**, so đúng (phân biệt hoa thường) trên các agent người gọi được thấy: khớp 1 thì giao cho agent đó; khớp nhiều (vd ID của agent này là tên của agent kia) thì báo lỗi kèm các ID, không tạo lượt; không khớp thì gửi nguyên chữ đó như ID (máy chủ kiểm như cũ), máy chủ không thấy thì báo "không tìm thấy agent (tên hoặc ID)" — cùng một thông điệp dù tên không tồn tại hay là tên của agent ngoài phạm vi người gọi |
-| `baton link <MÃ-điều-phối> <MÃ-dự-án> [--type dieu_phoi\|related\|blocks]` | Nối hai ticket (mục 4, 19.4); mặc định `dieu_phoi`. Tiêu đề `[Giao …]` vẫn do người tạo ticket tự gõ |
-| `baton verdict <lượt> accept\|return [--reason ...]` | Nghiệm thu |
-| `baton reply <lượt> "<nội dung>"` | Trả lời câu hỏi của agent trên lượt giao (xem 19.6); chỉ người giao của lượt đó gọi được |
-| `baton status <MÃ> "<trạng thái>" [--reason] [--original MÃ]` | Đổi trạng thái theo luật mục 4 |
-| `baton show <MÃ>` | In ticket, lượt giao, bằng chứng, 10 bình luận cuối |
-| `baton list [--project X] [--status ...]` | Liệt kê ticket |
-| `baton comment <MÃ> "<nội dung>"` | Bình luận |
-| `baton ask --level urgent\|today\|later --type ... "<tiêu đề>" [--option "A: ..."]... [--recommend A] [--command "..."] [--file ...] [--ticket MÃ] [--context f.md]` | Tạo mục Cần Chủ, in `T-số` |
-| `baton result T-<số> [--wait 60]` | In trạng thái và kết quả của mục; `--wait` thì chờ tới khi xử lý xong |
-| `baton decision <DỰ ÁN> "<quyết định>" --why "..." [--ref ...]` | Ghi Nhật ký |
-| `baton profile <DỰ ÁN>` | In hồ sơ dự án |
+| `baton whoami` | Prints who the agent is, its role, the projects it may enter, the common rules |
+| `baton tasks [--wait 60]` | Lists its own `pending` or `in_progress` assignments; with `--wait` it waits until there is one |
+| `baton claim <assignment>` | Claims the assignment, opens a session, prints the brief, the project profile and the known pitfalls |
+| `baton heartbeat [note] [--luot <assignment>]` | Heartbeat; returns a signal if there is one (`STOP`, a new Needs Owner result). Choosing the session: see the `--luot` note below the table |
+| `baton log <type> "<content>" [--luot <assignment>]` | Sends an activity: thought, action, question, result, error. Chooses the session like `heartbeat` |
+| `baton plan <file.json> [--luot <assignment>]` | Updates the session plan. Chooses the session like `heartbeat` |
+| `baton cancel <assignment> --reason "<reason>"` | Cancels the assignment (section 5 `canceled`, 19.6); only the assignment's assigner or the owner; the reason is required; a running session moves to `stopping` |
+| `baton evidence <CODE> <type> <value> [...]` | Sends evidence; waits up to 10 seconds for verification, then prints the result |
+| `baton submit <assignment> <report-file.md>` | Submits the report (a file following the 5-section template in section 5); closes the session |
+| `baton create <PROJECT> "<title>" [--brief f.md] [--parent CODE] [--priority high] [--status backlog]` | Creates a ticket |
+| `baton assign <CODE> <agent> [--brief f.md] [--timeout 15] [--review]` | Creates an assignment; with `--review` it creates an assignment of type `review` (19.3), without the flag it is `work`. `<agent>` is a **name or ID**, matched exactly (case-sensitive) against the agents the caller can see: 1 match assigns to that agent; several matches (e.g. one agent's ID is another agent's name) report an error with the IDs and create no assignment; no match sends the text as-is as an ID (the server checks as before), and if the server does not find it, it reports "không tìm thấy agent (tên hoặc ID)" (English: "agent not found (name or ID)") — the same message whether the name does not exist or is the name of an agent outside the caller's scope |
+| `baton link <coordination-CODE> <project-CODE> [--type dieu_phoi\|related\|blocks]` | Links two tickets (section 4, 19.4); default `dieu_phoi`. The `[Giao …]` title is still typed by the ticket's creator |
+| `baton verdict <assignment> accept\|return [--reason ...]` | Acceptance |
+| `baton reply <assignment> "<content>"` | Replies to an agent's question on the assignment (see 19.6); only that assignment's assigner can call it |
+| `baton status <CODE> "<status>" [--reason] [--original CODE]` | Changes status under the rules of section 4 |
+| `baton show <CODE>` | Prints the ticket, assignments, evidence, last 10 comments |
+| `baton list [--project X] [--status ...]` | Lists tickets |
+| `baton comment <CODE> "<content>"` | Comment |
+| `baton ask --level urgent\|today\|later --type ... "<title>" [--option "A: ..."]... [--recommend A] [--command "..."] [--file ...] [--ticket CODE] [--context f.md]` | Creates a Needs Owner item, prints `T-number` |
+| `baton result T-<number> [--wait 60]` | Prints the item's status and result; with `--wait` it waits until it has been handled |
+| `baton decision <PROJECT> "<decision>" --why "..." [--ref ...]` | Writes to the Decision log |
+| `baton profile <PROJECT>` | Prints the project profile |
 
-- **`--luot <lượt>` của `heartbeat`, `log`, `plan`** (MCP: tham số tuỳ chọn `luot`): chọn phiên đang mở của **chính mình** thuộc lượt đó. Không có cờ thì đọc biến môi trường **`BATON_LUOT`** (rỗng = không đặt); **cờ thắng biến**. Cờ gõ mà rỗng (`--luot=`) ⇒ `INVALID_INPUT` (không rơi về biến hay về "không chỉ định"). Lượt chỉ định không khớp phiên mở nào của mình ⇒ `NOT_FOUND`, cùng một thông điệp dù lượt không tồn tại, của agent khác hay phiên đã đóng. Không chỉ định: không có phiên mở ⇒ `NOT_FOUND`; đúng 1 ⇒ phiên đó; **từ 2 phiên mở trở lên ⇒ `INVALID_INPUT`** (không chọn hộ), thông điệp chỉ cách dùng `--luot`/`BATON_LUOT`. (Chủ chốt T-73/T-75 = A, 23–24/10; #83)
-- Mọi lệnh có `--json`. **Mã thoát:** 0 là xong; 1 là lỗi nghiệp vụ (in mã lỗi); 2 là lỗi xác thực hoặc mạng; 3 là nhận tín hiệu `STOP`.
-- Trạng thái, mức, loại nhận **mã tiếng Anh** (bảng mục 0.1); UI và thông điệp lỗi hiển thị nhãn tiếng Việt.
-- CLI đọc `BATON_URL` và `BATON_TOKEN` từ biến môi trường, **không bao giờ in token**.
+- **`--luot <assignment>` of `heartbeat`, `log`, `plan`** (MCP: optional parameter `luot`): selects **one's own** open session belonging to that assignment. Without the flag, the environment variable **`BATON_LUOT`** is read (empty = not set); **the flag beats the variable**. A flag typed but empty (`--luot=`) ⇒ `INVALID_INPUT` (no fallback to the variable or to "not specified"). A specified assignment that matches none of one's open sessions ⇒ `NOT_FOUND`, the same message whether the assignment does not exist, belongs to another agent or its session has closed. Not specified: no open session ⇒ `NOT_FOUND`; exactly 1 ⇒ that session; **2 or more open sessions ⇒ `INVALID_INPUT`** (no choosing on the agent's behalf), with a message explaining how to use `--luot`/`BATON_LUOT`. (Owner decided T-73/T-75 = A, 23–24/10; #83)
+- Every command has `--json`. **Exit codes:** 0 is success; 1 is a business error (prints the error code); 2 is an authentication or network error; 3 is receiving the `STOP` signal.
+- Status, level and type accept the **English codes** (table in section 0.1); the UI and error messages show the Vietnamese labels.
+- The CLI reads `BATON_URL` and `BATON_TOKEN` from environment variables and **never prints the token**.
 - **API:**
-  - Lỗi trả `{ "error": "<CODE>", "message": "<thông điệp tiếng Việt>" }`.
-  - Mã lỗi tối thiểu: `EVIDENCE_REQUIRED`, `CHILDREN_OPEN`, `REASON_REQUIRED`, `INVALID_DUPLICATE_TARGET`, `FORBIDDEN`, `NOT_FOUND`, `INVALID_INPUT`, `PROJECT_NOT_ACCEPTING`, `SESSION_CLOSED`, `OPTIONS_REQUIRED`, `COMMAND_REQUIRED`, `INVALID_TOKEN`, `RATE_LIMITED`.
-  - HTTP: 401 token sai; 403 không có quyền; 404 không tìm thấy (cũng dùng khi đối tượng ngoài phạm vi, để không lộ sự tồn tại); 409 xung đột trạng thái; 422 lỗi nghiệp vụ; 429 kèm `Retry-After`.
-- **Giới hạn:** 600 request mỗi phút cho mỗi token. Lệnh chờ dài tính 1 request.
-- **Webhook ra** (tuỳ chọn, cho tích hợp khác): 1 URL, ký HMAC-SHA256, gửi khi ticket đổi trạng thái, Cần Chủ mới hoặc đã xử lý, phiên đứng. Thử lại 3 lần.
+  - Errors return `{ "error": "<CODE>", "message": "<Vietnamese message>" }`.
+  - Minimum error codes: `EVIDENCE_REQUIRED`, `CHILDREN_OPEN`, `REASON_REQUIRED`, `INVALID_DUPLICATE_TARGET`, `FORBIDDEN`, `NOT_FOUND`, `INVALID_INPUT`, `PROJECT_NOT_ACCEPTING`, `SESSION_CLOSED`, `OPTIONS_REQUIRED`, `COMMAND_REQUIRED`, `INVALID_TOKEN`, `RATE_LIMITED`.
+  - HTTP: 401 wrong token; 403 no permission; 404 not found (also used when the object is out of scope, so as not to reveal its existence); 409 state conflict; 422 business error; 429 with `Retry-After`.
+- **Limit:** 600 requests per minute per token. A long-wait command counts as 1 request.
+- **Outgoing webhook** (optional, for other integrations): 1 URL, signed with HMAC-SHA256, sent when a ticket changes status, a Needs Owner item is new or resolved, a session stalls. Retried 3 times.
 
-## 14. Giao diện web của chủ
-- **Chế độ màu:** ba lựa chọn **Sáng / Tối / Theo máy** (`prefers-color-scheme`), mặc định **Tối**. Lựa chọn (kể cả "theo máy") được nhớ giữa các lần vào, và đặt **trước khi trang vẽ** — không có nhoáng trắng khi đang ở chế độ tối. Cả hai chế độ phải đọc được: chữ lỗi, viền đỏ, nhãn ⚪ của d.317 đều đủ tương phản.
+## 14. The owner's web interface
+- **Colour mode:** three choices **Sáng / Tối / Theo máy** (Light / Dark / System; `prefers-color-scheme`), default **Dark**. The choice (including "system") is remembered between visits and set **before the page paints** — no white flash while in dark mode. Both modes must be readable: error text, red borders and the ⚪ label of l.317 all have enough contrast.
 - **Sidebar:**
-  - Tổng quan, **Cần Chủ** (huy hiệu), Tất cả việc, Báo cáo, Nhật ký quyết định, Đội agent.
-  - "Tất cả việc" là danh sách ticket của **mọi dự án**, mở ở **kiểu Bảng**. Tiêu đề nhóm "Đội agent" bấm được để vào trang Đội agent, và không có link thứ hai tới cùng trang.
-  - **Bản đồ dự án** không có mục riêng ở sidebar; trang vẫn còn và vào từ một dự án.
-  - Rồi danh sách dự án theo nhóm, mỗi dự án có chấm sức sống.
-  - Dưới cùng: Cài đặt.
-  - Tên workspace mở một menu chứa **Đăng xuất** và **Đăng xuất mọi nơi** (mục 15); hai nút này không nằm trần trên thanh trên.
-- **Danh sách ticket** (theo dự án hoặc "Tất cả dự án"):
-  - Hai kiểu xem: danh sách gom theo trạng thái, và bảng (cột là trạng thái, kéo thả; kéo vào Xong mà thiếu bằng chứng thì thẻ bật về chỗ cũ và báo lý do). Trang việc của **một dự án** mặc định là kiểu **Bảng**; Danh sách là kiểu xem phụ. Bảng có **sáu cột** theo thứ tự **Backlog · Cần làm · Đang làm · Chờ kiểm chứng · Xong · Huỷ** (Trùng hiện trong cột Huỷ); nút `+` ở đầu cột Backlog (tạo vào Backlog) và đầu cột Cần làm (tạo vào Cần làm) (Chủ chốt T-111 = A, 29/10; BAT-64).
-  - Thẻ việc **không** có ô "Chuyển cột": đổi trạng thái bằng kéo thả, panel chi tiết, hoặc phím `S`. Ưu tiên "Không" **không** in chữ trên thẻ. Mọi chỗ hiện người làm đều hiện **tên agent**, không bao giờ id.
-  - **Cột (ở Bảng) và nhóm (ở Danh sách) rỗng:** cột rỗng thu hẹp nhưng vẫn hiện tiêu đề và số 0; nhóm rỗng ở Danh sách thì ẩn.
-  - Lọc theo dự án, trạng thái, ưu tiên, người chịu trách nhiệm, người đang cầm, nhãn, "có cờ", "cần Chủ", "xong không bằng chứng". Bộ lọc ghi trên URL. Lưu thành view riêng.
-  - Thanh lọc **không mở sẵn**: trên đầu danh sách chỉ có các **tab nhanh** (Đang chạy · Backlog · Tất cả) và một nút **"Lọc"** mở menu chứa mọi ô lọc trên, cùng với "Lưu thành view".
-  - **Tạm (BAT-41):** danh sách không có ô tìm chữ; gõ đúng dạng mã ticket (vd `sai-5`) vào ô lọc **Nhãn** thì ngay dưới ô hiện thêm dòng "Mở SAI-5" dẫn tới `/t/SAI-5`; lọc nhãn giữ nguyên. Chờ chốt: `cau-hoi-spec.md` #167.
-- **Chi tiết ticket** `/t/<MÃ>`:
-  - Bên trái: tiêu đề và mô tả (sửa tại chỗ), brief (8 mục gập được), ticket con, **chuỗi lượt giao** dạng dòng thời gian (người giao → người nhận, trạng thái, báo cáo nộp, nghiệm thu), bằng chứng, bình luận xen lịch sử (lịch sử thu gọn).
-  - Bên phải: thuộc tính, ticket liên quan (kể cả ticket điều phối), mục Cần Chủ liên quan.
-- **Chi tiết phiên:** dòng hoạt động, kế hoạch, nút "Dừng".
-- **Phím tắt:**
-  - `C` tạo ticket; `G` rồi `T` tới Cần Chủ; `G` rồi `O` tới Tổng quan; `G` rồi `N` tới Nhật ký.
-  - `Cmd/Ctrl+K` mở command menu: tìm mã, tiêu đề, T-số, chạy lệnh.
-  - Trên ticket đang chọn: `S` trạng thái, `P` ưu tiên, `L` nhãn, `A` giao (chọn agent).
-  - `J`/`K` di chuyển; `X` chọn; áp một phím cho nhiều ticket; `?` hiện bảng phím.
-  - **Chọn nhiều và áp cho nhiều thẻ** (Chủ chốt T-38 = A, 19/10; chi tiết ở 19.12 câu 67–71): có thẻ đã chọn thì `S`/`P`/`L`/`A` áp cho **tập chọn**, không cho thẻ đang focus. Ô trạng thái, ưu tiên, nhãn của thanh chọn nhiều **chỉ đặt giá trị chờ**; `Enter`, mũi tên, Space, gõ chữ trong ô không gửi request; **chỉ nút "Áp"** cạnh mỗi ô mới áp (CoS/Chủ chốt 20/10, câu 70). Áp cho **N ≥ 10** thẻ thì hỏi lại "Áp cho N thẻ?" trước khi gửi; N < 10 áp luôn. `A` mở **một** hộp "Giao N thẻ" (đã có nút gửi tường minh, không hỏi thêm). Bấm chuột vào ô tick của một thẻ ở màn rộng thì thẻ đó thành thẻ đang focus và mở panel; ở khổ hẹp thì không mở panel.
-- **Tốc độ:**
-  - Mọi thao tác sửa hiện ngay trên màn hình trước khi server trả lời; server từ chối thì hoàn lại và báo lỗi dạng toast ghi rõ lý do.
-  - Sau lần tải đầu, chuyển trang không có màn hình chờ toàn trang. Danh sách 5.000 ticket cuộn mượt.
-  - Thay đổi do agent tạo hiện lên trong vòng 3 giây, không cần tải lại trang.
-- **Điện thoại (375px):** Tổng quan, Cần Chủ (kể cả phiên duyệt và ô trả lời hàng loạt), chi tiết ticket và báo cáo dùng tốt. Bảng kéo thả không bắt buộc.
-- **Thời gian** hiển thị dạng tương đối ("12 phút trước"), rê chuột thấy giờ đầy đủ theo giờ Việt Nam.
-- **Có bản mới:** tab đang chạy bản web cũ sau một lần deploy thì hiện một dòng nhỏ "Có bản mới — tải lại trang" dưới thanh trên; bấm thì tải lại trang. Giao diện **không bao giờ tự tải lại** (chủ có thể đang gõ dở). Tab kiểm khi quay lại hiện, khi được focus lại và định kỳ mỗi 5 phút; kiểm lỗi (mất mạng, …) thì im lặng, không hiện gì (BAT-39).
+  - Tổng quan (Overview), **Cần Chủ** (Needs Owner; badge), Tất cả việc (All work), Báo cáo (Reports), Nhật ký quyết định (Decision log), Đội agent (Agent team).
+  - "All work" is the ticket list of **every project**, opening in the **Board view**. The "Agent team" group heading is clickable to go to the Agent team page, and there is no second link to the same page.
+  - The **project map** has no entry of its own in the sidebar; the page still exists and is reached from a project.
+  - Then the list of projects by group, each project with a health dot.
+  - At the bottom: Cài đặt (Settings).
+  - The workspace name opens a menu containing **Đăng xuất** (Sign out) and **Đăng xuất mọi nơi** (Sign out everywhere) (section 15); these two buttons do not sit bare on the top bar.
+- **Ticket list** (per project or "Tất cả dự án", All projects):
+  - Two views: a list grouped by status, and a board (columns are statuses, drag and drop; dragging into Done without enough evidence makes the card snap back and reports the reason). The work page of **a single project** defaults to the **Board** view; List is the secondary view. The board has **six columns** in the order **Backlog · Cần làm (To do) · Đang làm (In progress) · Chờ kiểm chứng (Awaiting verification) · Xong (Done) · Huỷ (Canceled)** (Duplicate shows in the Canceled column); a `+` button at the top of the Backlog column (creates into Backlog) and at the top of the To do column (creates into To do) (Owner decided T-111 = A, 29/10; BAT-64).
+  - A work card has **no** "Chuyển cột" (Move column) box: status is changed by drag and drop, the detail panel, or the `S` key. Priority "None" prints **no** text on the card. Everywhere a doer is shown, the **agent name** is shown, never the id.
+  - **Empty columns (Board) and groups (List):** an empty column narrows but still shows its heading and the number 0; an empty group in the List is hidden.
+  - Filter by project, status, priority, responsible party, current holder, label, "có cờ" (flagged), "cần Chủ" (needs Owner), "xong không bằng chứng" (done without evidence). Filters are written to the URL. Can be saved as a custom view.
+  - The filter bar is **not open by default**: at the top of the list there are only the **quick tabs** (Đang chạy (Running) · Backlog · Tất cả (All)) and a **"Lọc"** (Filter) button that opens a menu containing all the filter boxes above, together with "Lưu thành view" (Save as view).
+  - **Temporary (BAT-41):** the list has no text search box; typing something in ticket-code form (e.g. `sai-5`) into the **Label** filter box shows an extra line "Mở SAI-5" (Open SAI-5) right under the box, leading to `/t/SAI-5`; the label filter stays as is. Pending decision: `spec-questions.md` #167.
+- **Ticket detail** `/t/<CODE>`:
+  - Left: title and description (edited in place), brief (8 collapsible sections), child tickets, the **assignment chain** as a timeline (assigner → assignee, status, submission report, acceptance), evidence, comments interleaved with history (history collapsed).
+  - Right: properties, related tickets (including coordination tickets), related Needs Owner items.
+- **Session detail:** activity stream, plan, "Dừng" (Stop) button.
+- **Keyboard shortcuts:**
+  - `C` create ticket; `G` then `T` go to Needs Owner; `G` then `O` go to the Overview; `G` then `N` go to the Decision log.
+  - `Cmd/Ctrl+K` opens the command menu: search codes, titles, T-numbers, run commands.
+  - On the selected ticket: `S` status, `P` priority, `L` label, `A` assign (pick an agent).
+  - `J`/`K` move; `X` select; apply one key to several tickets; `?` shows the key table.
+  - **Multi-select and applying to several cards** (Owner decided T-38 = A, 19/10; details in 19.12 items 67–71): when cards are selected, `S`/`P`/`L`/`A` apply to the **selection**, not to the focused card. The status, priority and label boxes of the multi-select bar **only set a pending value**; `Enter`, arrow keys, Space and typing in the box send no request; **only the "Áp" (Apply) button** next to each box applies (CoS/Owner decided 20/10, item 70). Applying to **N ≥ 10** cards asks again "Áp cho N thẻ?" (Apply to N cards?) before sending; N < 10 applies straight away. `A` opens **one** "Giao N thẻ" (Assign N cards) dialog (it already has an explicit send button, no further question). Clicking the tick box of a card on a wide screen makes that card the focused card and opens the panel; on a narrow layout it does not open the panel.
+- **Speed:**
+  - Every edit shows on screen immediately, before the server answers; if the server rejects it, it is rolled back and an error is reported as a toast stating the reason.
+  - After the first load, changing pages has no full-page loading screen. A list of 5,000 tickets scrolls smoothly.
+  - Changes made by agents appear within 3 seconds, without reloading the page.
+- **Phone (375px):** the Overview, Needs Owner (including the approval session and the bulk answer box), ticket detail and reports work well. The drag-and-drop board is not required.
+- **Time** is shown in relative form ("12 phút trước", 12 minutes ago); hovering shows the full time in Vietnam time.
+- **New version available:** a tab running an old web build after a deploy shows a small line "Có bản mới — tải lại trang" (New version available — reload the page) under the top bar; clicking it reloads the page. The interface **never reloads by itself** (the owner may be in the middle of typing). The tab checks when it becomes visible again, when it regains focus and periodically every 5 minutes; if the check fails (offline, …) it stays silent and shows nothing (BAT-39).
 
-## 15. Bảo mật
-- **Chủ đăng nhập** bằng mật khẩu cộng mã TOTP (2 lớp). Passkey để sau. Phiên đăng nhập 30 ngày, có nút đăng xuất mọi nơi.
-- Agent chỉ dùng token, không đăng nhập web.
-- Token GitHub và Telegram lưu phía server, **không bao giờ trả ra API hay UI**.
-- Mọi hành động có dấu vết ai làm (mục 4 Lịch sử). Nhật ký truy cập của agent (lệnh gì, lúc nào) giữ 30 ngày.
-- **Sao lưu:** xuất toàn bộ dữ liệu ra JSON bằng một nút (chỉ chủ). Có sao lưu tự động hằng ngày, giữ 14 bản.
+## 15. Security
+- **The owner signs in** with a password plus a TOTP code (2 factors). Passkeys later. The login session lasts 30 days, with a sign-out-everywhere button.
+- Agents use tokens only and do not sign in to the web.
+- GitHub and Telegram tokens are stored on the server side and **never returned to the API or UI**.
+- Every action leaves a trace of who did it (section 4 History). The agent access log (which command, when) is kept for 30 days.
+- **Backup:** export all data to JSON with one button (owner only). There is an automatic daily backup, keeping 14 copies.
 
-## 16. Nhập dữ liệu (chuyển từ công cụ cũ)
-- **Nhập ticket** từ file JSON theo định dạng Baton công bố. Mỗi mục gồm: mã cũ, dự án đích, tiêu đề, mô tả, trạng thái cũ, ưu tiên, nhãn, mã cha cũ, mã liên quan cũ, các mốc thời gian, bình luận.
-  - Bảng ánh xạ trạng thái cũ sang trạng thái Baton do người nhập chọn trên màn hình xem trước.
-  - Ticket nhận mã mới; mã cũ lưu trong trường "mã cũ", tìm được.
-  - Ticket cũ ở trạng thái "xong" thì vào Xong, gắn nhãn "nhập, không bằng chứng", không bị chặn.
-- **Nhập Cần Chủ** từ markdown theo cấu trúc: các khối mức 🔴, 🟡, ⚪; mỗi mục có tiêu đề bắt đầu bằng `T-số · dự án · loại — tiêu đề`; cộng bảng "Đã xử lý" (ngày | mục | kết quả).
-  - Giữ nguyên số T. Bộ đếm T tiếp tục từ số lớn nhất.
-- **Nhập Nhật ký quyết định** từ markdown: các mục ngày, mỗi ngày một bảng (giờ | ai | dự án | quyết định | vì sao | căn cứ).
-- Chạy lại lần nữa thì bỏ qua mục đã nhập (so theo mã cũ, T-số, hoặc cặp ngày giờ và nội dung). Cuối lượt nhập in báo cáo: đã nhập, bỏ qua, lỗi (kèm lý do từng dòng).
-- Nhập không bắn thông báo và không ghi đè dữ liệu đang có.
+## 16. Importing data (migrating from old tools)
+- **Import tickets** from a JSON file in the format Baton publishes. Each entry consists of: old code, target project, title, description, old status, priority, labels, old parent code, old related codes, timestamps, comments.
+  - The mapping from old statuses to Baton statuses is chosen by the importer on the preview screen.
+  - Tickets receive new codes; the old code is stored in the "mã cũ" (old code) field and is searchable.
+  - An old ticket in a "done" status goes into Done, labelled "nhập, không bằng chứng" (imported, no evidence), and is not blocked.
+- **Import Needs Owner** from markdown with this structure: level blocks 🔴, 🟡, ⚪; each item has a heading starting with `T-số · dự án · loại — tiêu đề` (T-number · project · type — title); plus a "Đã xử lý" (Resolved) table (date | item | result).
+  - T numbers are preserved. The T counter continues from the largest number.
+- **Import the Decision log** from markdown: day sections, one table per day (time | who | project | decision | why | reference).
+- Running it again skips entries already imported (matched by old code, T-number, or the pair of date-time and content). At the end of the import run a report is printed: imported, skipped, errors (with the reason for each row).
+- Importing fires no notifications and does not overwrite existing data.
 
-## 17. Định nghĩa xong của v0.1
-1. Tạo 3 dự án và 4 agent (coordinator, manager, worker, reviewer). Chuỗi đầy đủ chạy qua CLI:
-   - coordinator tạo ticket điều phối và giao manager.
-   - manager tạo ticket dự án và giao worker.
-   - worker nhận, gửi nhịp tim, gửi commit, rồi nộp báo cáo.
-   - manager giao reviewer; reviewer gửi review `pass`.
-   - Commit được merge, và ticket **tự lên Xong**. Cả hai ticket (điều phối và dự án) phản ánh đúng.
-2. Commit chưa merge: ticket ở Chờ kiểm chứng. Merge xong: trong 10 phút ticket tự lên Xong.
-3. Agent worker im 30 phút: Tổng quan hiện phiên đứng, dự án thành 🟡, Telegram nhận 1 tin.
-4. manager gọi `ask` loại Quyết định, mức 🔴, 3 phương án:
-   - Telegram báo ngay (ngay = trong một nhịp cron, ≤ 60 giây).
-   - Trên điện thoại, chủ chạm nút phương án B rồi chạm **Gửi duyệt**.
-   - `result --wait` của agent trả về phương án B trong vòng 3 giây.
-   - Nhật ký có dòng mới; ticket liên quan có bình luận tự động.
-5. Ô trả lời hàng loạt: dán 3 dòng `T-x: ...`, cả 3 mục được xử lý đúng. Dòng sai mã thì báo đỏ.
-6. Dự án không có ticket Đang làm hiện "Dự án không chạy".
-7. Token agent worker thử giao việc: `FORBIDDEN`. Token agent không có quyền dự án `INC` đọc ticket INC: `NOT_FOUND`.
-8. Chủ bấm Dừng: lệnh `heartbeat` kế tiếp của agent thoát mã 3.
-9. Nhập được file `can-chu.md` và `decision-log.md` mẫu (định dạng mục 16), giữ nguyên số T. **Hoãn theo T-119 (mục 16).**
-10. Tạo **200 dự án và 200.000 ticket** giả: danh sách và Tổng quan vẫn mở trong dưới 1 giây sau lần tải đầu. Thiết kế còn phải chịu được tiếp **300 dự án** (và mọi tổ hợp nhỏ hơn 200.000 ticket) mà không đổi kiến trúc (xem 19.12 câu 1).
-11. Tổng quan, Cần Chủ, chi tiết ticket dùng tốt ở bề rộng 375px.
+## 17. Definition of done for v0.1
+1. Create 3 projects and 4 agents (coordinator, manager, worker, reviewer). The full chain runs through the CLI:
+   - the coordinator creates a coordination ticket and assigns the manager.
+   - the manager creates a project ticket and assigns the worker.
+   - the worker claims, sends heartbeats, sends a commit, then submits the report.
+   - the manager assigns the reviewer; the reviewer sends a `pass` review.
+   - The commit is merged, and the ticket **moves to Done by itself**. Both tickets (coordination and project) reflect this correctly.
+2. Commit not yet merged: the ticket is in Awaiting verification. Once merged: within 10 minutes the ticket moves to Done by itself.
+3. The worker agent is silent for 30 minutes: the Overview shows a stalled session, the project turns 🟡, Telegram receives 1 message.
+4. The manager calls `ask` with type Decision, level 🔴, 3 options:
+   - Telegram reports immediately (immediately = within one cron tick, ≤ 60 seconds).
+   - On the phone, the owner taps the button for option B and then taps **Gửi duyệt** (Send approval).
+   - The agent's `result --wait` returns option B within 3 seconds.
+   - The Decision log has a new row; related tickets have an automatic comment.
+5. Bulk answer box: paste 3 lines `T-x: ...`, all 3 items are handled correctly. A line with a wrong code is marked red.
+6. A project with no ticket In progress shows "Dự án không chạy" (Project is not running).
+7. A worker agent's token tries to assign work: `FORBIDDEN`. The token of an agent without access to project `INC` reads an INC ticket: `NOT_FOUND`.
+8. The owner presses Stop: the agent's next `heartbeat` command exits with code 3.
+9. The sample `needs-owner.md` and `decision-log.md` files can be imported (format of section 16), preserving T numbers. **Deferred under T-119 (section 16).**
+10. Create **200 projects and 200,000 tickets** of fake data: the list and the Overview still open in under 1 second after the first load. The design must further withstand **300 projects** (and any combination below 200,000 tickets) without changing the architecture (see 19.12 item 1).
+11. The Overview, Needs Owner and ticket detail work well at a width of 375px.
 
-## 18. Để sau (không làm ở v0.1, nhưng không được chặn đường)
-- Baton tự khởi động agent khi có lượt giao (gọi script cục bộ hoặc cloud).
-- Nhiều workspace và nhiều khách hàng, đăng ký, thanh toán (ship công khai).
-- Giao diện tiếng Anh.
-- Document dài gắn dự án; milestone.
-- Tích hợp GitHub hai chiều (tự liên kết PR theo mã ticket trong tên nhánh).
-- Xuất `can-chu.md` tự động để xem bằng trình xem markdown ngoài.
-- Passkey; thông báo qua email.
+## 18. Later (not done in v0.1, but must not be blocked)
+- Baton starting an agent when an assignment exists (calling a local script or the cloud).
+- Multiple workspaces and multiple customers, sign-up, billing (public release).
+- English interface.
+- Long documents attached to projects; milestones.
+- Two-way GitHub integration (auto-linking PRs by the ticket code in the branch name).
+- Automatic export of `needs-owner.md` for viewing in an external markdown viewer.
+- Passkeys; email notifications.
 
 ---
 
-## 19. Làm rõ hành vi (sau lần kiểm SPEC đầu, 30/09)
-Mục này **ưu tiên hơn** các mục trên nếu có chỗ lệch. Đây là quyết định sản phẩm do CoS đề xuất, chờ chủ duyệt.
+## 19. Behaviour clarifications (after the first SPEC review, 30/09)
+This section **takes precedence over** the sections above where they differ. These are product decisions proposed by CoS, awaiting the owner's approval.
 
-### 19.1 Lượt giao "mở" và người đang cầm
-- Lượt **mở** là lượt ở `pending` hoặc `in_progress`. Lượt `submitted` không còn mở, mà đang **chờ nghiệm thu**.
-- Mỗi lượt có **loại**: `work` hoặc `review` (đúng mã máy ở 0.1; xem 19.12 câu 29). Mỗi ticket có tối đa 1 lượt `work` mở và 1 lượt `review` mở cùng lúc.
-- **Người đang cầm**, tính theo thứ tự ưu tiên:
-  1. Agent của lượt `review` mở.
-  2. Agent của lượt `work` mở.
-  3. Nếu có lượt `submitted` chờ nghiệm thu: người giao lượt đó, hiện "chờ <tên> nghiệm thu".
-  4. Chủ, nếu chủ bấm "Tôi làm".
-  5. Nếu không có ai: trống.
-- Cờ **"Đang làm mà không ai cầm"** chỉ bật khi ticket ở nhóm `active`, người đang cầm trống, và tình trạng này kéo dài 24 giờ.
+### 19.1 "Open" assignments and the current holder
+- An **open** assignment is one in `pending` or `in_progress`. A `submitted` assignment is no longer open; it is **awaiting acceptance**.
+- Each assignment has a **type**: `work` or `review` (exactly the machine codes in 0.1; see 19.12 item 29). Each ticket has at most 1 open `work` assignment and 1 open `review` assignment at the same time.
+- **Current holder**, computed in priority order:
+  1. The agent of the open `review` assignment.
+  2. The agent of the open `work` assignment.
+  3. If there is a `submitted` assignment awaiting acceptance: that assignment's assigner, shown as "chờ <tên> nghiệm thu" (waiting for <name> to accept).
+  4. The owner, if the owner pressed "Tôi làm" (I'll do it).
+  5. If there is nobody: empty.
+- The **"In progress with no holder"** flag only turns on when the ticket is in the `active` group, the current holder is empty, and this has lasted 24 hours.
 
-### 19.2 Ticket đổi trạng thái theo kết quả nộp và nghiệm thu
+### 19.2 Ticket status changes on submission and acceptance
 
-| Sự kiện | Ticket |
+| Event | Ticket |
 |---|---|
-| Nộp `done` | Kiểm cổng: đủ thì **Xong**, thiếu thì **Chờ kiểm chứng** |
-| Nộp `partial` | Giữ **Đang làm**. Người giao chọn trả lại, hoặc tách việc còn lại thành ticket con rồi nghiệm thu đạt |
-| Nộp `blocked` | Về **Cần làm**. Hiện ở "Cần chú ý" cho người giao |
-| Nghiệm thu `accepted` | Ticket chưa Xong thì sang **Chờ kiểm chứng**, và Baton kiểm cổng ngay |
-| Nghiệm thu `returned` | Giữ **Đang làm**. Lượt mới được tạo (xem 19.5) |
-| Lượt bị `canceled`, không còn lượt mở nào | Về **Cần làm** |
-
-- Đổi tay sang Xong mà thiếu bằng chứng: từ chối với `EVIDENCE_REQUIRED`. Ticket đang ở nhóm `active` thì sang Chờ kiểm chứng; đang ở nhóm `planned` thì giữ nguyên.
-- **Tự lên Xong** chỉ áp cho ticket ở **Chờ kiểm chứng**. Commit được merge khi ticket còn Đang làm thì chưa có gì xảy ra; cổng được kiểm lúc nộp.
-
-### 19.3 Review và bằng chứng mới
-- Review chỉ tính khi là `review` ĐẠT được gửi **sau** bằng chứng `commit` hoặc `deploy` cuối cùng.
-- Có commit hoặc deploy mới sau review thì review cũ **hết hiệu lực**. Ticket ở hoặc về Chờ kiểm chứng, gắn cờ **"cần review lại"** (hiện ở "Cần chú ý"). Người giao, hoặc agent `coordinator`, mở lượt `review` mới.
-- Ticket đã Xong không bị hạ. Bằng chứng gửi sau khi Xong vẫn được lưu và hiện nhãn "sau khi xong".
-- **"Khác người làm"** nghĩa là agent gửi review không phải người nhận của bất kỳ lượt `work` nào trên ticket đó. Sai thì bị từ chối với `REVIEWER_IS_WORKER`.
-- Lượt `review` do `manager` hoặc `coordinator` tạo. Reviewer có phiên riêng như mọi lượt.
-- Reviewer nộp lượt review bằng cách gửi bằng chứng `review` cộng báo cáo. Lượt review **tự `accepted`**, không cần nghiệm thu, vì kết luận đã nằm trong review.
-
-### 19.4 Ticket điều phối
-- Liên kết giữa ticket điều phối (ở dự án điều phối, vd `COS`) và ticket dự án là loại riêng: **"điều phối"**, khác "liên quan". Một ticket điều phối nối được **1 hoặc nhiều** ticket dự án.
-- Ticket điều phối **không qua cổng bằng chứng**. Trạng thái của nó **tự theo** các ticket dự án:
-  - Có ít nhất 1 ticket dự án ở nhóm `active`: ticket điều phối là **Đang làm**.
-  - Tất cả đã kết, và ít nhất 1 Xong: **Xong**.
-  - Tất cả Huỷ hoặc Trùng: **Huỷ**, lý do "mọi ticket dự án đã huỷ".
-- Chủ ép trạng thái ticket điều phối thì chỉ ticket đó đổi, không lan sang ticket dự án. Ticket điều phối không có lượt `work` của `manager` riêng; lượt giao cho `manager` gắn trên chính ticket điều phối.
-
-### 19.5 Trả lại
-- `returned` tạo lượt mới trạng thái `pending`, cùng người nhận. Người nhận phải `nhan` lại, mở **phiên mới**. Hạn phản hồi áp lại.
-- Brief của lượt mới = brief cũ, cộng mục **"Lý do trả lại"** đặt ở đầu.
-- **Tỉ lệ đạt lần đầu** của agent (hiện ở trang agent, tính 30 ngày gần nhất) = số ticket mà lượt `work` đầu tiên của agent được `accepted` ÷ số ticket agent đã nộp ít nhất 1 lần.
-
-### 19.6 Phiên khi huỷ, khi chờ Chủ, khi hỏi người giao
-- **Huỷ lượt** có phiên đang chạy: phiên sang `stopping`, xử lý như bấm Dừng (mục 6).
-- **Phiên `waiting_owner`:** không bao giờ bị tính đứng. Khi mục Cần Chủ được xử lý hoặc bỏ qua, phiên về `running` và ngưỡng đứng tính lại từ lúc đó.
-- **Hỏi người giao:** agent gửi hoạt động `question` thì phiên sang `waiting_assigner`. Trạng thái này không bị tính đứng, nhưng quá 60 phút thì hiện ở "Cần chú ý".
-  - Người giao là agent: câu hỏi hiện trong `baton tasks` của người giao. Người giao trả lời bằng `baton reply <lượt> "<nội dung>"`.
-  - Người giao là chủ: trả lời trên trang ticket.
-  - Có câu trả lời thì phiên về `running`, và lần gọi kế tiếp của agent nhận được câu trả lời.
-- **Chỉ báo dự án** (thay thế mục 2):
-  - 🟢 có ít nhất 1 ticket nhóm `active`, và không có điều kiện 🟡 nào.
-  - 🟡 có phiên `stalled` hoặc `error`; có lượt "Không phản hồi"; có cờ "không ai cầm"; hoặc có cờ "cần review lại" quá 24 giờ.
-  - ⚪ không có ticket nhóm `active`.
-  - Phiên `waiting_owner` vẫn tính 🟢, nhưng dòng dự án ghi thêm "chờ Chủ: T-x".
-
-### 19.7 Commit chưa merge và bằng chứng trượt
-- `failed` **không chặn vĩnh viễn**: gửi bằng chứng mới là được. Server chỉ tự thử lại khi lỗi là lỗi mạng hoặc lỗi GitHub.
-- Commit `pushed` quá 7 ngày chưa merge: dừng theo dõi. Bằng chứng mang nhãn "chưa merge sau 7 ngày"; hiện ở "Cần chú ý"; Telegram báo 1 lần. Gửi lại cùng commit để theo dõi thêm 7 ngày.
-
-### 19.8 Hạn và thông báo của Cần Chủ
-- Quá hạn: **không đổi mức**. Thẻ có viền đỏ, chữ "quá hạn X", và được đưa lên đầu khối của nó.
-- **Hạn mặc định của 🟡:** tạo trước 18:00 thì hạn là 20:00 cùng ngày; từ 18:00 trở đi thì hạn là 20:00 hôm sau. 🔴 luôn là 4 giờ kể từ lúc tạo.
-- Loại `Chỉ để biết` tối đa là 🟡. Gửi 🔴 thì server tự hạ về 🟡 và báo lại cho agent trong kết quả trả về.
-- **Giờ yên lặng:** 🔴 mới vẫn gửi ngay (ngay = trong một nhịp cron, ≤ 60 giây). Lời nhắc sau 2 giờ mà rơi vào giờ yên lặng thì hoãn tới cuối giờ yên lặng.
-
-### 19.9 Kết quả, bỏ qua, mở lại
-- **Kết quả:**
-  - Loại `Quyết định`: bắt buộc chọn 1 phương án, ghi thêm là tuỳ chọn.
-  - Các loại khác: chữ là tuỳ chọn. Để trống thì Baton tự điền "đã chạy" (loại lệnh), "đã xem" (loại review), "đã đọc" (loại chỉ để biết).
-- **Bỏ qua:** bắt buộc lý do. Ghi Nhật ký ("T-x bỏ qua: lý do"), bình luận lên ticket liên quan, agent nhận trạng thái `skipped`.
-- **Mở lại:** thêm dòng Nhật ký mới "T-x mở lại" và bình luận "T-x mở lại". Xử lý lần sau lại thêm dòng mới và bình luận mới. Dòng cũ không bị sửa.
-- **`baton result --wait`** hết thời gian mà mục chưa xử lý: in "chưa xử lý", thoát **mã 4**. Bảng mã thoát ở mục 13 được bổ sung: 4 = hết thời gian chờ.
-
-### 19.10 Các điểm "nên rõ"
-- **Chủ tự làm:** nút "Tôi làm" chuyển ticket sang Đang làm, người đang cầm là chủ, không có nhịp tim. Vào Xong vẫn qua cổng; chủ ép được.
-- **Ticket con do agent `worker` tạo:** qua cổng như ticket thường. Lượt trên ticket cha bị huỷ thì ticket con không đổi, và hiện cảnh báo "lượt cha đã huỷ".
-- **Dự án không code:** chủ bỏ qua mục xác nhận thì ticket ở lại Chờ kiểm chứng. Cổng áp theo cờ "có code hay không" **tại thời điểm kiểm**.
-- **Ô trả lời hàng loạt:**
-  - Dòng trỏ tới mục đã xử lý: báo đỏ "đã xử lý, mở lại trước".
-  - Nhiều dòng cùng mã trong một lần dán: báo đỏ tất cả các dòng đó, không áp dòng nào.
-- **Nút và phím trên thẻ:** theo bảng "Trả lời bằng nút rồi bấm Gửi" ở mục 8. Điện thoại dùng nút, không cần phím.
-- **Mã lỗi thêm:** `REVIEWER_IS_WORKER`, `ALREADY_RESOLVED`.
-
-### 19.11 Mặc định bổ sung (sau lần kiểm SPEC thứ hai)
-- **Review KHÔNG ĐẠT:** lượt review vẫn tự `accepted`, nhưng review đó không mở cổng. Ticket giữ Chờ kiểm chứng và hiện ở "Cần chú ý" cho người giao, kèm ghi chú của reviewer.
-- **Ticket điều phối:** chưa có ticket dự án nào ở nhóm `active`, và chưa phải tất cả đã kết, thì ticket điều phối giữ trạng thái hiện tại.
-- **Huỷ lượt `work` khi lượt `review` đang mở:** lượt review không bị huỷ theo.
-- **Ticket cha ở Chờ kiểm chứng vì còn ticket con:** hiện dòng "chờ N ticket con". Con cuối cùng kết thì cha tự kiểm cổng lại.
-- **Kết quả Cần Chủ khi phiên đã đóng, hoặc agent đã bị tắt:** kết quả vẫn lưu, lấy được qua `baton result`. Không gửi thêm tín hiệu nào.
-
-### 19.12 Chốt của phiên spec
-Mục này gom chốt của chủ qua ba đợt, trả lời các câu trong `cau-hoi-spec.md`:
-- **Đợt 01/10/2026** — câu **#1–#8**, là các câu **1–8** dưới đây.
-- **Đợt 02/10/2026 (T-64)** — câu **#18–#27**, là các câu **9–18** dưới đây.
-- **Đợt 03/10/2026 (T-69)** — câu **#9–#17** và **#28–#54**, là các câu **19–54** dưới đây.
-- **Đợt 04/10/2026 (T-76)** — câu **#57–#59** và **#66–#69**, là các câu **55–61** dưới đây.
-- **Đợt 04/10/2026 (T-80 + T-80b)** — câu **#71**, **#73**, **#74**, **#75**, là các câu **62–65** dưới đây.
-
-Mục này **ưu tiên hơn** chữ cũ ở các mục trên nếu có chỗ lệch.
-
-1. **Mốc hiệu năng nghiệm thu (thay cho số cũ ở 17.10).** v0.1 nghiệm thu đạt khi có **200 dự án và 200.000 ticket** mà danh sách ticket và Tổng quan vẫn mở **dưới 1 giây** sau lần tải đầu. Thiết kế còn phải chịu được tiếp **300 dự án** (và mọi tổ hợp nhỏ hơn 200.000 ticket) mà **không đổi kiến trúc**.
-
-2. **Lệnh `baton reply` (bổ sung bảng lệnh mục 13).** `baton reply <lượt> "<nội dung>"` trả lời câu hỏi mà agent gửi trên lượt giao (mục 19.6).
-   - **Chỉ người giao của lượt đó** gọi được. Agent khác gọi → `FORBIDDEN`.
-   - Chủ trả lời từ web ở trang chi tiết ticket; hành vi giống hệt.
-   - Câu trả lời được ghi thành **một hoạt động trên phiên của người hỏi** (phiên của agent đã gửi `question`), **đồng thời** là một **bình luận trên ticket**.
-
-3. **Khởi tạo chủ, và lấy lại 2FA (bổ sung mục 15).** Chủ được tạo bằng **lệnh chạy trên máy chủ** `baton-admin init` — **không có trang web công khai** nào làm việc này.
-   - `baton-admin init` đặt tên chủ và mật khẩu, hiện **mã QR TOTP một lần**, và in **10 mã khôi phục dùng một lần**.
-   - Lệnh chỉ chạy được khi **chưa có chủ** nào.
-   - Mất thiết bị TOTP: đăng nhập bằng **mật khẩu + 1 mã khôi phục**, rồi đặt lại TOTP.
-   - Mất cả mã khôi phục: `baton-admin reset-2fa` trên máy chủ.
-   - **Mọi lần đặt lại** (TOTP hoặc mật khẩu) ghi một dòng Lịch sử và bắn một thông báo Telegram.
-
-4. **"Chung" trong Cần Chủ là giá trị rỗng (mục 8).** "Chung" **không phải một dự án**; nó là trường dự án để **rỗng**.
-   - Giao diện hiện nhãn **"Chung"** cho giá trị rỗng.
-   - Bộ lọc theo dự án có một lựa chọn **"Chung"** (lọc các mục có trường dự án rỗng).
-   - `baton ask` không truyền dự án → mục là Chung.
-   - Dòng Nhật ký tự sinh từ một mục Chung để **trống** trường dự án.
-
-5. **Mã phiên bản của bằng chứng `deploy` (mục 7).** Mã phiên bản **chỉ được lưu và hiện**, server **không kiểm** nó. Xác minh deploy chỉ dựa trên mã HTTP **2xx hoặc 3xx**.
-
-6. **Gửi Telegram thất bại (mục 12).** Thử lại **3 lần** giãn cách: **10 giây, 60 giây, 5 phút**.
-   - Vẫn trượt: tin được **giữ trong chuông thông báo trong app**, và hiện ở **"Cần chú ý"** dòng `Không gửi được thông báo Telegram (lý do)`.
-   - Thất bại gửi Telegram **không bao giờ chặn luồng chính** (lệnh gây ra thông báo vẫn thành công).
-
-7. **Sao lưu (mục 15).** Bản sao lưu đặt ở **nơi lưu trữ khác DB chính** (R2).
-   - Màn hình Cài đặt liệt kê **14 bản**, mỗi bản có **ngày** và **dung lượng**, kèm **nút tải về**.
-   - **Phục hồi là việc tay, có tài liệu hướng dẫn** — v0.1 **không** có nút phục hồi.
-
-8. **Phạm vi tìm của `Cmd/Ctrl+K` (mục 14).** Command menu tìm **chỉ** trong: **mã ticket**, **tiêu đề ticket**, **mã cũ** (với ticket được nhập, mục 16), **T-số**, và **tiêu đề mục Cần Chủ**. Khớp theo **chuỗi con**, không cần tìm toàn văn. Tìm trong **mô tả, brief, bình luận** để v0.2. (Việc "tìm theo chữ" của Nhật ký quyết định ở mục 10 vẫn giữ nguyên.)
-
-9. **"Mở lại" là mọi lần rời nhóm `closed` (sửa mục 4 dòng 138; chốt cho `cau-hoi-spec.md` #18).** Mục 4 chỉ nói ca "về Cần làm"; nay **mọi** lần rời nhóm `closed` đều tính là "mở lại", nên **chỉ chủ** làm được.
-   - Gồm cả Xong → Đang làm, Huỷ → Backlog, Xong → Huỷ — không riêng ca về Cần làm.
-   - Rộng hơn chữ cũ của SPEC, **có chủ ý**: đây là hướng an toàn, agent không bao giờ sửa được kết luận của một ticket đã kết.
-
-10. **"Ticket gốc hợp lệ" của trạng thái Trùng (bổ sung mục 4 dòng 137; chốt cho #19).** Mục 4 nêu mã lỗi `INVALID_DUPLICATE_TARGET` nhưng không định nghĩa "hợp lệ". Hợp lệ là **đủ bốn** điều kiện:
-    - **Tồn tại và chưa xoá mềm.**
-    - **Cùng workspace** (dữ liệu tách theo workspace — mục 1); **khác dự án thì được**, vì mục 4 nói liên kết ticket "được khác dự án".
-    - **Không phải chính nó.**
-    - **Không tạo chuỗi trùng vòng** — ticket gốc không được trỏ về chính ticket đang đánh trùng, trực tiếp hay qua chuỗi. Thiếu điều kiện này thì mọi chỗ "đi theo ticket gốc" lặp vô tận.
-
-11. **"Xoá bất cứ thứ gì" nói về xoá đối tượng (giải nghĩa mục 3 so với mục 4; chốt cho #20).** Hàng "Xoá bất cứ thứ gì — không bao giờ" của bảng quyền mục 3 áp cho xoá **đối tượng**: ticket, bằng chứng, dòng lịch sử, mục Cần Chủ.
-    - **Bỏ một nhãn không thuộc hàng đó.** Bỏ nhãn là đặt lại giá trị của một trường, cùng loại việc với đổi ưu tiên, và vẫn để lại dấu vết trong lịch sử.
-    - Gắn nhãn **và** bỏ nhãn đều đi qua hàng **"Đổi trạng thái ticket"**.
-
-12. **Ticket cha chỉ đặt lúc tạo (bổ sung mục 4, trường "Ticket cha"; chốt cho #21).** Ticket cha đặt **lúc tạo ticket**, và **không có đường đổi cha hay bỏ cha về sau**.
-    - Lý do: đổi cha là đổi luật `CHILDREN_OPEN` của hai cây cùng lúc (cây cũ có thể vừa đủ điều kiện vào Xong, cây mới thì ngược lại).
-    - Lệnh nối liên kết ticket cố ý **không nhận** loại `parent`.
-
-13. **Quyền bình luận (bổ sung mục 3; liên quan mục 4, 6; chốt cho #22).** Bảng quyền mục 3 không có hàng nào cho bình luận. Điều kiện là **"agent được vào dự án"**, cộng **không bị `disabled`** — **không phân biệt vai trò**.
-    - Kể cả **`reviewer`** bình luận được, vì mục 6 đòi reviewer gửi được tín hiệu trên phiên của nó.
-    - **Không mượn** một hàng nào khác của bảng quyền (vd "Đổi trạng thái ticket"): mượn là âm thầm đổi nghĩa của hàng đó, và sẽ chặn `reviewer` bình luận.
-
-14. **Xoá và sửa bình luận (bổ sung mục 4, phần Bình luận; chốt cho #23).** Mục 4 nói "Tác giả tự sửa được (có ghi 'đã sửa'). Agent không xoá được", nhưng không nói về chủ.
-    - **Chủ xoá được** bình luận, và là xoá **mềm** (còn dấu vết) — mục 15 đòi "mọi hành động có dấu vết ai làm", nên một bình luận biến mất không dấu vết là sai hướng. Đường đọc lọc bình luận đã xoá.
-    - "**Tác giả** tự sửa được" hiểu **đúng chữ**: **chủ cũng không sửa được** bình luận của agent, vì một bình luận của agent bị chủ sửa thì lịch sử hội thoại không còn đáng tin.
-
-15. **Ngoài phạm vi: đường ĐỌC trả 404; đường GHI: không thấy được đối tượng ⇒ 404 giống hệt id bịa, thấy được mà không có quyền ⇒ 403 (bổ sung mục 13 và 17.7; chốt cho #24, sửa theo #175–#177).** Mục 13 và 17.7 chỉ nói về đường đọc; nay chốt cho cả hai đường.
-    - **Đường ĐỌC → `NOT_FOUND`/404** — để **không lộ sự tồn tại**.
-    - **Đường GHI → `FORBIDDEN`/403** khi người gọi thấy được đối tượng mà không có quyền. Mã lỗi còn là tín hiệu cho CLI: 404 làm agent tưởng mình gõ sai id và đi sửa dữ liệu gửi lên, còn 403 nói đúng việc phải làm là xin quyền. Id của đối tượng người gọi **không thấy được** thì ra 404 giống hệt id bịa — hai gạch dưới.
-    - **Quyền phải kiểm trước khi tra đối tượng, hoặc đối tượng phải được tra ngay trong phạm vi người gọi** (ngoài phạm vi thì câu tra rỗng, đi cùng đường với id bịa). Tra dự án trước rồi mới kiểm quyền thì 404 ("không có thật") khác 403 ("có thật, không được vào") — đó là một máy dò sự tồn tại. Với agent ngoài phạm vi, **cả hai ca phải ra phản hồi giống hệt nhau**.
-    - **Agent được tham chiếu bằng ID trong thân lệnh ghi** (người nhận lượt giao `nguoi_nhan_agent_id`, người chịu trách nhiệm `chiu_trach_nhiem_agent_id`) mà nằm **ngoài phạm vi quyền người gọi** → `NOT_FOUND`/404, **giống hệt** ID không tồn tại (cùng mã, thông điệp, status), **không** trả 403 — để không lộ sự tồn tại của agent. Agent người gọi **thấy được** mà đã tắt hoặc không vào dự án thì vẫn `FORBIDDEN` (mục 5). (Chủ chốt T-58 = A, 22/10; #172)
-    - **Id đối tượng mà cửa ghi chỉ biết dự án sau khi tra** — id **lượt giao, phiên, ticket, bình luận, bằng chứng, dự án** — ở **mọi lệnh ghi** (trên đường dẫn hay trong thân): đối tượng **ngoài phạm vi người gọi** → `NOT_FOUND`/404 **giống hệt** id không tồn tại (cùng mã, thông điệp, status, thân), và **không ghi gì** (không Lịch sử, Nhật ký, thông báo, tín hiệu phiên, "lần cuối lên tiếng"). Người gọi **thấy được** đối tượng mà không có quyền làm việc đó → vẫn `FORBIDDEN`/403. Lý do không trả 403 cho cả hai: cửa ghi không biết dự án của một id trước khi tra nó, nên 403 cho id bịa sẽ báo "không có quyền" cho người **trong** phạm vi chỉ gõ sai id. Lệnh **chỉ chủ** (hoặc kiểm vai trò/cửa dự án **trước** khi tra) trả 403 cho mọi id — không lộ gì, giữ nguyên. (Chủ chốt T-73/T-75 = A, 23–24/10; #175, #176, #177)
-      - "Thấy được" một **lượt giao** trên đường ghi = ticket của lượt trong phạm vi đọc của người gọi, **hoặc** người gọi là người nhận hay người giao của chính lượt đó. Một **phiên**: ticket trong phạm vi đọc, **hoặc** người gọi là agent của phiên, **hoặc** là người giao của lượt của phiên. Nên người nhận/người giao bị gỡ khỏi dự án vẫn làm tiếp lệnh trên lượt **của mình** (`claim`, `heartbeat`, `log`, `plan`, `submit`, `cancel`, `verdict`, `reply`; câu 37, 44). Đường **đọc** phiên vẫn theo luật đọc ticket.
-      - "Thấy được" một **ticket** = ticket trong phạm vi đọc. Một **bình luận / bằng chứng**: ticket của nó trong phạm vi đọc, **hoặc** người gọi là tác giả bình luận / người gửi bằng chứng. Người nhận lượt bị gỡ khỏi dự án nhận 404 trên lệnh theo id ticket (sửa, đổi trạng thái, bình luận, gửi bằng chứng…).
-      - "Thấy được" một **dự án** = dự án người gọi được vào (chủ và agent "tất cả dự án" thấy mọi dự án).
-      - **Ticket gốc của Trùng** (mục 4) ngoài phạm vi người gọi coi như không có → `INVALID_DUPLICATE_TARGET`, giống id bịa. `coordinator` chỉ được vào một số dự án **không** đánh Trùng với ticket ngoài các dự án đó, và **không** đề xuất trọng tâm (mục 11) với ticket ngoài các dự án đó (404).
-
-16. **Ai nối được liên kết `dieu_phoi` (bổ sung 19.4 và bảng quyền mục 3; chốt cho #25).** **Chỉ chủ và agent vai `coordinator`** nối được liên kết loại `dieu_phoi`.
-    - Lý do: liên kết `dieu_phoi` là thứ **định nghĩa** một ticket là ticket điều phối, mà ticket điều phối **không qua cổng bằng chứng** (19.4) — nên để một `manager` tự nối là mở một đường vòng qua cổng bằng chứng.
-    - Luật mới là điều kiện **cộng thêm**: các điều kiện quyền và phạm vi dự án sẵn có vẫn áp (phải có quyền trên **cả hai** đầu nối).
-    - **`related` và `blocks` giữ như hiện tại** — không siết, không nới.
-
-17. **Ticket dự án xoá mềm và ticket điều phối (bổ sung 19.4 so với mục 4; chốt cho #26).** Trạng thái ticket điều phối tự theo các ticket dự án nối bằng `dieu_phoi`; nay chốt cách tính khi chủ xoá mềm hoặc khôi phục.
-    - Ticket **đã xoá mềm không tính** vào tập ticket dự án mà ticket điều phối theo.
-    - Xoá ticket **cuối cùng** của tập (không còn ticket nào) ⇒ ticket điều phối **giữ nguyên** trạng thái, cùng tinh thần 19.11 ("chưa đủ dữ kiện thì giữ nguyên").
-    - **Khôi phục** một ticket ⇒ **tính lại** trạng thái ticket điều phối theo tập mới.
-
-18. **Quyền của hai lệnh cấp số (bổ sung mục 3; liên quan mục 4, 8; chốt cho #27).** Bảng quyền mục 3 không có hàng nào cho "cấp số", nhưng cấp số là lệnh **ghi** thật: gọi một lần là đốt vĩnh viễn một số. Dùng hàng **gần nhất theo mục đích**:
-    - Cấp **số ticket** (mục 4, "tăng dần trong dự án, không tái dùng") đi qua hàng **"Tạo ticket"**.
-    - Cấp **`T-số`** (mục 8) đi qua hàng **"Tạo mục Cần Chủ"**.
-    - Không truyền cờ phạm vi lượt giao nào, nên `worker` bị từ chối — mặc định an toàn.
-
-19. **Mã lỗi thuộc lớp HTTP nào (bổ sung bảng mục 13; chốt cho #9).** Mục 13 nêu các lớp HTTP nhưng không nói mã lỗi nào thuộc lớp nào. Nay chốt theo nghĩa của lớp:
-    - **409** cho "trạng thái hiện tại không cho phép": `PROJECT_NOT_ACCEPTING`, `SESSION_CLOSED`, `CHILDREN_OPEN`, `ALREADY_RESOLVED`.
-    - **422** cho "dữ liệu hoặc điều kiện nghiệp vụ chưa đạt": `EVIDENCE_REQUIRED`, `REASON_REQUIRED`, `INVALID_DUPLICATE_TARGET`, `INVALID_INPUT`, `OPTIONS_REQUIRED`, `COMMAND_REQUIRED`, `REVIEWER_IS_WORKER`.
-    - **500 `INTERNAL`** cho lỗi máy chủ không lường trước; CLI thoát **mã 2**. Mã này là mã **thêm**, vì bảng mục 13 tự khai là "mã lỗi tối thiểu".
-    - Bảng ánh xạ nằm **một chỗ** và có test phủ từng mã.
-
-20. **Chủ chỉnh được gì của quyền một agent (bổ sung mục 3; chốt cho #10).** Chủ chỉnh được **cả hai**: `cho_phep` (bật/tắt ô) **và** `pham_vi` của ô.
-    - Chủ bật một ô vốn là `—` mà **không** ghi phạm vi thì hiểu là **"có"** — vẫn phải qua cửa dự án.
-    - Hai hàng "**không bao giờ**" **không nhận ghi đè** ở cả ba tầng: code, module quyền, và `CHECK` của cơ sở dữ liệu.
-
-21. **Agent `disabled` gọi API trả `FORBIDDEN`/403 (bổ sung mục 3 so với mục 13; chốt cho #11).** Token *đúng*, chỉ danh tính bị tắt, nên là **`FORBIDDEN`/403** — không phải `INVALID_TOKEN`/401.
-    - Lý do: xác thực đã thành công; chỉ là không được phép hành động.
-    - Thông điệp nói rõ "Agent đã bị tắt", để người đọc log hiểu ngay.
-
-22. **Sửa các trường khác của ticket đi qua hàng "Đổi trạng thái ticket" (bổ sung mục 3; chốt cho #12).** Bảng quyền mục 3 chỉ có hàng "Đổi trạng thái ticket"; hàng đó dùng chung cho **mọi lần sửa trường** của ticket (tiêu đề, mô tả, ưu tiên, nhãn, brief, hạn), **cùng phạm vi**: `worker` chỉ ticket của lượt mình, `manager` trong dự án, `coordinator` có, `reviewer` không.
-
-23. **"Lần cuối lên tiếng" của agent và "tín hiệu" của phiên là hai mốc khác nhau (giải nghĩa mục 3 so với mục 6; chốt cho #13).**
-    - **"Lần cuối lên tiếng"** (mục 3, trang agent) = **mọi lệnh ghi thành công** của agent, **có gắn phiên hay không**. Lệnh đọc không tính.
-    - **"Tín hiệu phiên"** (mục 6, ngưỡng đứng) chỉ tính lệnh ghi liên quan **phiên đó** (xem thêm câu 41).
-
-24. **Agent đọc được thông tin agent nào (bổ sung mục 3 so với mục 13; chốt cho #14).** Một agent đọc được: **chính nó**, các agent **dùng chung ít nhất một dự án** với nó, và agent có cờ "tất cả dự án".
-    - Chủ đọc được **mọi** agent.
-    - Ngoài phạm vi → **`NOT_FOUND`**, như mọi đường đọc khác (câu 15).
-
-25. **Dự án `archived` mở lại được (bổ sung mục 2; chốt cho #15).** "Chỉ đọc" không phải cửa một chiều: **chủ mở lại được** một dự án đã lưu trữ.
-    - Mọi lệnh **ghi** lên dự án `archived` bị từ chối (`PROJECT_NOT_ACCEPTING`), **trừ** chính việc **chủ đổi `trang_thai`**.
-
-26. **Chủ tạo được ticket trong dự án `paused` (giải nghĩa mục 2 so với mục 4; chốt cho #16).** `paused` là luật dành cho **agent**: agent không nhận việc mới và không tạo được ticket. **Chủ vẫn tạo được** — chủ phải lên kế hoạch trước được cho một dự án đang tạm dừng.
-    - `archived` thì **chỉ đọc với mọi người** (trừ ca ở câu 25).
-
-27. **Dự án `archived` bị ẩn ở tầng API, không chỉ ở UI (bổ sung mục 2 và mục 13; chốt cho #17).** Đường đọc danh sách dự án **ẩn dự án `archived` mặc định**.
-    - Có cờ **`?gom_luu_tru=co`** để lấy cả, và **`?trang_thai=archived`** vẫn lấy đúng nhóm đó — không dữ liệu nào bị khoá tầm nhìn.
-    - **Đọc từng dự án lưu trữ vẫn được** (chỉ đọc thì phải đọc được).
-    - Lý do ẩn ở API: để UI tự lọc thì web, CLI và MCP đều phải nhớ lọc, và `baton list` sẽ hiện dự án lưu trữ trong khi sidebar thì không — "ẩn" là **một** luật, không phải ba lần cài giống nhau.
-
-28. **Hai mã lỗi mới cho xung đột trạng thái của lượt giao (bổ sung bảng mục 13; chốt cho #28).** Hai ca của mục 5 chưa có mã nào; nay thêm hai mã, **cả hai 409** (nhóm "trạng thái hiện tại không cho phép", câu 19):
-    - **`ASSIGNMENT_OPEN`**: ticket đã có một lượt **mở cùng loại** mà vẫn xin tạo thêm (mục 5, 19.1).
-    - **`ASSIGNMENT_NOT_PENDING`**: gọi lệnh **nhận** trên một lượt không còn `pending`.
-    - Hai mã này là mã **thêm**, khai riêng, **không** trộn vào bảng tối thiểu của mục 13.
-
-29. **Loại lượt giao là `work` (sửa chữ ở 19.1; chốt cho #29).** Mục 0.1 ghi loại lượt giao là `work` / `review`, còn 19.1 viết "`worker` hoặc `review`". Nay chốt theo **`work`**, và **sửa chữ ở 19.1 — không đổi 0.1**.
-    - Lý do: 0.1 là bảng mã máy **duy nhất** của SPEC và tự khai áp cho "API, CLI, MCP, **cơ sở dữ liệu** và log"; chữ ở 19.1 là văn xuôi.
-    - Thêm nữa, `worker` **trùng tên một vai trò agent**; một trường của lượt giao mang đúng tên một vai trò là nguồn nhầm lẫn lâu dài.
-
-30. **"Ticket con của lượt mình đang làm" dùng đúng định nghĩa "mở" của 19.1 (giải nghĩa mục 3; chốt cho #30).** Chữ "**đang làm**" trong hai ô phạm vi của `worker` ở bảng quyền mục 3 nghĩa là lượt **mở** = `pending` **hoặc** `in_progress`.
-    - Lý do: cả hệ chỉ có **một** khái niệm "lượt của mình", không phải hai khái niệm lệch nhau một trạng thái.
-
-31. **Chỉ đúng người nhận gọi được lệnh "nhận" (bổ sung mục 5; chốt cho #31).** **Kể cả chủ** gọi hộ cũng `FORBIDDEN`.
-    - Lý do: "nhận" không phải thao tác quản trị mà là **lời khai của agent rằng nó đang chạy** — nó mở phiên và khởi động đồng hồ ngưỡng đứng (mục 6). Chủ nhận hộ là tạo một phiên không có ai ở đầu kia, tức làm hỏng đúng thứ mục 6 sinh ra để bảo đảm.
-    - Cùng khuôn với câu 2 (`baton reply` chỉ người giao). Chủ vẫn **huỷ** được lượt (mục 5).
-
-32. **Lượt giao không đặt hạn phản hồi (giải nghĩa mục 5; chốt cho #32).** Chữ "**có thể** đặt hạn phản hồi (mặc định 15 phút)" nghĩa là được phép không đặt:
-    - **Không đặt hạn** là một giá trị thật (`null`), và lượt đó **không bao giờ** bị tính là "Không phản hồi".
-    - **Trần 30 ngày**, để một giá trị gõ nhầm không thành hạn vô hạn trá hình. Giá trị vô lý → `INVALID_INPUT`.
-
-33. **Huỷ lượt khi ticket đã kết thì ticket giữ nguyên (sửa hàng cuối bảng 19.2; chốt cho #33).** Hàng "Lượt bị `canceled`, không còn lượt mở nào → **Về Cần làm**" **chỉ áp cho ticket chưa kết**.
-    - Ticket ở nhóm `closed` thì huỷ lượt **giữ nguyên trạng thái ticket**.
-    - Hai luật cụ thể hơn **thắng** chữ tổng quát của bảng 19.2: 19.3 "ticket đã Xong không bị hạ", và câu 9 "mọi lần rời nhóm `closed` chỉ chủ làm được" — mà huỷ lượt là việc của người giao.
-
-34. **"Báo cáo nộp bắt buộc" chỉ bắt buộc trường `Kết quả` (giải nghĩa mục 5 dòng 166; chốt cho #34).** Chữ "bắt buộc khi nộp" nghĩa là **nộp thì phải kèm một báo cáo có cấu trúc**, không phải cả 6 trường đều bắt buộc.
-    - **`Kết quả` bắt buộc** — bảng 19.2 lái trạng thái ticket theo nó. Thiếu → `INVALID_INPUT`.
-    - **Năm mục còn lại** (Đã làm · Kiểm chứng · Nhánh và commit · Rủi ro · Việc phát sinh) **được để trống**.
-    - Lý do: "Nhánh và commit" vô nghĩa với dự án không code (19.10) và "Việc phát sinh" vô nghĩa khi không có việc phát sinh — bắt buộc chúng là buộc agent điền chữ rác, làm báo cáo kém tin hơn.
-
-35. **"Lý do trả lại" nằm ở đầu trường mục tiêu của brief (bổ sung 19.5 so với mục 4; chốt cho #35).** Brief ở mục 4 là 8 trường cố định, không có trường "Lý do trả lại". Lý do trả lại được **chèn vào đầu trường `muc_tieu`** dạng khối `Lý do trả lại: <lý do>`, rồi tới mục tiêu cũ.
-    - Lý do: `muc_tieu` là trường đầu tiên agent đọc, nên "đặt ở đầu" giữ được đúng ý của 19.5.
-    - **Hệ quả đã biết và chấp nhận:** `muc_tieu` của lượt mới không còn là mục tiêu thuần. Hướng sạch hơn (thêm một trường brief thứ 9) là đổi cấu trúc brief của mục 4, **không làm ở v0.1**.
-
-36. **Ticket tạo từ "Việc phát sinh" không nối liên kết nào (bổ sung mục 5 dòng 169; chốt cho #36).** Nút "Tạo ticket từ việc phát sinh" tạo một **ticket thường trong cùng dự án**, **không** nối liên kết gì với ticket gốc.
-    - Không chọn `parent`: nó kéo theo luật `CHILDREN_OPEN`, tức ticket gốc không vào Xong được cho tới khi việc phát sinh xong — trái định nghĩa "việc phát sinh là việc **không tự làm**".
-    - Không chọn `related`: đó là một liên kết tự sinh mà SPEC không yêu cầu.
-    - Người giao **nối tay** bằng lệnh nối liên kết nếu muốn.
-
-37. **Nộp báo cáo, nghiệm thu, huỷ lượt kiểm theo danh tính (bổ sung mục 3 so với mục 5; chốt cho #37).** Ba lệnh này **không đi qua bảng quyền** mục 3; chúng kiểm **danh tính** đúng như mục 5 viết: **người nhận** nộp, **người giao** nghiệm thu, **người giao hoặc chủ** huỷ.
-    - Hướng này chặt hơn: một `manager` có mọi quyền vẫn **không** nghiệm thu được lượt của người khác. Chủ cũng không nghiệm thu được lượt mình không giao.
-    - **Không mượn** hàng nào của bảng quyền — mượn là âm thầm đổi nghĩa hàng đó (cùng lý do câu 13).
-    - Ba lệnh vẫn là lệnh ghi, nên vẫn bị luật "agent `disabled` bị từ chối" (câu 21).
-
-38. **Nộp lần thứ hai trên một lượt đã `submitted` bị từ chối (bổ sung mục 5 so với 19.1; chốt cho #38).** Lượt phải đang `in_progress` mới nộp được; nộp lại → **`ASSIGNMENT_STATE_INVALID`/409**.
-    - Lý do: nộp là một **sự kiện** lái bảng 19.2 (có thể đã kéo ticket sang Xong rồi kiểm cổng) — cho nộp lại là cho **phát lại** sự kiện đó.
-    - Đường đúng cho "làm lại" đã có: nghiệm thu `returned` → lượt mới (19.5).
-    - Mục 15 đòi mọi hành động có dấu vết, mà ghi đè báo cáo là xoá dấu vết.
-
-39. **Trạng thái phiên có đủ 7 mã (sửa chữ ở mục 6; chốt cho #39).** Mục 6 liệt kê 6 mã, thiếu **`waiting_assigner`** (Chờ người giao) mà cả 0.1 và 19.6 đều dùng. Nay chốt theo **0.1 (đủ 7 mã)**, và **sửa chữ ở mục 6 — không đổi 0.1**.
-    - Cùng hình huống và cùng lý do với câu 29: 0.1 là bảng mã máy **duy nhất**, tự khai áp cho cả cơ sở dữ liệu; danh sách ở mục 6 là văn xuôi.
-
-40. **Ngưỡng đứng: bậc agent thắng bậc dự án (giải nghĩa mục 6 dòng 189; chốt cho #40).** Chữ "chỉnh theo dự án **hoặc** theo agent" không nói bậc nào thắng khi cả hai đều đặt. Nay chốt: **agent thắng dự án**, rồi rơi về **mặc định 30 phút** nếu cả hai để trống.
-    - Lý do: ngưỡng đứng là tính chất của **nhịp chạy thật của một agent** (một agent build lâu cần ngưỡng rộng ở mọi dự án), còn dự án chỉ là mặc định cho cả nhóm.
-
-41. **Lệnh ghi nhích tín hiệu phiên nào của chính agent gọi lệnh (giải nghĩa mục 6 dòng 188; chốt cho #41, sửa theo #174 — Chủ chốt T-73/T-75 = A, 23–24/10).** Nhiều lệnh ghi **không gắn lượt giao nào** (bình luận một ticket khác, `coordinator` tạo ticket, đổi ưu tiên), nên không có "phiên đó". Nay chốt, cho một lệnh ghi thành công của agent:
-    - Lệnh **gắn một lượt giao** (`heartbeat`, gửi hoạt động `log`, `plan`, `submit`, `claim`) chỉ làm mới tín hiệu sống của **phiên của lượt đó**, và chỉ khi đó là phiên của **chính agent gọi lệnh**. Phiên khác của cùng agent **không** được nhích. (Áp cả khi lệnh bị từ chối `SESSION_CLOSED` của câu 45.)
-    - Lệnh **không gắn lượt nào** (bình luận, tạo/sửa ticket, bằng chứng, giao, nghiệm thu, huỷ, trả lời…) chỉ làm mới tín hiệu khi agent có **đúng 1 phiên mở**; agent có **từ 2 phiên mở trở lên** thì lệnh đó **không nhích phiên nào**. "Phiên mở" = chưa `closed` và không phải `stopping` đã quá 10 phút (mục 6). Phép đếm "đúng 1 phiên mở" **tính cả phiên vừa đóng trong chính lệnh đó**: agent có phiên A mở, một lệnh chung của nó đóng phiên B (vd agent đổi ticket của B sang Chờ kiểm chứng hoặc Xong bằng `baton status` — mục 6 "phiên đóng khi ticket sang Chờ kiểm chứng hoặc Xong") ⇒ đếm được 2 ⇒ A **không** được nhích: lệnh đó là bằng chứng về B, không về A. Agent nhiều phiên giữ từng phiên sống bằng `baton heartbeat --luot <lượt>` (mục 13).
-    - Căn cứ: mục 6 sinh ra để biết "agent **có thật đang chạy**" — một agent vừa ghi gì đó **rõ ràng đang chạy**, nên để nó bị tính đứng là sai đúng việc mục 6 phải làm. Nhưng khi agent giữ nhiều phiên, một lệnh của phiên này **không** chứng minh phiên kia còn sống: nhích mọi phiên thì một phiên đã chết giữa chừng được "cứu" mãi bởi phiên còn chạy, và cảnh báo đứng của mục 6 không bao giờ bắn.
-    - "Lần cuối lên tiếng" của agent (câu 23) và mốc chống bắn lặp (câu 46) không đổi.
-    - Lệnh của **chủ**, và lệnh của **agent khác**, không nhích tín hiệu của phiên nào.
-    - Luật này áp ở **cửa ghi chung**, không rắc tay vào từng lệnh — rắc tay thì lệnh ghi thêm về sau sẽ quên, im lặng.
-
-42. **Chỉ phiên `running` mới dẫn xuất sang `stalled` (bổ sung mục 6 dòng 182–187; chốt cho #42).** Phiên ở `error` hoặc `stopping` im quá ngưỡng **không** thành `stalled`.
-    - Lý do: để `stalled` ăn mất `error` là **che một thông tin cụ thể hơn bằng một thông tin mơ hồ hơn** — chủ cần biết agent **báo lỗi**, không phải "agent im". Mục 11 và 19.6 đều xếp "đứng **hoặc** lỗi" cạnh nhau như hai việc ngang hàng.
-    - `stopping` đã có đồng hồ riêng 10 phút của mục 6 dòng 194. `waiting_owner` và `waiting_assigner` đã được 19.6 miễn.
-
-43. **Ánh xạ 7 mã phiên về 5 mã trạng thái agent (bổ sung mục 3 dòng 98–103; chốt cho #43).** Trạng thái agent có 5 mã, phiên có 7; nay chốt đường về cho ba mã còn thiếu, và chốt ca agent có **nhiều phiên mở**:
-    - **`waiting_assigner` và `stopping` → `busy`** (agent vẫn đang chạy, chỉ là đang chờ hoặc đang thu dọn).
-    - **`error` → `stalled`**, theo cách mục 11 và 19.6 gộp "đứng **hoặc** lỗi" thành một mức cần chú ý. Đây là chỗ **duy nhất** trong hệ mà `error` bị gộp vào `stalled` — ngược hướng câu 42, **có chủ ý**: câu 42 nói về **phiên** (cần chính xác), đây nói về một **nhãn tóm tắt của agent** (chỉ có 5 ô).
-    - **Nhiều phiên mở:** lấy theo **đúng thứ tự liệt kê của mục 3** làm thứ tự ưu tiên, và **`disabled` thắng mọi thứ**.
-
-44. **Nhịp tim và nút Dừng kiểm theo danh tính (bổ sung mục 3 so với mục 6; chốt cho #44).** Bảng quyền mục 3 không có hàng nào cho hai việc này; chúng **không mượn** hàng nào của bảng quyền:
-    - **Nhịp tim: chỉ agent của phiên đó** — kể cả chủ cũng `FORBIDDEN`, cùng lý do câu 31 (nhịp tim là lời khai "tôi đang chạy", chủ gửi hộ là làm hỏng đúng thứ mục 6 bảo đảm).
-    - **Dừng: chỉ chủ**, đúng chữ mục 6 dòng 192 ("Chủ bấm Dừng").
-
-45. **`SESSION_CLOSED` chỉ áp cho lệnh gắn rõ một lượt giao (giải nghĩa mục 6 dòng 195; chốt cho #45).** "Mọi lệnh ghi sau khi phiên đóng bị từ chối" **không** đọc rộng ra mọi lệnh ghi của agent:
-    - **Bị chặn:** lệnh gắn rõ một lượt giao (nhịp tim, nộp báo cáo, dòng hoạt động, bằng chứng của lượt).
-    - **Không bị chặn:** lệnh ghi chung (bình luận, sửa ticket) — chỉ là chúng không nhích tín hiệu cho một phiên đã đóng.
-    - Lý do: `SESSION_CLOSED` sinh ra để chặn agent **tiếp tục làm việc của một lượt đã kết**, không phải để tước danh tính của agent. Đọc rộng nhất thì nó chặn cả reviewer và chặn agent bình luận một ticket nó không có lượt nào.
-
-46. **Ai phát hiện phiên chuyển sang `stalled` hoặc `error` để bắn cảnh báo (bổ sung mục 6 dòng 196; chốt cho #46).** `stalled` là trạng thái **dẫn xuất, không ghi vào cơ sở dữ liệu** (câu 42), nên phải chốt ai phát hiện "lần chuyển":
-    - Cảnh báo được phát hiện bằng một **Cron Trigger quét mỗi 5 phút**, **không** dựa vào việc có ai mở Tổng quan.
-    - Giữ một **mốc "đã bắn cảnh báo cho tín hiệu nào"** để chống bắn lặp — không phải một cờ bật/tắt: cờ thì "hồi lại rồi đứng **lần nữa**" không phân biệt được với "vẫn đang đứng từ lần trước". Mốc gắn với tín hiệu cuối thì mỗi lần im lặng mới là **một** lần bắn, đúng chữ dòng 196.
-    - Mốc được ghi **qua cửa ghi** (Durable Object), như mọi lần ghi khác.
-    - Thông báo **ghi vào kho thông báo trong app**; **gửi Telegram thật là phần 7**.
-
-47. **Nộp báo cáo tính là xác nhận dừng (bổ sung mục 6 dòng 193 so với 19.6; chốt cho #47).** Agent đang `stopping` mà **nộp báo cáo** thì phiên **đóng** với lý do "đã nộp báo cáo" — không đòi thêm một mục `result`.
-    - Lý do: nộp là một kết luận **đầy đủ hơn** `result`; từ chối nó để đòi `result` là bắt agent làm lại việc vừa làm.
-    - **Hai đường vào `stopping` không đối xứng, và đó là chốt:** bấm Dừng thì lượt vẫn mở nên nộp được; **huỷ lượt** (19.6) thì lượt đã `canceled` nên **`result`/`error` là lối duy nhất**, đúng như mục 6 viết.
-
-48. **60 phút của `waiting_assigner` đếm từ lúc gửi `question` (giải nghĩa 19.6 dòng 516; chốt cho #48).** Mốc đếm là **lúc agent gửi hoạt động `question`**, **không** phải tín hiệu cuối của phiên.
-    - Lý do: cái 60 phút này đo **người giao chậm trả lời**, không đo agent im. Agent đang chờ trả lời mà vẫn gửi nhịp tim là chuyện bình thường và đúng — đếm từ tín hiệu cuối làm luật **tự vô hiệu hoá** đúng trong ca nó cần chạy.
-
-49. **Đổi ngưỡng đứng áp ngay cho phiên đang chạy (bổ sung mục 6 dòng 189; chốt cho #49).** Chủ đổi ngưỡng đứng của dự án hoặc agent thì **áp ngay** cho các phiên đang chạy, không chỉ từ phiên sau. Mỗi lần tính lấy **cấu hình hiện hành**, không chụp ảnh ngưỡng vào phiên lúc mở.
-    - Lý do: chủ nới ngưỡng thường là **đang** nhìn một phiên bị báo đứng oan và muốn nó thôi báo ngay; phải chờ phiên sau thì nút đó vô dụng đúng lúc cần.
-    - **Hệ quả chấp nhận:** nhãn đứng của một phiên có thể đổi mà **không có lệnh nào chạm phiên đó**.
-
-50. **Phiên `error` hồi lại bằng đường nào, và mốc chống bắn lặp của nó (bổ sung mục 6 dòng 196 và 19.6; chốt cho #50).** `error` là trạng thái **ghi trong cơ sở dữ liệu**, nên một tín hiệu mới (nhịp tim, mục `thought`) **không** đưa phiên ra khỏi `error`.
-    - Đường **duy nhất** ra khỏi `error`: agent gửi mục `question` → phiên sang `waiting_assigner`; có câu trả lời của người giao thì về `running`.
-    - Mốc chống bắn lặp của `error` **không** gắn tín hiệu cuối mà gắn **lần vào `error`**: agent lỗi mà vẫn đập nhịp tim thì vẫn là **một** lần chuyển sang, nên chỉ **1** tin; ra khỏi `error` rồi vào lại là một lần chuyển mới ⇒ **bắn lại**.
-
-51. **Token bị thu hồi hoặc agent bị tắt giữa lúc một lệnh chờ dài đang treo thì cắt ngay (bổ sung mục 13 so với mục 3; chốt cho #51).** Mục 3 nói token cũ hết hiệu lực "**ngay**", mà một lệnh chờ dài đã xác thực xong còn treo thêm tới một phút. Nay chốt: **cắt ngay**, không chạy nốt.
-    - Mỗi lần lệnh chờ tỉnh thì **kiểm lại token**: mất hiệu lực → `INVALID_TOKEN`/401; agent `disabled` → `FORBIDDEN`/403 (câu 21).
-    - Việc thu hồi token **tự đánh thức** lệnh đang treo của agent đó, nên không có khoảng hở "đọc được dữ liệu thêm một phút".
-
-52. **`baton tasks` dùng được cho chủ (bổ sung bảng lệnh mục 13; chốt cho #52).** Chủ không bao giờ là *người nhận* của một lượt giao (mục 5), nhưng 19.6 nói câu hỏi của agent hiện trong `baton tasks` của **người giao**, mà người giao có thể là chủ.
-    - Chủ gọi được: trả **danh sách lượt giao rỗng**, cộng đúng các **câu hỏi đang chờ chủ trả lời**. Chế độ chờ dài cũng tỉnh khi có câu hỏi mới.
-    - Lý do: đường API là **một** đường cho cả web, CLI và MCP (mục 13), nên dựng một đường thứ hai chỉ để chủ đọc câu hỏi là hai lần cài cùng một luật.
-
-53. **Lệnh chờ dài không phải tín hiệu của phiên (giải nghĩa mục 13 dòng 352 so với mục 6 dòng 188; chốt cho #53).** `baton tasks --wait` là **lệnh đọc**, nên **không nhích tín hiệu**, đúng chữ "lệnh đọc không tính".
-    - Agent muốn giữ phiên sống thì gửi **`baton heartbeat`**.
-    - Ghi chú: một agent *giữa hai lượt giao* không có phiên nào mở nên không có gì để tính đứng; ca đáng lo chỉ là agent **có phiên mở** mà lại đi chờ việc khác.
-
-54. **Ticket điều phối đã xoá mềm thì bỏ qua khi lan toả (bổ sung 19.4 và 19.11 so với mục 4; chốt cho #54).** Câu 17 chốt đầu **con** (ticket dự án xoá mềm không tính vào tập); nay chốt đầu **cha**: một ticket điều phối **đã xoá mềm** thì việc lan toả **bỏ qua nó** — không tính lại, không ghi gì cho nó, và **không báo lỗi**.
-    - Lý do: ticket đã xoá thì trạng thái của nó không còn nghĩa với ai; để nó **chặn** một lệnh trên một ticket dự án đang sống là lấy cái đã bỏ chặn cái đang dùng.
-    - Áp cho **mọi** đường lan toả: đổi trạng thái, xoá, khôi phục.
-
-55. **Xác minh deploy không theo chuyển hướng, và không đọc nội dung trả về (bổ sung mục 7 dòng 207 và 219; chốt cho #57).** Lớp chặn của d.207 chỉ chặn được **cú pháp host**, nên hai lỗ còn lại được đóng như sau:
-    - **Không theo chuyển hướng.** Mã **3xx** tính là **đạt** theo đúng chữ d.207, rồi **dừng** — server **không** gọi lần thứ hai theo `Location`. Nhờ vậy không có lần gọi nào đi qua lớp chặn host.
-    - **Không đọc nội dung trả về.** Không dòng nào của SPEC dùng tới nội dung, và đọc nó là mời một phản hồi dài vô hạn ăn bộ nhớ.
-    - **Kiểm lại cú pháp host ngay trước khi gọi**, dư thừa **có chủ ý**: đường thử lại định kỳ (d.221) đọc URL **từ cơ sở dữ liệu** và không đi qua bước kiểm nội dung nữa.
-    - **Hạn chế được chấp nhận, khai thẳng:** Baton **không** chặn được một tên miền công khai **phân giải ra** địa chỉ nội bộ, vì nơi chạy không có API phân giải DNS và không ghim được IP cho lần gọi. Hướng "phân giải qua DNS-over-HTTPS rồi kiểm IP" **bị bỏ**: nó vẫn không ghim được IP (còn nguyên khoảng hở giữa lúc kiểm và lúc gọi) và thêm một lần gọi mạng vào hạn 10 giây của d.219.
-
-56. **Bốn hậu tố tên miền chỉ-nội-bộ bị chặn, khớp theo nhãn (bổ sung mục 7 dòng 207; chốt cho #58).** "Không nhận IP nội bộ hay localhost" của d.207 **không** phủ được một tên miền đúng cú pháp như `metadata.google.internal` — thứ phân giải ra đúng máy chủ metadata mà d.207 sinh ra để chặn. Nay chặn thêm bốn hậu tố: **`.internal`, `.local`, `.home.arpa`, `.localhost`**.
-    - Khớp theo **NHÃN** (tách theo dấu chấm rồi so đuôi nhãn), **không** theo chuỗi con. Khớp chuỗi con thì `notinternal.com`, `myinternal.example.com`, `mail.notlocal` bị **chặn oan** — tức từ chối một URL deploy thật của chủ vì tên nó tình cờ chứa mấy chữ ấy.
-    - Áp **sau** khi đã bỏ dấu chấm cuối, nên `metadata.google.internal.` cũng bị chặn.
-    - **Hệ quả được chấp nhận:** một dịch vụ thật đặt ở tên miền `.internal` nội bộ thì **không gửi được bằng chứng deploy**. Đó đúng ý d.207: một URL mà chỉ mạng nội bộ mở được thì Baton gọi nó cũng không chứng minh được gì cho chủ.
-
-57. **Mục Cần Chủ "tự sinh" của dự án không code sinh lúc KIỂM CỔNG (bổ sung mục 7 dòng 217, 19.10 và mục 8; chốt cho #59).** d.217 nói dự án không code cần "một mục Cần Chủ loại Review **tự sinh**" nhưng không nói ai sinh và khi nào. Nay chốt:
-    - Sinh **lúc cổng được kiểm** và cổng thiếu đúng phần chủ xác nhận — đó là chỗ **duy nhất** biết được điều đó. Áp cho **mọi** đường kiểm cổng, kể cả đường tự lên Xong định kỳ (d.221), nơi không có ai gõ lệnh nào.
-    - **Một** mục cho mỗi ticket, không sinh trùng.
-    - Mục đã bị **Bỏ qua** (19.10) thì **chỉ** dựng lại khi có bằng chứng `file` hoặc `note` **mới hơn** lần bỏ qua. Nhờ vậy "Bỏ qua" giữ được cho tới khi thật sự có việc mới để xem, chứ không mất nghĩa ở lần kiểm cổng kế tiếp.
-    - **Bổ sung (T-31 câu 3.4 A; Chủ chốt T-38 = A, 19/10; chốt cho #161):** câu này áp cho **mọi ticket không code** — cờ dự án **hoặc** cờ ticket (mục 7). Khi cổng **đã đủ nhờ một `bao_cao`** hợp lệ thì phần "chủ xác nhận" không còn thiếu, nên **không** sinh (và không dựng lại) mục xác nhận. Một `bao_cao` cũng **không** là "bằng chứng `file`/`note` mới hơn" của gạch trên.
-    - **Bổ sung (Chủ chốt T-38 = A, T-43 = A; chốt cho #163):** ticket sang `done` bằng **mọi** đường (đủ nhờ `bao_cao`, chủ xác nhận, chủ ép Xong, tự lên Xong, cha tự kiểm cổng, …) ⇒ mục tự sinh **của chính ticket đó** (nhận theo mốc của mục, **không** theo "ticket liên quan") mà còn `Chờ` chuyển `Đã xử lý`, kết quả "ticket đã Xong", **không** kết luận Đạt/Cần sửa — nên nó **không** tính là chủ xác nhận. Ghi **cùng một lượt** với lệnh đưa ticket sang Xong (cùng thành, cùng hỏng). Mục tạo tay, mục của ticket khác, mục đã `Bỏ qua`/`Đã xử lý`: không đụng.
-
-58. **"Ticket ở hoặc về Chờ kiểm chứng" chỉ áp khi bằng chứng THAY ĐỔI (giải nghĩa 19.3 dòng 494 so với mục 4 và 19.10; chốt cho #66).** d.494 treo câu đó vào một **sự kiện** ("có commit hoặc deploy mới sau review"), không vào một **trạng thái**. Nay chốt:
-    - Nhánh **kéo trạng thái** chỉ chạy ở lượt ghi **thật sự thêm hoặc đổi bằng chứng** (gửi bằng chứng, rút bằng chứng). Mọi đường khác — đổi trạng thái tay, nút "Tôi làm", mở lượt giao, nộp, nghiệm thu, huỷ lượt, lan toả 19.4, kiểm lại cổng của ticket cha 19.11, đường định kỳ — **chỉ bật hoặc tắt cờ**.
-    - Lý do: đọc theo "mỗi lượt ghi" thì chủ **không bao giờ** đưa được một ticket mang cờ về Đang làm để đi sửa mã, và `baton status` sẽ cư xử **ngược** với nút "Tôi làm" (19.10) trên **cùng một** chuyển trạng thái — mà SPEC không có chữ nào phân biệt hai đường đó.
-    - **Hệ quả có chủ ý:** cờ **vẫn bật** trên một ticket chủ vừa đưa về Đang làm — đúng vậy, vì việc cần làm chưa xong. Cờ tắt khi có bằng chứng mới hợp lệ, hoặc khi review KHÔNG ĐẠT bị rút.
-    - **Ticket điều phối giữ nguyên trạng thái**, chỉ **cờ** bật/tắt. 19.4 d.502 nói trạng thái ticket điều phối "tự theo các ticket dự án" và nó "không qua cổng bằng chứng"; để d.494 kéo được nó sang Chờ kiểm chứng là làm hai câu đó trái nhau. Nó **gửi** bằng chứng được, nên nó **mang cờ** được.
-
-59. **Gửi và rút bằng chứng là lệnh ghi CHUNG, không bị `SESSION_CLOSED` (giải nghĩa câu 45 ở trên so với mục 6 dòng 195 và mục 7; chốt cho #67).** Câu 45 kể "bằng chứng của lượt" vào nhóm bị chặn, nhưng một dòng bằng chứng **không gắn lượt giao nào** — nó chỉ gắn ticket cộng người gửi, và mục 7 không có trường lượt. Nay chốt: **không** chặn theo phiên.
-    - Hai căn cứ: nó **khớp mô hình dữ liệu** (không phải đoán ra một liên kết lượt↔bằng chứng mà SPEC chưa có), và nó là hướng **không thêm chặn mới** — siết quyền của agent dựa trên một suy đoán là hướng khó lùi hơn nhiều so với nới sau.
-    - Nếu phiên spec sau muốn chặn, việc phải làm **không** phải sửa một điều kiện mà là **thêm một trường lượt vào mục 7**.
-
-60. **Mọi giờ-trên-tường của SPEC tính theo UTC+7 (bổ sung mục 8 dòng 241, 19.8 dòng 533, và nguyên tắc 8 của mục 0; chốt cho #68).** "18:00", "20:00", "08:00", "23:00–07:00" là giờ đồng hồ trên tường, nên chúng chỉ có nghĩa trong một múi giờ — mà các phép tính này chạy **phía server**.
-    - Lấy **UTC+7** của nguyên tắc 8 (giờ Việt Nam) làm múi giờ **nghiệp vụ**, không chỉ múi giờ hiển thị. Tính theo UTC thì một mục 🟡 tạo lúc 22:00 giờ Việt Nam nhận hạn "20:00 hôm nay" — một hạn **đã qua từ 2 giờ trước**.
-    - Khai ở **đúng một chỗ**, và mọi luật dùng giờ-trên-tường đi qua nó: hạn mặc định 🟡 (19.8), lịch nhắc phiên duyệt 08:00/20:00 (mục 8), handoff tối 20:00 (mục 11), giờ yên lặng 23:00–07:00 (mục 12). **Bốn luật phải dùng cùng một múi giờ**, nếu không chúng lệch nhau.
-    - Dùng một **độ lệch cố định**, không dùng cơ sở dữ liệu múi giờ: Việt Nam không có giờ mùa hè nên đó là mô hình đúng, và nó kiểm chứng được bằng số học. Nếu phiên spec sau muốn múi giờ là một **cài đặt của workspace** thì việc phải làm là đọc độ lệch từ cài đặt rồi truyền vào — một chỗ.
-
-61. **Tầm nhìn của lớp "Chung" rẽ theo VAI, không theo cờ dự án (bổ sung mục 8 dòng 229 và 233, bảng quyền mục 3, và câu 4 ở trên; chốt cho #69).** Câu 4 chốt "Chung" là trường dự án để **rỗng**, nên mọi đường đọc có một lớp dòng mà **cửa dự án không có gì để kiểm** (`project_id` rỗng). Nay chốt cho **cả hai** mục có lớp đó: mục 8 (Cần Chủ) và mục 10 (Nhật ký quyết định — câu 4 nói dòng tự sinh từ một mục Chung để trống trường dự án).
-    - **Đường TẠO: mở.** `coordinator`, `manager` và **chủ** đều tạo được mục Chung; luật duy nhất là ô "Tạo mục Cần Chủ" của bảng quyền mục 3, nên `worker` và `reviewer` vẫn bị từ chối. Căn cứ là **chữ SPEC**: d.229 nói mục Cần Chủ do `coordinator` **hoặc `manager`** tạo, và câu 4 nói `baton ask` không truyền dự án → mục là Chung. Ghép hai câu, "`manager` gửi `baton ask` không dự án" là một đường SPEC **cho phép tường minh**.
-    - **Đường ĐỌC: rẽ theo vai.** **Chủ** và agent vai **`coordinator`** đọc **mọi** mục và dòng Chung. Agent vai **`manager`** chỉ đọc cái do **chính mình tạo** — kể cả một dòng Chung **do chủ ghi** cũng là ngoài tầm nhìn. Vai khác (`worker`, `reviewer`) không đọc cái nào.
-    - Ngoài tầm nhìn → **`NOT_FOUND`**, không 403, theo nếp "không lộ sự tồn tại" của mục 13.
-    - Rẽ theo **vai** chứ không theo cờ "vào mọi dự án" là **có chủ ý**: lớp dòng này không thuộc dự án nào, nên một cờ về dự án không nói gì về nó. Một `coordinator` **không** bật cờ vẫn đọc được mọi dòng Chung; cờ chỉ quyết lớp dòng **có** dự án.
-    - Luật này phải nằm ở **một chỗ duy nhất**, và mọi module truy vấn **gọi** nó chứ không tự dựng điều kiện cho lớp này.
-
-62. **Trường "vì sao" của dòng Nhật ký là BẮT BUỘC, không rỗng (bổ sung mục 10 dòng 306 và 308; chốt cho #71).** d.306 đặt mục tiêu của cả mục 10 là trả lời "ai đã quyết cái này, **vì sao**, lúc nào", và d.308 liệt kê "vì sao" là một trường của dòng, nhưng không câu nào nói nó có được để trống không. Nay chốt theo hướng **chặt**:
-    - **Mọi** dòng Nhật ký phải có "vì sao" **không rỗng** — cả dòng chủ tự ghi, cả dòng **tự sinh** từ một mục Cần Chủ (câu 64 dưới đây cho chữ mặc định của dòng tự sinh).
-    - Luật này áp ở **cả ba tầng**: lệnh CLI (`--why` của d.377 không trong ngoặc vuông, tức bắt buộc), API, và **ràng buộc của DB**.
-    - Lý do chọn hướng chặt chứ không hướng mở: dòng Nhật ký **không sửa được** (d.309), nên một dòng lỡ ghi thiếu "vì sao" là vĩnh viễn. **Nới ra về sau dễ hơn siết vào** — nới là bỏ một ràng buộc; siết thì không vá được dữ liệu đã ghi.
-    - **Đường nhập của mục 16:** bảng "giờ · ai · dự án · quyết định · vì sao · căn cứ" có ô "vì sao" **trống** thì dòng đó là **lỗi**, vào mục "lỗi (kèm lý do từng dòng)" của báo cáo nhập — **không** được nhập với "vì sao" rỗng, và **không** được tự điền một chữ thay chủ.
-
-63. **Một mục đã Bỏ qua phải được MỞ LẠI trước khi xử lý, và đường mở lại nhận cả mục Bỏ qua (bổ sung mục 8 dòng 244 và 246, 19.9 và 19.10; chốt cho #73 vế (a)).** d.244 chỉ vẽ một mục `Chờ` đi ra **hai** nhánh ("xử lý" hoặc "bỏ qua"), và d.246 chỉ nói mở lại **từ Đã xử lý**, nên hai việc "xử lý một mục đang Bỏ qua" và "mở lại một mục đang Bỏ qua" đều là chỗ SPEC **im lặng**. Nay chốt, và **hai nửa đi cùng nhau**:
-    - **Xử lý thẳng một mục đang `Bỏ qua` → bị từ chối** bằng `ALREADY_RESOLVED`, với thông điệp nói đúng việc phải làm: **mở lại trước**. Đây là cùng khuôn chữ mà 19.10 đã dùng cho mục đã xử lý.
-    - **Đường mở lại nhận CẢ mục `Bỏ qua`**, không riêng mục `Đã xử lý` của d.246. Mở lại đưa mục về **`Chờ`** và **có ghi lịch sử**, giống hệt ca của d.246.
-    - **Nửa sau là điều kiện để nửa đầu có nghĩa:** nếu chỉ cấm xử lý mà không nới đường mở lại thì chính câu "mở lại trước" **không thực hiện được**, và một mục bị bỏ qua **nhầm** là vĩnh viễn — mất đường sửa sai duy nhất. Nên không được cài nửa đầu mà thiếu nửa sau.
-    - Chốt này **không** nói gì về **chữ** của bình luận khi bỏ qua (19.9 d.541 nói có bình luận nhưng không cho chữ) — vế đó vẫn ở `cau-hoi-spec.md` **#73(b)**, chờ phiên spec.
-
-64. **Dòng Nhật ký TỰ SINH lấy "vì sao" là `"Trả lời mục T-x: <tiêu đề mục>"` (bổ sung mục 8 dòng 279 và mục 10; chốt cho #74; đi cùng câu 62).** d.279 liệt kê đúng **bốn** vế của dòng tự sinh khi một mục Cần Chủ được xử lý — người là **chủ**, cùng **dự án** với mục, nội dung là **kết quả**, căn cứ là **`T-số`** — và **không có** vế "vì sao"; nhưng câu 62 làm vế đó **bắt buộc**, nên đường tự sinh phải điền một chữ. Nay chốt:
-    - Mặc định là **`"Trả lời mục T-x: <tiêu đề mục>"`**, với `T-x` là `T-số` của mục và `<tiêu đề mục>` là tiêu đề của chính nó.
-    - Tiêu đề mục **luôn có** (trường bắt buộc của d.233), nên mặc định này không bao giờ rơi vào rỗng và không bao giờ vỡ câu 62.
-    - Chủ gửi "vì sao" **rõ** thì **tôn trọng chữ của chủ**, không ghi đè bằng mặc định.
-    - Công thức này theo đúng **nếp SPEC đã tự dùng** cho các chuỗi sinh tự động ở d.280 và 19.9 d.542: `<mã> <việc>: <nội dung>`.
-
-65. **Chủ xử lý / bỏ qua / mở lại một mục Cần Chủ của dự án ĐÃ LƯU TRỮ thì ĐƯỢC (bổ sung câu 25 ở trên; chốt cho #75).** Câu 25 nói **tường minh** rằng mọi lệnh **ghi** lên dự án `archived` bị từ chối (`PROJECT_NOT_ACCEPTING`), **trừ** chính việc chủ đổi `trang_thai`; nhưng 19.6 d.516 và mục 8 d.281 đòi một mục được xử lý (hoặc bỏ qua) thì phiên liên quan **phải** thoát `waiting_owner`, và đó là **đường duy nhất** SPEC cho để thoát. Nay chốt mở, tức **thêm một ngoại lệ thứ hai** vào câu 25:
-    - **Chủ** xử lý, bỏ qua và mở lại được mục Cần Chủ của một dự án `archived` — kể cả các việc đi kèm mà mục 8 d.279–281 đòi: **dòng Nhật ký** tự sinh, **bình luận** trên ticket liên quan, và **thả phiên** khỏi `waiting_owner`.
-    - **Agent vẫn bị chặn như cũ.** Câu 25 áp đủ cho **mọi** lệnh ghi của agent lên dự án `archived`, gồm cả việc **tạo** mục Cần Chủ mới. Ngoại lệ này chỉ cho **chủ**, và chỉ cho các mục **đã tồn tại**.
-    - Lý do: "trả lời một câu hỏi **đã hỏi**" không phải "ghi việc **mới** vào dự án" — nó **đóng** một việc đang treo, tức cùng chiều với mục đích của lưu trữ. Hướng đóng thì một mục tạo lúc dự án còn sống, sau đó dự án bị lưu trữ, sẽ **không ai trả lời được**: nó nằm mãi ở khối `Chờ`, **và** phiên liên quan kẹt `waiting_owner` vĩnh viễn — đúng trạng thái "**không bao giờ** bị tính đứng" của 19.6, tức một agent đứng im mà **không cảnh báo nào bắn**.
-    - Giao diện mục 14 **hiện và cho bấm** các nút của một mục thuộc dự án đã lưu trữ; không có nút nào luôn trả lỗi.
-
-66. **Ticket không code ở mức TICKET và bằng chứng `bao_cao` (Báo cáo) (bổ sung mục 7, bảng 0.1, 19.10 và câu 57; T-31 câu 3.4 A; Chủ chốt T-38 = A, 19/10; chốt cho #161 và #162).** Một ticket không có code nằm trong dự án **có** code (vd một ticket nghiên cứu) trước đây không đóng được: cờ "không code" chỉ có ở hồ sơ dự án, và không loại bằng chứng nào nói "báo cáo đã có người khác kiểm". Nay chốt:
-    - **Cờ `ticket.khong_code`**: chỉ **chủ** bật/tắt (agent ⇒ `FORBIDDEN`), có ghi Lịch sử, **không kéo trạng thái** (câu 58). Ticket là "không code" khi cờ dự án **hoặc** cờ ticket bật, đọc **tại thời điểm kiểm** (19.10). Cờ dự án giữ nguyên nghĩa.
-    - **Loại bằng chứng `bao_cao`** (nhãn "Báo cáo"): đường dẫn và/hoặc nội dung (ít nhất một); người ký là người gửi; **quyền ký giống hệt `review`** (dòng `review` của bảng "Loại bằng chứng" mục 7 và bảng quyền mục 3: `reviewer` khác người làm; `manager` kèm đường dẫn báo cáo của reviewer độc lập; `coordinator`; chủ); nguồn ký hiện ở mọi đường đọc; không xác minh; không sửa, không xoá, rút theo mục 7, gạch "Bằng chứng không sửa, không xoá".
-    - **Cổng của ticket không code** đủ khi **(1 `file`/`note` + chủ xác nhận)** HOẶC **≥1 `bao_cao` chưa rút do người khác người làm ký**. Đủ nhờ báo cáo thì không sinh mục xác nhận (câu 57). Ticket **có code**: `bao_cao` không mở gì, luật cũ y nguyên.
-    - **Gửi `bao_cao` không tự đưa ticket lên Xong** từ Chờ kiểm chứng, giống `file`/`note`/`review`. Người **có quyền "Đổi trạng thái ticket"** theo bảng quyền mục 3 (worker là người làm với ticket của lượt mình; `manager` trong dự án; `coordinator`; chủ) đổi sang Xong; cổng được kiểm lúc đổi. Người gửi `bao_cao` thường là agent `reviewer`, vốn **không** có quyền đổi trạng thái, nên việc đổi là của người khác. Lý do giữ: "Tự lên Xong" (mục 7, gạch "Tự lên Xong") chỉ gắn với bước **xác minh** chạy nền (commit pushed → merged); `bao_cao` không có bước xác minh chạy nền nào.
-
-67. **`L` (nhãn) áp cho nhiều thẻ: gắn hay bỏ (bổ sung mục 14, gạch "Phím tắt"; Chủ chốt T-38 = A, 19/10; chốt cho #156).** Gõ nhãn rồi bấm nút "Áp" cạnh ô nhãn ở thanh chọn nhiều (`Enter` trong ô không áp — câu 70): **mọi** thẻ đã chọn đều có nhãn đó ⇒ **bỏ** ở tất cả; ngược lại ⇒ **gắn** cho các thẻ chưa có, thẻ đã có **không gửi request**. Một thẻ (panel) giữ nguyên: ô "Thêm nhãn" gắn, nút × bỏ.
-
-68. **Tập chọn sau khi áp, bộ lọc, `Esc` và đích của phím khi có thẻ đã chọn (bổ sung mục 14, gạch "Phím tắt" và gạch "Danh sách ticket" (bộ lọc); Chủ chốt T-38 = A, 19/10; chốt cho #157).**
-    - Áp xong: bỏ chọn thẻ **thành công**, **giữ đúng thẻ lỗi** để sửa và thử lại; tất cả thành công ⇒ tập chọn rỗng.
-    - Chọn theo id, gắn với bộ lọc lúc chọn (bộ lọc + tab nhanh + "Ẩn Xong cũ"): đổi bộ lọc/tab/view ⇒ tập chọn **rỗng hẳn** (quay lại bộ lọc cũ không sống lại); mỗi lần áp chỉ lấy thẻ **đang hiện**.
-    - `Esc` khi có thẻ đã chọn ⇒ bỏ chọn hết trước; `Esc` nữa mới đóng panel.
-    - Có thẻ đã chọn ⇒ `S`/`P`/`L`/`A` áp cho **tập chọn**, không cho thẻ đang focus.
-
-69. **`A` cho nhiều thẻ (bổ sung mục 14, gạch "Phím tắt", và mục 5; Chủ chốt T-38 = A, 19/10; chốt cho #158).** **Một** hộp "Giao N thẻ": chọn agent và brief **một lần**, gửi **tuần tự từng thẻ** (mỗi thẻ một lượt giao riêng), không hiện lạc quan. Có thẻ lỗi ⇒ **một** thông báo "k/N thẻ lỗi: MÃ — câu máy chủ"; thẻ thành công được bỏ chọn; hộp **giữ mở** với đúng các thẻ lỗi, giữ agent/brief để gửi lại. Đi hết các thẻ, không dừng ở thẻ lỗi đầu tiên. Mất mạng trước lần gửi đầu ⇒ đóng hộp là huỷ cả lượt; mất mạng giữa lượt ⇒ các thẻ còn lại báo lỗi mạng trong thông báo đó.
-
-70. **Bước xác nhận khi áp cho nhiều thẻ (bổ sung mục 14, gạch "Phím tắt"; Chủ chốt T-38 = A, 19/10; chốt cho #159).**
-    - Ô trạng thái, ưu tiên, nhãn của thanh chọn nhiều **chỉ đặt giá trị chờ**. Đổi giá trị bằng chuột, mũi tên, Space, gõ chữ, hay bấm `Enter` trong ô đều **không gửi request**. **Chỉ nút "Áp"** cạnh mỗi ô mới áp (nút "Áp" khoá khi ô còn trống; nhãn trống sau khi bỏ khoảng trắng tính là trống). Lý do: trên nhiều trình duyệt `↑`/`↓` trên ô chọn đang đóng đổi giá trị ngay, nên "áp khi đổi" biến một phím lỡ tay thành thao tác trên N thẻ; và `Enter` để **đóng danh sách đã mở** trên Chromium cũng tới ô, nên "áp khi `Enter`" đã áp nhầm "Đang làm" cho 2 thẻ trên production ngày 19/10 (CoS/Chủ chốt 20/10, BAT-39, #164). Áp dụng cho cả N < 10 và N ≥ 10.
-    - **N ≥ 10** (N = số thẻ đã chọn **đang hiện**, tức đúng số thẻ lượt áp sẽ xét) ⇒ trước khi gửi hiện hộp **"Áp cho N thẻ?"** với nút xác nhận và nút Huỷ. Hộp ghi lượt này làm gì; với nhãn thì nói rõ là **gắn** hay **bỏ** theo luật câu 67 (vd `Bỏ nhãn "x" khỏi 10 thẻ`, `Gắn nhãn "x" cho 7 thẻ (3 thẻ đã có, không đổi)`). Huỷ (nút, `Esc`, bấm nền) ⇒ **không gửi request nào**, giữ tập chọn và giá trị chờ. **N < 10** ⇒ áp luôn.
-    - `A` **không** thêm bước hỏi: hộp "Giao N thẻ" đã là bước xác nhận (chọn agent rồi bấm gửi tường minh), hỏi thêm là hỏi hai lần cho cùng một việc.
-    - Panel một thẻ giữ nguyên hành vi áp-khi-đổi.
-
-71. **Bấm ô tick của một thẻ (bổ sung mục 14, gạch "Phím tắt" (`J`/`K`, `X`); Chủ chốt T-38 = A, 19/10; chốt cho #160).** Ở trang danh sách, "thẻ đang focus" và "panel đang mở" là **một** trạng thái (`?the=<mã>`). Nay chốt giữ:
-    - **Màn rộng:** bấm ô tick ⇒ ngoài bật/tắt chọn, thẻ đó thành thẻ đang focus, tức **mở panel của thẻ** — giống `J`/`K`; `X` kế tiếp tác động đúng thẻ vừa bấm. Mỗi lần tick thêm một mục lịch sử trình duyệt, như `J`/`K`/nút "Mở".
-    - **Khổ hẹp:** bấm ô tick **không** đặt focus và **không** mở panel — ở đó panel là hộp phủ kín, mở ra thì không tick được thẻ thứ hai.
-
-## 20. Bản đồ dự án trên Tổng quan
-**Người dùng nhận được:** mở Tổng quan là thấy ngay mình đang ôm những dự án nào, dự án nào đang được đẩy, cái nào đang chờ mình, và không ôm quá 3 thứ cùng lúc. (Chủ chốt 04/11/2026, T-127 = A.)
-
-### 20.1 Trường mới
-| Trường | Ở đâu | Giá trị | Mặc định | Ai sửa |
+| Submit `done` | Check the gate: satisfied means **Done**, not satisfied means **Awaiting verification** |
+| Submit `partial` | Stays **In progress**. The assigner chooses to return it, or to split the remaining work into a child ticket and then accept |
+| Submit `blocked` | Back to **To do**. Shown under "Needs attention" for the assigner |
+| Acceptance `accepted` | A ticket not yet Done moves to **Awaiting verification**, and Baton checks the gate immediately |
+| Acceptance `returned` | Stays **In progress**. A new round is created (see 19.5) |
+| Assignment `canceled`, no open assignment left | Back to **To do** |
+
+- Manually changing to Done without enough evidence: rejected with `EVIDENCE_REQUIRED`. A ticket in the `active` group moves to Awaiting verification; one in the `planned` group stays as is.
+- **Auto-Done** only applies to tickets in **Awaiting verification**. A commit merged while the ticket is still In progress causes nothing yet; the gate is checked on submit.
+
+### 19.3 Review and new evidence
+- A review only counts when it is a PASS `review` sent **after** the last `commit` or `deploy` evidence.
+- A new commit or deploy after the review makes the old review **expire**. The ticket stays in or returns to Awaiting verification, flagged **"cần review lại"** (needs re-review; shown under "Needs attention"). The assigner, or a `coordinator` agent, opens a new `review` assignment.
+- A ticket already Done is not demoted. Evidence sent after Done is still stored and shows the label "sau khi xong" (after done).
+- **"Other than the doer"** means the agent sending the review is not the assignee of any `work` assignment on that ticket. Otherwise it is rejected with `REVIEWER_IS_WORKER`.
+- A `review` assignment is created by a `manager` or `coordinator`. The reviewer has its own session, as with every assignment.
+- The reviewer submits the review assignment by sending `review` evidence plus a report. The review assignment is **`accepted` automatically**, with no acceptance needed, because the verdict is already in the review.
+
+### 19.4 Coordination tickets
+- The link between a coordination ticket (in the coordination project, e.g. `COS`) and a project ticket is its own type: **"điều phối"** (coordination), different from "related". One coordination ticket can link to **1 or more** project tickets.
+- A coordination ticket **does not go through the evidence gate**. Its status **follows** the project tickets automatically:
+  - At least 1 project ticket in the `active` group: the coordination ticket is **In progress**.
+  - All closed, and at least 1 Done: **Done**.
+  - All Canceled or Duplicate: **Canceled**, reason "mọi ticket dự án đã huỷ" (every project ticket was canceled).
+- When the owner forces a coordination ticket's status, only that ticket changes; it does not spread to the project tickets. A coordination ticket has no separate `work` assignment of the `manager`; the assignment to the `manager` is attached to the coordination ticket itself.
+
+### 19.5 Returning
+- `returned` creates a new round in status `pending`, with the same assignee. The assignee must `nhan` (claim) again, opening a **new session**. The response deadline applies again.
+- The new round's brief = the old brief, plus a **"Lý do trả lại"** (Reason for return) section placed at the top.
+- An agent's **first-time pass rate** (shown on the agent page, computed over the last 30 days) = the number of tickets on which the agent's first `work` assignment was `accepted` ÷ the number of tickets on which the agent has submitted at least once.
+
+### 19.6 Sessions on cancel, on waiting for the Owner, on asking the assigner
+- **Canceling an assignment** that has a running session: the session moves to `stopping`, handled like pressing Stop (section 6).
+- **`waiting_owner` session:** never counted as stalled. When the Needs Owner item is resolved or skipped, the session returns to `running` and the stall threshold is counted afresh from that moment.
+- **Asking the assigner:** when the agent sends a `question` activity, the session moves to `waiting_assigner`. This status is not counted as stalled, but after 60 minutes it shows under "Needs attention".
+  - The assigner is an agent: the question shows in the assigner's `baton tasks`. The assigner replies with `baton reply <assignment> "<content>"`.
+  - The assigner is the owner: replies on the ticket page.
+  - When a reply arrives the session returns to `running`, and the agent's next call receives the reply.
+- **Project indicator** (replaces section 2):
+  - 🟢 at least 1 ticket in the `active` group, and none of the 🟡 conditions.
+  - 🟡 there is a `stalled` or `error` session; there is a "No response" assignment; there is a "no holder" flag; or there is a "needs re-review" flag older than 24 hours.
+  - ⚪ no ticket in the `active` group.
+  - A `waiting_owner` session still counts as 🟢, but the project line adds "chờ Chủ: T-x" (waiting for Owner: T-x).
+
+### 19.7 Unmerged commits and failed evidence
+- `failed` **does not block permanently**: sending new evidence is enough. The server only retries by itself when the error is a network error or a GitHub error.
+- A `pushed` commit not merged after 7 days: tracking stops. The evidence carries the label "chưa merge sau 7 ngày" (not merged after 7 days); shown under "Needs attention"; Telegram reports once. Send the same commit again to track for another 7 days.
+
+### 19.8 Deadlines and notifications of Needs Owner
+- Overdue: **the level does not change**. The card has a red border, the text "quá hạn X" (overdue by X), and is moved to the top of its block.
+- **Default deadline of 🟡:** created before 18:00, the deadline is 20:00 the same day; from 18:00 onwards, the deadline is 20:00 the next day. 🔴 is always 4 hours from creation.
+- Type `Chỉ để biết` (FYI) is at most 🟡. If 🔴 is sent, the server lowers it to 🟡 by itself and tells the agent so in the returned result.
+- **Quiet hours:** a new 🔴 is still sent immediately (immediately = within one cron tick, ≤ 60 seconds). A 2-hour reminder that falls within quiet hours is postponed to the end of quiet hours.
+
+### 19.9 Result, skip, reopen
+- **Result:**
+  - Type `Quyết định` (Decision): choosing 1 option is required, the additional note is optional.
+  - Other types: text is optional. If left blank Baton fills in "đã chạy" (ran it; command type), "đã xem" (reviewed; review type), "đã đọc" (read; FYI type) by itself.
+- **Skip:** a reason is required. Writes to the Decision log ("T-x bỏ qua: lý do"; English: "T-x skipped: reason"), comments on related tickets, and the agent receives status `skipped`.
+- **Reopen:** adds a new Decision log row "T-x mở lại" (T-x reopened) and a comment "T-x mở lại". Handling it the next time again adds a new row and a new comment. The old row is not edited.
+- **`baton result --wait`** timing out while the item is still unhandled: prints "chưa xử lý" (not handled yet), exits with **code 4**. The exit code table in section 13 is extended: 4 = wait timed out.
+
+### 19.10 "Should be clear" points
+- **The owner does it personally:** the "Tôi làm" (I'll do it) button moves the ticket to In progress, the current holder is the owner, there is no heartbeat. Entering Done still goes through the gate; the owner can force it.
+- **Child tickets created by a `worker` agent:** go through the gate like ordinary tickets. If the assignment on the parent ticket is canceled, the child ticket does not change, and a warning "lượt cha đã huỷ" (parent assignment was canceled) is shown.
+- **No-code project:** if the owner skips the confirmation item, the ticket stays in Awaiting verification. The gate applies according to the "has code or not" flag **at the time of the check**.
+- **Bulk answer box:**
+  - A line pointing to an already-resolved item: marked red "đã xử lý, mở lại trước" (already resolved, reopen first).
+  - Several lines with the same code in one paste: all those lines are marked red, none is applied.
+- **Buttons and keys on the card:** per the "Answer with buttons, then press Send" table in section 8. The phone uses buttons; keys are not needed.
+- **Additional error codes:** `REVIEWER_IS_WORKER`, `ALREADY_RESOLVED`.
+
+### 19.11 Additional defaults (after the second SPEC review)
+- **FAIL review:** the review assignment is still `accepted` automatically, but that review does not open the gate. The ticket stays in Awaiting verification and shows under "Needs attention" for the assigner, with the reviewer's note.
+- **Coordination ticket:** when no project ticket is in the `active` group yet, and not all are closed yet, the coordination ticket keeps its current status.
+- **Canceling a `work` assignment while a `review` assignment is open:** the review assignment is not canceled with it.
+- **Parent ticket in Awaiting verification because child tickets remain:** shows the line "chờ N ticket con" (waiting for N child tickets). When the last child closes, the parent re-checks the gate by itself.
+- **Needs Owner result when the session has closed, or the agent has been disabled:** the result is still stored and retrievable through `baton result`. No further signal is sent.
+
+### 19.12 Decisions of the spec sessions
+This section collects the owner's decisions over three batches, answering the questions in `spec-questions.md`:
+- **Batch 01/10/2026** — questions **#1–#8**, which are items **1–8** below.
+- **Batch 02/10/2026 (T-64)** — questions **#18–#27**, which are items **9–18** below.
+- **Batch 03/10/2026 (T-69)** — questions **#9–#17** and **#28–#54**, which are items **19–54** below.
+- **Batch 04/10/2026 (T-76)** — questions **#57–#59** and **#66–#69**, which are items **55–61** below.
+- **Batch 04/10/2026 (T-80 + T-80b)** — questions **#71**, **#73**, **#74**, **#75**, which are items **62–65** below.
+
+This section **takes precedence over** the older wording in the sections above where they differ.
+
+1. **Acceptance performance mark (replaces the old number in 17.10).** v0.1 passes acceptance when, with **200 projects and 200,000 tickets**, the ticket list and the Overview still open in **under 1 second** after the first load. The design must further withstand **300 projects** (and any combination below 200,000 tickets) **without changing the architecture**.
+
+2. **The `baton reply` command (addition to the command table in section 13).** `baton reply <assignment> "<content>"` replies to a question an agent sent on the assignment (section 19.6).
+   - **Only that assignment's assigner** can call it. Another agent calling it → `FORBIDDEN`.
+   - The owner replies from the web on the ticket detail page; the behaviour is identical.
+   - The reply is recorded as **an activity on the asker's session** (the session of the agent that sent the `question`), and **at the same time** as a **comment on the ticket**.
+
+3. **Initializing the owner, and recovering 2FA (addition to section 15).** The owner is created by a **command run on the server**, `baton-admin init` — there is **no public web page** that does this.
+   - `baton-admin init` sets the owner's name and password, shows the **TOTP QR code once**, and prints **10 single-use recovery codes**.
+   - The command only runs when there is **no owner yet**.
+   - Lost TOTP device: sign in with **password + 1 recovery code**, then reset TOTP.
+   - Lost the recovery codes too: `baton-admin reset-2fa` on the server.
+   - **Every reset** (TOTP or password) writes a History row and fires a Telegram notification.
+
+4. **"Chung" (General) in Needs Owner is an empty value (section 8).** "General" is **not a project**; it is the project field left **empty**.
+   - The interface shows the label **"Chung"** (General) for the empty value.
+   - The project filter has a **"Chung"** (General) choice (filters items whose project field is empty).
+   - `baton ask` without a project → the item is General.
+   - A Decision log row auto-generated from a General item leaves the project field **blank**.
+
+5. **Version code of `deploy` evidence (section 7).** The version code is **only stored and shown**; the server **does not check** it. Deploy verification relies only on an HTTP code of **2xx or 3xx**.
+
+6. **Telegram send failure (section 12).** Retried **3 times** at intervals of **10 seconds, 60 seconds, 5 minutes**.
+   - Still failing: the message is **kept in the in-app notification bell**, and shown under **"Needs attention"** as the line `Không gửi được thông báo Telegram (lý do)` (English: "Could not send Telegram notification (reason)").
+   - A Telegram send failure **never blocks the main flow** (the command that caused the notification still succeeds).
+
+7. **Backup (section 15).** Backups are placed in **storage separate from the main DB** (R2).
+   - The Settings screen lists **14 copies**, each with its **date** and **size**, with a **download button**.
+   - **Restore is a manual task, with written instructions** — v0.1 has **no** restore button.
+
+8. **Search scope of `Cmd/Ctrl+K` (section 14).** The command menu searches **only** in: **ticket code**, **ticket title**, **old code** (for imported tickets, section 16), **T-number**, and **Needs Owner item title**. Matching is by **substring**; full-text search is not needed. Searching in **description, brief, comments** is left for v0.2. (The "search by text" of the Decision log in section 10 stays as is.)
+
+9. **"Reopen" is every departure from the `closed` group (amends section 4 line 138; settles `spec-questions.md` #18).** Section 4 only mentions the "back to To do" case; now **every** departure from the `closed` group counts as a "reopen", so **only the owner** can do it.
+   - This includes Done → In progress, Canceled → Backlog, Done → Canceled — not only the back-to-To-do case.
+   - Broader than the old wording of the SPEC, **intentionally**: this is the safe direction; an agent can never alter the conclusion of a closed ticket.
+
+10. **"Valid original ticket" for the Duplicate status (addition to section 4 line 137; settles #19).** Section 4 names the error code `INVALID_DUPLICATE_TARGET` but does not define "valid". Valid means **all four** conditions hold:
+    - **Exists and is not soft-deleted.**
+    - **Same workspace** (data is separated by workspace — section 1); **a different project is allowed**, because section 4 says ticket links "may cross projects".
+    - **Not itself.**
+    - **Does not create a duplicate cycle** — the original ticket must not point back to the ticket being marked duplicate, directly or through a chain. Without this condition, everything that "follows the original ticket" loops forever.
+
+11. **"Delete anything" is about deleting objects (interprets section 3 against section 4; settles #20).** The row "Delete anything — never" of the section 3 permission table applies to deleting **objects**: tickets, evidence, history rows, Needs Owner items.
+    - **Removing a label does not belong to that row.** Removing a label is resetting the value of a field, the same kind of action as changing priority, and it still leaves a trace in history.
+    - Adding a label **and** removing a label both go through the **"Change ticket status"** row.
+
+12. **The parent ticket is set only at creation (addition to section 4, field "Parent ticket"; settles #21).** The parent ticket is set **when the ticket is created**, and **there is no path to change or remove the parent later**.
+    - Reason: changing the parent changes the `CHILDREN_OPEN` rule of two trees at once (the old tree may just have become eligible for Done, the new tree the reverse).
+    - The ticket-link command deliberately **does not accept** the `parent` type.
+
+13. **Comment permission (addition to section 3; relates to sections 4, 6; settles #22).** The section 3 permission table has no row for comments. The condition is **"the agent may enter the project"**, plus **not being `disabled`** — **regardless of role**.
+    - Even a **`reviewer`** can comment, because section 6 requires that the reviewer can send signals on its session.
+    - **Do not borrow** any other row of the permission table (e.g. "Change ticket status"): borrowing silently changes the meaning of that row, and would block `reviewer` from commenting.
+
+14. **Deleting and editing comments (addition to section 4, Comments part; settles #23).** Section 4 says "The author can edit their own (marked 'edited'). Agents cannot delete", but says nothing about the owner.
+    - **The owner can delete** a comment, and it is a **soft** delete (a trace remains) — section 15 requires "every action leaves a trace of who did it", so a comment vanishing without a trace goes the wrong way. The read path filters out deleted comments.
+    - "The **author** can edit their own" is read **literally**: **the owner cannot edit** an agent's comment either, because once an agent's comment has been edited by the owner the conversation history is no longer trustworthy.
+
+15. **Out of scope: the READ path returns 404; the WRITE path: object not visible ⇒ 404 identical to a made-up id, visible but no permission ⇒ 403 (addition to sections 13 and 17.7; settles #24, amended per #175–#177).** Sections 13 and 17.7 only talk about the read path; this now settles both paths.
+    - **READ path → `NOT_FOUND`/404** — so as **not to reveal existence**.
+    - **WRITE path → `FORBIDDEN`/403** when the caller can see the object but has no permission. The error code is also a signal to the CLI: 404 makes the agent think it mistyped the id and go fix the data it sends, while 403 states the right thing to do, which is to request permission. The id of an object the caller **cannot see** yields a 404 identical to a made-up id — the two bullets below.
+    - **Permission must be checked before looking up the object, or the object must be looked up within the caller's scope from the start** (out of scope, the lookup comes back empty and takes the same path as a made-up id). Looking up the project first and only then checking permission makes 404 ("does not exist") differ from 403 ("exists, not allowed in") — that is an existence probe. For an out-of-scope agent, **both cases must produce identical responses**.
+    - **An agent referenced by ID in the body of a write command** (assignment assignee `nguoi_nhan_agent_id`, responsible party `chiu_trach_nhiem_agent_id`) that lies **outside the caller's permission scope** → `NOT_FOUND`/404, **identical** to a non-existent ID (same code, message, status), **not** 403 — so as not to reveal the agent's existence. An agent the caller **can see** but that is disabled or not in the project is still `FORBIDDEN` (section 5). (Owner decided T-58 = A, 22/10; #172)
+    - **Object ids for which the write gate only knows the project after looking them up** — ids of **assignments, sessions, tickets, comments, evidence, projects** — in **every write command** (in the path or in the body): an object **outside the caller's scope** → `NOT_FOUND`/404 **identical** to a non-existent id (same code, message, status, body), and **nothing is written** (no History, Decision log, notification, session signal, "last spoke"). When the caller **can see** the object but has no permission for that action → still `FORBIDDEN`/403. Reason for not returning 403 in both cases: the write gate does not know the project of an id before looking it up, so a 403 for a made-up id would report "no permission" to someone **inside** the scope who merely mistyped the id. **Owner-only** commands (or ones that check role/project gate **before** the lookup) return 403 for every id — nothing is revealed, unchanged. (Owner decided T-73/T-75 = A, 23–24/10; #175, #176, #177)
+      - "Can see" an **assignment** on the write path = the assignment's ticket is in the caller's read scope, **or** the caller is the assignee or assigner of that very assignment. A **session**: the ticket is in the read scope, **or** the caller is the session's agent, **or** is the assigner of the session's assignment. So an assignee/assigner removed from the project can still carry on commands on **their own** assignment (`claim`, `heartbeat`, `log`, `plan`, `submit`, `cancel`, `verdict`, `reply`; items 37, 44). The session **read** path still follows the ticket read rule.
+      - "Can see" a **ticket** = the ticket is in the read scope. A **comment / piece of evidence**: its ticket is in the read scope, **or** the caller is the comment's author / the evidence's sender. An assignee removed from the project gets 404 on commands by ticket id (edit, change status, comment, send evidence…).
+      - "Can see" a **project** = a project the caller may enter (the owner and "all projects" agents see every project).
+      - **The original ticket of a Duplicate** (section 4) outside the caller's scope is treated as non-existent → `INVALID_DUPLICATE_TARGET`, like a made-up id. A `coordinator` allowed into only some projects **cannot** mark Duplicate against a ticket outside those projects, and **cannot** propose a focus item (section 11) with a ticket outside those projects (404).
+
+16. **Who can create a `dieu_phoi` link (addition to 19.4 and the section 3 permission table; settles #25).** **Only the owner and agents with the `coordinator` role** can create a link of type `dieu_phoi`.
+    - Reason: the `dieu_phoi` link is what **defines** a ticket as a coordination ticket, and a coordination ticket **does not go through the evidence gate** (19.4) — so letting a `manager` create the link itself opens a way around the evidence gate.
+    - The new rule is an **additional** condition: the existing permission and project-scope conditions still apply (permission is needed on **both** ends of the link).
+    - **`related` and `blocks` stay as they are** — neither tightened nor loosened.
+
+17. **Soft-deleted project tickets and the coordination ticket (addition to 19.4 against section 4; settles #26).** A coordination ticket's status follows the project tickets linked by `dieu_phoi`; this now settles the computation when the owner soft-deletes or restores.
+    - A **soft-deleted ticket does not count** in the set of project tickets the coordination ticket follows.
+    - Deleting the **last** ticket of the set (no ticket left) ⇒ the coordination ticket **keeps** its status, in the same spirit as 19.11 ("not enough facts, keep as is").
+    - **Restoring** a ticket ⇒ the coordination ticket's status is **recomputed** from the new set.
+
+18. **Permission for the two number-allocation commands (addition to section 3; relates to sections 4, 8; settles #27).** The section 3 permission table has no row for "allocating a number", but allocating a number is a real **write** command: one call burns a number forever. Use the row **closest in purpose**:
+    - Allocating a **ticket number** (section 4, "increases within the project, never reused") goes through the **"Create ticket"** row.
+    - Allocating a **`T-number`** (section 8) goes through the **"Create a Needs Owner item"** row.
+    - No assignment-scope flag is passed, so `worker` is rejected — the safe default.
+
+19. **Which HTTP class each error code belongs to (addition to the section 13 table; settles #9).** Section 13 lists the HTTP classes but does not say which error code belongs to which class. Now settled by the meaning of the class:
+    - **409** for "the current state does not allow it": `PROJECT_NOT_ACCEPTING`, `SESSION_CLOSED`, `CHILDREN_OPEN`, `ALREADY_RESOLVED`.
+    - **422** for "data or business condition not met": `EVIDENCE_REQUIRED`, `REASON_REQUIRED`, `INVALID_DUPLICATE_TARGET`, `INVALID_INPUT`, `OPTIONS_REQUIRED`, `COMMAND_REQUIRED`, `REVIEWER_IS_WORKER`.
+    - **500 `INTERNAL`** for unforeseen server errors; the CLI exits with **code 2**. This code is an **additional** code, because the section 13 table declares itself to be the "minimum error codes".
+    - The mapping table lives in **one place** and has tests covering every code.
+
+20. **What the owner can adjust in an agent's permissions (addition to section 3; settles #10).** The owner can adjust **both**: `cho_phep` (turning a cell on/off) **and** the cell's `pham_vi`.
+    - The owner turning on a cell that was `—` **without** stating a scope is read as **"yes"** — it must still pass the project gate.
+    - The two "**never**" rows **accept no override** at all three layers: code, the permission module, and the database `CHECK`.
+
+21. **A `disabled` agent calling the API gets `FORBIDDEN`/403 (addition to section 3 against section 13; settles #11).** The token is *correct*; only the identity is turned off, so it is **`FORBIDDEN`/403** — not `INVALID_TOKEN`/401.
+    - Reason: authentication succeeded; it is just not allowed to act.
+    - The message states clearly "Agent đã bị tắt" (English: "The agent has been disabled"), so whoever reads the log understands at once.
+
+22. **Editing other ticket fields goes through the "Change ticket status" row (addition to section 3; settles #12).** The section 3 permission table only has the "Change ticket status" row; that row is shared by **every field edit** of a ticket (title, description, priority, labels, brief, due date), **with the same scope**: `worker` only tickets of its own assignment, `manager` in the project, `coordinator` yes, `reviewer` no.
+
+23. **An agent's "last spoke" and a session's "signal" are two different marks (interprets section 3 against section 6; settles #13).**
+    - **"Last spoke"** (section 3, agent page) = **every successful write command** by the agent, **whether attached to a session or not**. Read commands do not count.
+    - **"Session signal"** (section 6, stall threshold) only counts write commands related to **that session** (see also item 41).
+
+24. **Which agents' details an agent can read (addition to section 3 against section 13; settles #14).** An agent can read: **itself**, agents that **share at least one project** with it, and agents with the "all projects" flag.
+    - The owner can read **every** agent.
+    - Out of scope → **`NOT_FOUND`**, like every other read path (item 15).
+
+25. **An `archived` project can be reopened (addition to section 2; settles #15).** "Read-only" is not a one-way door: **the owner can reopen** an archived project.
+    - Every **write** command on an `archived` project is rejected (`PROJECT_NOT_ACCEPTING`), **except** the very act of **the owner changing `trang_thai`**.
+
+26. **The owner can create tickets in a `paused` project (interprets section 2 against section 4; settles #16).** `paused` is a rule for **agents**: agents take no new work and cannot create tickets. **The owner still can** — the owner must be able to plan ahead for a paused project.
+    - `archived`, however, is **read-only for everyone** (except the case in item 25).
+
+27. **`archived` projects are hidden at the API layer, not only in the UI (addition to sections 2 and 13; settles #17).** The project-list read path **hides `archived` projects by default**.
+    - There is a flag **`?gom_luu_tru=co`** to get them all, and **`?trang_thai=archived`** still returns exactly that group — no data is locked out of view.
+    - **Reading an individual archived project still works** (read-only must be readable).
+    - Reason for hiding at the API: if the UI filtered by itself, the web, CLI and MCP would each have to remember to filter, and `baton list` would show archived projects while the sidebar did not — "hidden" is **one** rule, not three identical implementations.
+
+28. **Two new error codes for assignment state conflicts (addition to the section 13 table; settles #28).** Two cases of section 5 had no code; two codes are now added, **both 409** (the "current state does not allow it" group, item 19):
+    - **`ASSIGNMENT_OPEN`**: the ticket already has an **open assignment of the same type** and another is still requested (section 5, 19.1).
+    - **`ASSIGNMENT_NOT_PENDING`**: the **claim** command is called on an assignment that is no longer `pending`.
+    - These two codes are **additional** codes, declared separately, **not** mixed into the minimum table of section 13.
+
+29. **The assignment type is `work` (corrects the wording in 19.1; settles #29).** Section 0.1 gives the assignment type as `work` / `review`, while 19.1 wrote "`worker` or `review`". Now settled as **`work`**, and **the wording in 19.1 is corrected — 0.1 is not changed**.
+    - Reason: 0.1 is the **only** machine-code table of the SPEC and declares that it applies to "the API, CLI, MCP, **database** and logs"; the wording in 19.1 is prose.
+    - In addition, `worker` **collides with the name of an agent role**; an assignment field carrying exactly the name of a role is a lasting source of confusion.
+
+30. **"Child tickets of the assignment it is working" uses exactly the "open" definition of 19.1 (interprets section 3; settles #30).** The word "**working**" in the two scope cells of `worker` in the section 3 permission table means an **open** assignment = `pending` **or** `in_progress`.
+    - Reason: the whole system has only **one** concept of "its own assignment", not two concepts that differ by one status.
+
+31. **Only the actual assignee can call the "claim" command (addition to section 5; settles #31).** **Even the owner** calling it on the agent's behalf gets `FORBIDDEN`.
+    - Reason: "claim" is not an administrative action but **the agent's declaration that it is running** — it opens the session and starts the stall-threshold clock (section 6). The owner claiming on its behalf creates a session with nobody at the other end, i.e. breaks exactly what section 6 exists to guarantee.
+    - The same pattern as item 2 (`baton reply` only by the assigner). The owner can still **cancel** the assignment (section 5).
+
+32. **An assignment with no response deadline (interprets section 5; settles #32).** The words "a response deadline **can** be set (default 15 minutes)" mean it is permitted not to set one:
+    - **No deadline** is a real value (`null`), and that assignment is **never** counted as "No response".
+    - **Ceiling of 30 days**, so that a mistyped value does not become a disguised infinite deadline. An unreasonable value → `INVALID_INPUT`.
+
+33. **Canceling an assignment when the ticket is closed leaves the ticket as is (amends the last row of the 19.2 table; settles #33).** The row "Assignment `canceled`, no open assignment left → **Back to To do**" **only applies to tickets not yet closed**.
+    - For a ticket in the `closed` group, canceling the assignment **keeps the ticket status**.
+    - Two more specific rules **beat** the general wording of the 19.2 table: 19.3 "a ticket already Done is not demoted", and item 9 "every departure from the `closed` group can only be done by the owner" — while canceling an assignment is the assigner's action.
+
+34. **"Submission report required" only requires the `Kết quả` (Result) field (interprets section 5 line 166; settles #34).** The words "required on submit" mean **a submit must come with a structured report**, not that all 6 fields are required.
+    - **`Kết quả` (Result) is required** — the 19.2 table drives the ticket status from it. Missing → `INVALID_INPUT`.
+    - **The other five sections** (Done · Verification · Branch and commit · Risks · Follow-up work) **may be left blank**.
+    - Reason: "Branch and commit" is meaningless for a no-code project (19.10) and "Follow-up work" is meaningless when there is no follow-up work — requiring them forces the agent to fill in junk text, making the report less trustworthy.
+
+35. **"Reason for return" sits at the top of the brief's goal field (addition to 19.5 against section 4; settles #35).** The brief in section 4 is 8 fixed fields, with no "Reason for return" field. The reason for return is **inserted at the top of the `muc_tieu` field** as a block `Lý do trả lại: <reason>` (English: "Reason for return: <reason>"), followed by the old goal.
+    - Reason: `muc_tieu` is the first field an agent reads, so "placed at the top" preserves the intent of 19.5.
+    - **Known and accepted consequence:** the new round's `muc_tieu` is no longer a pure goal. The cleaner direction (adding a 9th brief field) changes the brief structure of section 4, and is **not done in v0.1**.
+
+36. **A ticket created from "Follow-up work" has no link at all (addition to section 5 line 169; settles #36).** The "Create ticket from follow-up work" button creates an **ordinary ticket in the same project**, with **no** link to the original ticket.
+    - `parent` is not chosen: it brings in the `CHILDREN_OPEN` rule, meaning the original ticket cannot enter Done until the follow-up work is done — contrary to the definition "follow-up work is work **not done on own initiative**".
+    - `related` is not chosen: that would be an auto-generated link the SPEC does not require.
+    - The assigner **links manually** with the link command if they wish.
+
+37. **Submitting a report, acceptance and canceling an assignment check identity (addition to section 3 against section 5; settles #37).** These three commands **do not go through the permission table** of section 3; they check **identity** exactly as section 5 says: the **assignee** submits, the **assigner** accepts, the **assigner or the owner** cancels.
+    - This direction is stricter: a `manager` with every permission still **cannot** accept someone else's assignment. The owner cannot accept an assignment they did not assign either.
+    - **Do not borrow** any row of the permission table — borrowing silently changes that row's meaning (same reason as item 13).
+    - The three commands are still write commands, so they remain subject to the "a `disabled` agent is rejected" rule (item 21).
+
+38. **A second submit on an already `submitted` assignment is rejected (addition to section 5 against 19.1; settles #38).** The assignment must be `in_progress` to be submitted; submitting again → **`ASSIGNMENT_STATE_INVALID`/409**.
+    - Reason: a submit is an **event** that drives the 19.2 table (it may already have pulled the ticket to Done and checked the gate) — allowing a resubmit is allowing that event to be **replayed**.
+    - The right path for "redo" already exists: acceptance `returned` → a new round (19.5).
+    - Section 15 requires every action to leave a trace, and overwriting a report erases the trace.
+
+39. **Session status has all 7 codes (corrects the wording in section 6; settles #39).** Section 6 listed 6 codes, missing **`waiting_assigner`** (Waiting for assigner), which both 0.1 and 19.6 use. Now settled per **0.1 (all 7 codes)**, and **the wording in section 6 is corrected — 0.1 is not changed**.
+    - The same situation and the same reason as item 29: 0.1 is the **only** machine-code table and declares that it applies to the database too; the list in section 6 is prose.
+
+40. **Stall threshold: the agent level beats the project level (interprets section 6 line 189; settles #40).** The words "adjustable per project **or** per agent" do not say which level wins when both are set. Now settled: **agent beats project**, then falls back to the **default of 30 minutes** if both are blank.
+    - Reason: the stall threshold is a property of **an agent's real running rhythm** (an agent with long builds needs a wide threshold in every project), while the project is only a default for the whole group.
+
+41. **Which session signal a write command bumps for the calling agent itself (interprets section 6 line 188; settles #41, amended per #174 — Owner decided T-73/T-75 = A, 23–24/10).** Many write commands are **not attached to any assignment** (commenting on another ticket, a `coordinator` creating a ticket, changing priority), so there is no "that session". Now settled, for a successful write command by an agent:
+    - A command **attached to an assignment** (`heartbeat`, sending a `log` activity, `plan`, `submit`, `claim`) only refreshes the liveness signal of **that assignment's session**, and only when it is the session of **the calling agent itself**. Other sessions of the same agent are **not** bumped. (Applies even when the command is rejected with the `SESSION_CLOSED` of item 45.)
+    - A command **not attached to any assignment** (comment, create/edit ticket, evidence, assign, accept, cancel, reply…) only refreshes the signal when the agent has **exactly 1 open session**; when the agent has **2 or more open sessions** the command **bumps no session**. "Open session" = not yet `closed` and not `stopping` for more than 10 minutes (section 6). The "exactly 1 open session" count **includes a session closed within that very command**: the agent has session A open, and a general command of its own closes session B (e.g. the agent moves B's ticket to Awaiting verification or Done with `baton status` — section 6 "the session closes when the ticket moves to Awaiting verification or Done") ⇒ the count is 2 ⇒ A is **not** bumped: that command is evidence about B, not about A. An agent with several sessions keeps each one alive with `baton heartbeat --luot <assignment>` (section 13).
+    - Basis: section 6 exists to know whether "the agent **is really running**" — an agent that has just written something is **clearly running**, so letting it be counted as stalled gets wrong exactly what section 6 must do. But when an agent holds several sessions, a command of one session does **not** prove the other is still alive: bumping every session means a session that died midway is "rescued" forever by the session still running, and the stall alert of section 6 never fires.
+    - The agent's "last spoke" (item 23) and the repeat-fire guard mark (item 46) do not change.
+    - Commands by the **owner**, and commands by **another agent**, bump no session's signal.
+    - This rule applies at the **common write gate**, not sprinkled by hand into each command — sprinkled by hand, a write command added later would forget it, silently.
+
+42. **Only a `running` session derives to `stalled` (addition to section 6 lines 182–187; settles #42).** A session in `error` or `stopping` that stays silent past the threshold does **not** become `stalled`.
+    - Reason: letting `stalled` swallow `error` **hides a more specific piece of information behind a vaguer one** — the owner needs to know the agent **reported an error**, not "the agent is silent". Sections 11 and 19.6 both place "stalled **or** error" side by side as two equal things.
+    - `stopping` already has its own 10-minute clock from section 6 line 194. `waiting_owner` and `waiting_assigner` are already exempted by 19.6.
+
+43. **Mapping the 7 session codes to the 5 agent status codes (addition to section 3 lines 98–103; settles #43).** Agent status has 5 codes, sessions have 7; this now settles where the three missing codes go, and settles the case of an agent with **several open sessions**:
+    - **`waiting_assigner` and `stopping` → `busy`** (the agent is still running, merely waiting or cleaning up).
+    - **`error` → `stalled`**, following the way sections 11 and 19.6 merge "stalled **or** error" into one attention level. This is the **only** place in the system where `error` is merged into `stalled` — the opposite direction to item 42, **intentionally**: item 42 is about the **session** (which must be precise), this is about a **summary label of the agent** (only 5 slots).
+    - **Several open sessions:** take **exactly the listing order of section 3** as the priority order, and **`disabled` beats everything**.
+
+44. **Heartbeat and the Stop button check identity (addition to section 3 against section 6; settles #44).** The section 3 permission table has no row for these two actions; they **borrow no** row of the permission table:
+    - **Heartbeat: only that session's agent** — even the owner gets `FORBIDDEN`, for the same reason as item 31 (a heartbeat is the declaration "I am running"; the owner sending it on the agent's behalf breaks exactly what section 6 guarantees).
+    - **Stop: owner only**, exactly per the wording of section 6 line 192 ("The owner presses Stop").
+
+45. **`SESSION_CLOSED` only applies to commands explicitly attached to an assignment (interprets section 6 line 195; settles #45).** "Every write command after the session has closed is rejected" is **not** read broadly as every write command of the agent:
+    - **Blocked:** commands explicitly attached to an assignment (heartbeat, submitting the report, activity stream, the assignment's evidence).
+    - **Not blocked:** general write commands (comment, edit ticket) — they simply do not bump the signal of a closed session.
+    - Reason: `SESSION_CLOSED` exists to stop an agent from **continuing the work of a finished assignment**, not to strip the agent of its identity. Read at its broadest, it would block reviewers too and block an agent from commenting on a ticket where it has no assignment.
+
+46. **Who detects a session moving to `stalled` or `error` in order to fire the alert (addition to section 6 line 196; settles #46).** `stalled` is a **derived status, not written to the database** (item 42), so it must be settled who detects "the transition":
+    - The alert is detected by a **Cron Trigger scanning every 5 minutes**, **not** relying on someone having the Overview open.
+    - Keep a **mark of "which signal an alert has been fired for"** to prevent repeat firing — not an on/off flag: with a flag, "recovers and then stalls **again**" cannot be distinguished from "still stalled since last time". With the mark tied to the last signal, each new silence is **one** firing, exactly per the wording of line 196.
+    - The mark is written **through the write gate** (Durable Object), like every other write.
+    - The notification is **written to the in-app notification store**; **actually sending Telegram is part 7**.
+
+47. **Submitting the report counts as confirming the stop (addition to section 6 line 193 against 19.6; settles #47).** When an agent in `stopping` **submits its report**, the session **closes** with the reason "đã nộp báo cáo" (report submitted) — no additional `result` entry is demanded.
+    - Reason: a submit is a **fuller** conclusion than `result`; rejecting it in order to demand a `result` makes the agent redo what it just did.
+    - **The two ways into `stopping` are not symmetric, and that is the decision:** on pressing Stop the assignment is still open, so a submit is possible; on **canceling the assignment** (19.6) the assignment is already `canceled`, so **`result`/`error` is the only exit**, exactly as section 6 says.
+
+48. **The 60 minutes of `waiting_assigner` count from when the `question` was sent (interprets 19.6 line 516; settles #48).** The counting mark is **when the agent sent the `question` activity**, **not** the session's last signal.
+    - Reason: these 60 minutes measure **the assigner being slow to reply**, not the agent being silent. An agent waiting for a reply while still sending heartbeats is normal and correct — counting from the last signal makes the rule **disable itself** in exactly the case where it needs to run.
+
+49. **Changing the stall threshold applies immediately to running sessions (addition to section 6 line 189; settles #49).** When the owner changes the stall threshold of a project or agent, it **applies immediately** to running sessions, not only from the next session. Each computation takes the **current configuration**; the threshold is not snapshotted into the session when it opens.
+    - Reason: the owner loosening the threshold is usually looking **right now** at a session wrongly reported as stalled and wants it to stop reporting at once; having to wait for the next session makes that button useless exactly when it is needed.
+    - **Accepted consequence:** a session's stalled label can change **without any command touching that session**.
+
+50. **By which path an `error` session recovers, and its repeat-fire guard mark (addition to section 6 line 196 and 19.6; settles #50).** `error` is a status **written in the database**, so a new signal (heartbeat, `thought` entry) does **not** take the session out of `error`.
+    - The **only** way out of `error`: the agent sends a `question` entry → the session moves to `waiting_assigner`; when the assigner's reply arrives it returns to `running`.
+    - The repeat-fire guard mark of `error` is **not** tied to the last signal but to **the entry into `error`**: an agent that errors and keeps sending heartbeats is still **one** transition, so only **1** message; leaving `error` and entering it again is a new transition ⇒ **fires again**.
+
+51. **A token revoked or an agent disabled while a long-wait command is hanging is cut off immediately (addition to section 13 against section 3; settles #51).** Section 3 says the old token stops working "**immediately**", yet a long-wait command that has already authenticated hangs for up to another minute. Now settled: **cut off immediately**, not run to completion.
+    - Each time the waiting command wakes it **re-checks the token**: no longer valid → `INVALID_TOKEN`/401; agent `disabled` → `FORBIDDEN`/403 (item 21).
+    - Revoking the token **wakes** that agent's hanging command by itself, so there is no gap of "data readable for one more minute".
+
+52. **`baton tasks` works for the owner (addition to the section 13 command table; settles #52).** The owner is never the *assignee* of an assignment (section 5), but 19.6 says an agent's question shows in the **assigner's** `baton tasks`, and the assigner may be the owner.
+    - The owner can call it: it returns an **empty assignment list**, plus exactly the **questions waiting for the owner's reply**. The long-wait mode also wakes when there is a new question.
+    - Reason: the API path is **one** path for the web, CLI and MCP alike (section 13), so building a second path just for the owner to read questions is implementing the same rule twice.
+
+53. **A long-wait command is not a session signal (interprets section 13 line 352 against section 6 line 188; settles #53).** `baton tasks --wait` is a **read command**, so it **does not bump the signal**, exactly per the words "read commands do not count".
+    - An agent that wants to keep its session alive sends **`baton heartbeat`**.
+    - Note: an agent *between two assignments* has no open session, so there is nothing to count as stalled; the only worrying case is an agent that **has an open session** and yet goes off to wait for other work.
+
+54. **A soft-deleted coordination ticket is skipped during propagation (addition to 19.4 and 19.11 against section 4; settles #54).** Item 17 settles the **child** end (a soft-deleted project ticket does not count in the set); this now settles the **parent** end: for a **soft-deleted** coordination ticket, propagation **skips it** — no recomputation, nothing written for it, and **no error reported**.
+    - Reason: once a ticket is deleted its status no longer means anything to anyone; letting it **block** a command on a live project ticket is using something discarded to block something in use.
+    - Applies to **every** propagation path: status change, delete, restore.
+
+55. **Deploy verification does not follow redirects, and does not read the response body (addition to section 7 lines 207 and 219; settles #57).** The blocking layer of l.207 can only block the **host syntax**, so the two remaining holes are closed as follows:
+    - **No following of redirects.** A **3xx** code counts as a **pass** exactly per the wording of l.207, and then it **stops** — the server makes **no** second call following `Location`. That way no call bypasses the host-blocking layer.
+    - **No reading of the response body.** No line of the SPEC uses the body, and reading it invites an infinitely long response to eat memory.
+    - **Re-check the host syntax right before calling**, redundant **on purpose**: the periodic retry path (l.221) reads the URL **from the database** and no longer goes through the content check step.
+    - **Accepted limitation, stated plainly:** Baton **cannot** block a public domain name that **resolves to** an internal address, because the runtime has no DNS resolution API and cannot pin the IP for the call. The direction "resolve over DNS-over-HTTPS and then check the IP" was **dropped**: it still cannot pin the IP (the gap between the check and the call remains in full) and it adds a network call to the 10-second limit of l.219.
+
+56. **Four internal-only domain suffixes are blocked, matched by label (addition to section 7 line 207; settles #58).** "No internal IPs or localhost" of l.207 does **not** cover a syntactically valid domain name such as `metadata.google.internal` — something that resolves to exactly the metadata server l.207 exists to block. Four suffixes are now blocked in addition: **`.internal`, `.local`, `.home.arpa`, `.localhost`**.
+    - Matched by **LABEL** (split on dots and compare the trailing labels), **not** by substring. With substring matching, `notinternal.com`, `myinternal.example.com`, `mail.notlocal` would be **wrongly blocked** — i.e. rejecting a real deploy URL of the owner because its name happens to contain those letters.
+    - Applied **after** stripping the trailing dot, so `metadata.google.internal.` is blocked too.
+    - **Accepted consequence:** a real service placed on an internal `.internal` domain **cannot send deploy evidence**. That is exactly the intent of l.207: for a URL only the internal network can open, Baton calling it proves nothing to the owner either.
+
+57. **The "auto-generated" Needs Owner item of a no-code project is generated at GATE CHECK time (addition to section 7 line 217, 19.10 and section 8; settles #59).** l.217 says a no-code project needs "an **auto-generated** Needs Owner item of type Review" but does not say who generates it or when. Now settled:
+    - Generated **when the gate is checked** and the gate lacks exactly the owner-confirmation part — that is the **only** place where this is known. Applies to **every** gate-check path, including the periodic auto-Done path (l.221), where nobody types any command.
+    - **One** item per ticket, no duplicates generated.
+    - An item that was **Skipped** (19.10) is rebuilt **only** when there is `file` or `note` evidence **newer than** the skip. That way "Skip" holds until there is really something new to look at, rather than losing its meaning at the next gate check.
+    - **Addition (T-31 question 3.4 A; Owner decided T-38 = A, 19/10; settles #161):** this item applies to **every no-code ticket** — project flag **or** ticket flag (section 7). When the gate **is already satisfied by a valid `bao_cao`**, the "owner confirmation" part is no longer missing, so the confirmation item is **not** generated (and not rebuilt). A `bao_cao` is also **not** the "newer `file`/`note` evidence" of the bullet above.
+    - **Addition (Owner decided T-38 = A, T-43 = A; settles #163):** a ticket moving to `done` by **any** path (satisfied by `bao_cao`, owner confirmation, owner forces Done, auto-Done, parent re-checking the gate by itself, …) ⇒ the auto-generated item **of that very ticket** (identified by the item's mark, **not** by "related tickets") that is still `Chờ` (Waiting) moves to `Đã xử lý` (Resolved), with the result "ticket đã Xong" (ticket is Done), with **no** Pass/Needs fixing verdict — so it does **not** count as owner confirmation. Written **in the same write** as the command moving the ticket to Done (succeed together, fail together). Manually created items, items of other tickets, items already Skipped/Resolved: untouched.
+
+58. **"The ticket stays in or returns to Awaiting verification" only applies when the evidence CHANGES (interprets 19.3 line 494 against section 4 and 19.10; settles #66).** l.494 hangs that sentence on an **event** ("a new commit or deploy after the review"), not on a **state**. Now settled:
+    - The **status-pulling** branch only runs in a write that **actually adds or changes evidence** (sending evidence, withdrawing evidence). Every other path — manual status change, the "I'll do it" button, opening an assignment, submit, acceptance, canceling an assignment, the 19.4 propagation, the parent ticket's gate re-check of 19.11, the periodic path — **only turns the flag on or off**.
+    - Reason: read as "every write", the owner could **never** bring a flagged ticket back to In progress to go fix the code, and `baton status` would behave **opposite** to the "I'll do it" button (19.10) on **the same** transition — while the SPEC has no wording that distinguishes those two paths.
+    - **Intentional consequence:** the flag is **still on** for a ticket the owner has just brought back to In progress — correctly so, because the work needed is not finished. The flag turns off when there is new valid evidence, or when the FAIL review is withdrawn.
+    - **A coordination ticket keeps its status**; only the **flag** turns on/off. 19.4 l.502 says a coordination ticket's status "follows the project tickets automatically" and it "does not go through the evidence gate"; letting l.494 pull it into Awaiting verification would make those two sentences contradict each other. It **can send** evidence, so it **can carry the flag**.
+
+59. **Sending and withdrawing evidence are GENERAL write commands, not subject to `SESSION_CLOSED` (interprets item 45 above against section 6 line 195 and section 7; settles #67).** Item 45 counts "the assignment's evidence" in the blocked group, but an evidence row is **not attached to any assignment** — it is attached only to the ticket plus the sender, and section 7 has no assignment field. Now settled: **no** blocking by session.
+    - Two grounds: it **matches the data model** (rather than inventing an assignment↔evidence link the SPEC does not have), and it is the direction that **adds no new block** — tightening an agent's permissions on the basis of a guess is much harder to walk back than loosening later.
+    - If a later spec session wants to block it, the work is **not** to change one condition but to **add an assignment field to section 7**.
+
+60. **Every wall-clock time in the SPEC is computed in UTC+7 (addition to section 8 line 241, 19.8 line 533, and principle 8 of section 0; settles #68).** "18:00", "20:00", "08:00", "23:00–07:00" are wall-clock times, so they only have meaning in a time zone — and these computations run **on the server side**.
+    - Take the **UTC+7** of principle 8 (Vietnam time) as the **business** time zone, not only the display time zone. Computed in UTC, a 🟡 item created at 22:00 Vietnam time would get the deadline "20:00 today" — a deadline that **passed 2 hours ago**.
+    - Declared in **exactly one place**, and every rule using wall-clock time goes through it: the 🟡 default deadline (19.8), the approval session reminder schedule 08:00/20:00 (section 8), the evening handoff at 20:00 (section 11), quiet hours 23:00–07:00 (section 12). **The four rules must use the same time zone**, otherwise they drift apart.
+    - Use a **fixed offset**, not a time zone database: Vietnam has no daylight saving time so that is the correct model, and it can be verified by arithmetic. If a later spec session wants the time zone to be a **workspace setting**, the work is to read the offset from the settings and pass it in — one place.
+
+61. **Visibility of the "General" class branches by ROLE, not by project flag (addition to section 8 lines 229 and 233, the section 3 permission table, and item 4 above; settles #69).** Item 4 settles "General" as the project field left **empty**, so every read path has a class of rows for which **the project gate has nothing to check** (`project_id` empty). Now settled for **both** sections that have this class: section 8 (Needs Owner) and section 10 (Decision log — item 4 says a row auto-generated from a General item leaves the project field blank).
+    - **CREATE path: open.** `coordinator`, `manager` and the **owner** can all create General items; the only rule is the "Create a Needs Owner item" cell of the section 3 permission table, so `worker` and `reviewer` are still rejected. The basis is the **wording of the SPEC**: l.229 says a Needs Owner item is created by a `coordinator` **or `manager`**, and item 4 says `baton ask` without a project → the item is General. Putting the two together, "a `manager` sends `baton ask` with no project" is a path the SPEC **explicitly allows**.
+    - **READ path: branches by role.** The **owner** and agents with the **`coordinator`** role read **every** General item and row. An agent with the **`manager`** role reads only what **it created itself** — even a General row **written by the owner** is out of its view. Other roles (`worker`, `reviewer`) read none.
+    - Out of view → **`NOT_FOUND`**, not 403, following the "do not reveal existence" convention of section 13.
+    - Branching by **role** rather than by the "enters every project" flag is **intentional**: this class of rows belongs to no project, so a flag about projects says nothing about it. A `coordinator` **without** the flag still reads every General row; the flag only decides the class of rows that **have** a project.
+    - This rule must live in **one single place**, and every query module **calls** it rather than building its own condition for this class.
+
+62. **The "why" field of a Decision log row is REQUIRED, non-empty (addition to section 10 lines 306 and 308; settles #71).** l.306 sets the goal of the whole of section 10 as answering "who decided this, **why**, and when", and l.308 lists "why" as a field of the row, but no sentence says whether it may be left blank. Now settled in the **strict** direction:
+    - **Every** Decision log row must have a **non-empty** "why" — both rows the owner writes personally and rows **auto-generated** from a Needs Owner item (item 64 below gives the default text for auto-generated rows).
+    - This rule applies at **all three layers**: the CLI command (`--why` of l.377 is not in square brackets, i.e. required), the API, and a **DB constraint**.
+    - Reason for choosing the strict direction rather than the open one: a Decision log row **cannot be edited** (l.309), so a row accidentally written without a "why" is permanent. **Loosening later is easier than tightening** — loosening is dropping a constraint; tightening cannot patch data already written.
+    - **The import path of section 16:** when the "time · who · project · decision · why · reference" table has a **blank** "why" cell, that row is an **error** and goes into the "errors (with the reason for each row)" part of the import report — it is **not** imported with an empty "why", and a text is **not** filled in on the owner's behalf.
+
+63. **A Skipped item must be REOPENED before being handled, and the reopen path accepts Skipped items too (addition to section 8 lines 244 and 246, 19.9 and 19.10; settles #73 part (a)).** l.244 only draws a `Chờ` (Waiting) item going out on **two** branches ("handle" or "skip"), and l.246 only speaks of reopening **from Resolved**, so both "handling an item that is Skipped" and "reopening an item that is Skipped" are places where the SPEC is **silent**. Now settled, and **the two halves go together**:
+    - **Handling a `Bỏ qua` (Skipped) item directly → rejected** with `ALREADY_RESOLVED`, with a message stating exactly what to do: **reopen first**. This is the same wording pattern 19.10 already uses for resolved items.
+    - **The reopen path accepts Skipped items TOO**, not only the Resolved items of l.246. Reopening brings the item back to **Waiting** and **is recorded in history**, exactly like the case of l.246.
+    - **The second half is the condition for the first half to make sense:** if handling were forbidden without widening the reopen path, the very sentence "reopen first" **could not be carried out**, and an item skipped **by mistake** would be permanent — losing the only way to correct the error. So the first half must not be implemented without the second.
+    - This decision says **nothing** about the **wording** of the comment on skip (19.9 l.541 says there is a comment but does not give its wording) — that part remains in `spec-questions.md` **#73(b)**, awaiting a spec session.
+
+64. **An AUTO-GENERATED Decision log row takes its "why" as `"Trả lời mục T-x: <tiêu đề mục>"` (English: "Answer to item T-x: <item title>") (addition to section 8 line 279 and section 10; settles #74; goes with item 62).** l.279 lists exactly **four** parts of the auto-generated row when a Needs Owner item is resolved — the person is the **owner**, the same **project** as the item, the content is the **result**, the reference is the **`T-number`** — and there is **no** "why" part; but item 62 makes that part **required**, so the auto-generation path must fill in a text. Now settled:
+    - The default is **`"Trả lời mục T-x: <tiêu đề mục>"`**, where `T-x` is the item's `T-number` and `<tiêu đề mục>` is its own title.
+    - The item title **always exists** (a required field per l.233), so this default never falls to empty and never breaks item 62.
+    - When the owner sends an **explicit** "why", **the owner's text is respected**, not overwritten by the default.
+    - This formula follows exactly **the convention the SPEC already uses** for automatically generated strings at l.280 and 19.9 l.542: `<code> <action>: <content>`.
+
+65. **The owner handling / skipping / reopening a Needs Owner item of an ARCHIVED project is ALLOWED (addition to item 25 above; settles #75).** Item 25 says **explicitly** that every **write** command on an `archived` project is rejected (`PROJECT_NOT_ACCEPTING`), **except** the very act of the owner changing `trang_thai`; but 19.6 l.516 and section 8 l.281 require that when an item is resolved (or skipped) the related session **must** leave `waiting_owner`, and that is the **only path** the SPEC gives for leaving it. Now settled as open, i.e. **a second exception is added** to item 25:
+    - **The owner** can handle, skip and reopen a Needs Owner item of an `archived` project — including the accompanying actions that section 8 l.279–281 requires: the auto-generated **Decision log row**, the **comment** on related tickets, and **releasing the session** from `waiting_owner`.
+    - **Agents remain blocked as before.** Item 25 applies in full to **every** agent write command on an `archived` project, including **creating** a new Needs Owner item. This exception is for the **owner** only, and only for items that **already exist**.
+    - Reason: "answering a question **already asked**" is not "writing **new** work into the project" — it **closes** something left hanging, i.e. the same direction as the purpose of archiving. In the closed direction, an item created while the project was alive, with the project archived afterwards, **could be answered by no one**: it would sit forever in the Waiting block, **and** the related session would be stuck in `waiting_owner` permanently — exactly the "**never** counted as stalled" state of 19.6, i.e. an agent standing still with **no alert firing**.
+    - The interface of section 14 **shows and enables** the buttons of an item belonging to an archived project; there is no button that always returns an error.
+
+66. **No-code ticket at the TICKET level and the `bao_cao` (Report) evidence (addition to section 7, the 0.1 table, 19.10 and item 57; T-31 question 3.4 A; Owner decided T-38 = A, 19/10; settles #161 and #162).** A ticket without code inside a project that **has** code (e.g. a research ticket) previously could not be closed: the "no code" flag existed only in the project profile, and no evidence type said "the report has been checked by someone else". Now settled:
+    - **The `ticket.khong_code` flag**: turned on/off by the **owner** only (agent ⇒ `FORBIDDEN`), recorded in History, **does not pull the status** (item 58). A ticket is "no-code" when the project flag **or** the ticket flag is on, read **at the time of the check** (19.10). The project flag keeps its meaning.
+    - **The `bao_cao` evidence type** (label "Báo cáo", Report): path and/or content (at least one); the signer is the sender; **signing rights identical to `review`** (the `review` row of the "Evidence types" table in section 7 and the section 3 permission table: a `reviewer` other than the doer; a `manager` with the path to an independent reviewer's report; a `coordinator`; the owner); the signing source is shown on every read path; not verified; not edited, not deleted, withdrawn per section 7, bullet "Evidence is not edited, not deleted".
+    - **The gate of a no-code ticket** is satisfied when **(1 `file`/`note` + owner confirmation)** OR **≥1 non-withdrawn `bao_cao` signed by someone other than the doer**. When satisfied by a report, no confirmation item is generated (item 57). A ticket **with code**: `bao_cao` opens nothing, the old rules exactly as before.
+    - **Sending a `bao_cao` does not move the ticket to Done by itself** from Awaiting verification, like `file`/`note`/`review`. Someone **with the "Change ticket status" permission** in the section 3 permission table (a worker who is the doer, for tickets of its own assignment; the `manager` in the project; the `coordinator`; the owner) changes it to Done; the gate is checked at that change. The sender of a `bao_cao` is usually a `reviewer` agent, which has **no** permission to change status, so the change is someone else's job. Reason for keeping this: "Auto-Done" (section 7, bullet "Auto-Done") is tied only to the background **verification** step (commit pushed → merged); `bao_cao` has no background verification step.
+
+67. **`L` (label) applied to several cards: add or remove (addition to section 14, bullet "Keyboard shortcuts"; Owner decided T-38 = A, 19/10; settles #156).** Type a label, then press the "Áp" (Apply) button next to the label box in the multi-select bar (`Enter` in the box does not apply — item 70): **every** selected card has that label ⇒ **remove** it from all; otherwise ⇒ **add** it to the cards that lack it, and cards that already have it **send no request**. A single card (panel) is unchanged: the "Thêm nhãn" (Add label) box adds, the × button removes.
+
+68. **The selection after applying, filters, `Esc` and the target of keys when cards are selected (addition to section 14, bullet "Keyboard shortcuts" and bullet "Ticket list" (filters); Owner decided T-38 = A, 19/10; settles #157).**
+    - After applying: deselect the cards that **succeeded**, **keep exactly the failed cards** selected to fix and retry; all succeeded ⇒ the selection is empty.
+    - Selection is by id, tied to the filter at selection time (filter + quick tab + "Ẩn Xong cũ", Hide old Done): changing filter/tab/view ⇒ the selection is **emptied entirely** (returning to the old filter does not revive it); each apply only takes cards **currently shown**.
+    - `Esc` when cards are selected ⇒ deselect all first; only a further `Esc` closes the panel.
+    - Cards selected ⇒ `S`/`P`/`L`/`A` apply to the **selection**, not to the focused card.
+
+69. **`A` for several cards (addition to section 14, bullet "Keyboard shortcuts", and section 5; Owner decided T-38 = A, 19/10; settles #158).** **One** "Giao N thẻ" (Assign N cards) dialog: choose the agent and brief **once**, send **card by card in sequence** (a separate assignment per card), with no optimistic display. Failed cards ⇒ **one** notification "k/N thẻ lỗi: MÃ — câu máy chủ" (English: "k/N cards failed: CODE — server message"); cards that succeeded are deselected; the dialog **stays open** with exactly the failed cards, keeping the agent/brief for resending. It goes through all cards and does not stop at the first failed card. Offline before the first send ⇒ closing the dialog cancels the whole run; offline midway ⇒ the remaining cards report a network error in that notification.
+
+70. **The confirmation step when applying to several cards (addition to section 14, bullet "Keyboard shortcuts"; Owner decided T-38 = A, 19/10; settles #159).**
+    - The status, priority and label boxes of the multi-select bar **only set a pending value**. Changing the value by mouse, arrow keys, Space, typing, or pressing `Enter` in the box all **send no request**. **Only the "Áp" (Apply) button** next to each box applies (the Apply button is locked while the box is empty; a label that is empty after trimming whitespace counts as empty). Reason: in many browsers `↑`/`↓` on a closed select box changes the value immediately, so "apply on change" turns a slip of a key into an action on N cards; and the `Enter` used to **close an opened list** on Chromium also reaches the box, so "apply on `Enter`" wrongly applied "Đang làm" (In progress) to 2 cards in production on 19/10 (CoS/Owner decided 20/10, BAT-39, #164). Applies to both N < 10 and N ≥ 10.
+    - **N ≥ 10** (N = the number of selected cards **currently shown**, i.e. exactly the number of cards the apply run will consider) ⇒ before sending, a dialog **"Áp cho N thẻ?"** (Apply to N cards?) appears with a confirm button and a Cancel button. The dialog states what this run does; for labels it says clearly whether it **adds** or **removes** under the rule of item 67 (e.g. `Bỏ nhãn "x" khỏi 10 thẻ` (Remove label "x" from 10 cards), `Gắn nhãn "x" cho 7 thẻ (3 thẻ đã có, không đổi)` (Add label "x" to 7 cards (3 cards already have it, unchanged))). Cancel (button, `Esc`, clicking the backdrop) ⇒ **no request is sent**, the selection and the pending value are kept. **N < 10** ⇒ applies straight away.
+    - `A` adds **no** confirmation question: the "Assign N cards" dialog is already the confirmation step (choose the agent, then press an explicit send), and asking again is asking twice for the same thing.
+    - The single-card panel keeps its apply-on-change behaviour.
+
+71. **Clicking a card's tick box (addition to section 14, bullet "Keyboard shortcuts" (`J`/`K`, `X`); Owner decided T-38 = A, 19/10; settles #160).** On the list page, "the focused card" and "the open panel" are **one** state (`?the=<code>`). Now settled to keep it so:
+    - **Wide screen:** clicking the tick box ⇒ besides toggling selection, that card becomes the focused card, i.e. **the card's panel opens** — like `J`/`K`; the next `X` acts on exactly the card just clicked. Each tick adds a browser history entry, like `J`/`K`/the "Mở" (Open) button.
+    - **Narrow layout:** clicking the tick box does **not** set focus and does **not** open the panel — there the panel is a full-cover overlay, and opening it would make it impossible to tick a second card.
+
+## 20. Project map on the Overview
+**What the user gets:** on opening the Overview, seeing at once which projects they are carrying, which project is being pushed, which is waiting on them, and that they are not carrying more than 3 things at once. (Owner decided 04/11/2026, T-127 = A.)
+
+### 20.1 New fields
+| Field | Where | Value | Default | Who edits |
 |---|---|---|---|---|
-| `uu_tien` | dự án | số nguyên 1–5 (5 = quan trọng nhất) | 3 | chủ, `coordinator` |
-| `dang_day` | dự án | có/không: dự án "đang đẩy mạnh" | không | chủ, `coordinator`, `manager` của dự án (20.8) |
-| `duy_tri` | dự án | có/không: việc duy trì dài hạn, không có đích (PARA "Area") | không | chủ, `coordinator`, `manager` của dự án (20.8) |
-| `ten_ngan` | dự án | chuỗi 0–24 ký tự | trống ⇒ dùng tên đầy đủ | chủ, `coordinator` |
-| `khoi_lon` | ticket | số thứ tự khối 1–99, hoặc trống | trống | chủ, `coordinator`, `manager` của dự án |
-| `doi` | ticket có `khoi_lon` | số nguyên 0–100 (vị trí trên đồi) | trống | chủ, `coordinator`, `manager` của dự án |
-| Giới hạn WIP | Cài đặt workspace | số nguyên 1–10 | 3 | chủ |
+| `uu_tien` | project | integer 1–5 (5 = most important) | 3 | owner, `coordinator` |
+| `dang_day` | project | yes/no: the project is "being pushed hard" | no | owner, `coordinator`, the project's `manager` (20.8) |
+| `duy_tri` | project | yes/no: long-term maintenance work with no end goal (PARA "Area") | no | owner, `coordinator`, the project's `manager` (20.8) |
+| `ten_ngan` | project | string of 0–24 characters | empty ⇒ use the full name | owner, `coordinator` |
+| `khoi_lon` | ticket | block sequence number 1–99, or empty | empty | owner, `coordinator`, the project's `manager` |
+| `doi` | ticket with `khoi_lon` | integer 0–100 (position on the hill) | empty | owner, `coordinator`, the project's `manager` |
+| WIP limit | Workspace settings | integer 1–10 | 3 | owner |
 
-- "Mảng" của bản đồ chính là **Nhóm dự án** (mục 2). Dự án không có nhóm nằm ở mảng "Khác".
-- Khối việc lớn là ticket có `khoi_lon`; ticket con của nó (mục 4) là việc nhỏ. Tiến độ khối của dự án = số khối Xong / tổng khối không Huỷ, không Trùng.
-- Đặt `doi` cho ticket không có `khoi_lon`: `INVALID_INPUT`. Giá trị ngoài khoảng: `INVALID_INPUT` kèm khoảng đúng.
-- Bật `dang_day` khi đã đủ giới hạn WIP: **vẫn cho**, không chặn; đồng hồ WIP chuyển đỏ.
-- Bật `duy_tri` thì tự tắt `dang_day` (dự án duy trì không "đẩy").
-- Mọi thay đổi các trường trên ghi Lịch sử như trường khác (mục 4).
-- CLI: `baton project set <MÃ> [--nhom] [--uu-tien 1-5] [--dang-day on|off] [--duy-tri on|off] [--ten-ngan "…"]`; `baton ticket set <MÃ> [--khoi-lon <stt>|off] [--doi 0-100]`. API và MCP có thao tác tương ứng.
-- Dữ liệu cũ: mọi dự án nhận giá trị mặc định; không dự án nào tự thành "đang đẩy" hay "duy trì". Hành vi cũ không đổi.
+- A "domain" on the map is simply a **project group** (section 2). A project with no group sits in the domain "Khác" (Other).
+- A large work block is a ticket with `khoi_lon`; its child tickets (section 4) are the small work. A project's block progress = number of Done blocks / total blocks that are not Canceled and not Duplicate.
+- Setting `doi` on a ticket without `khoi_lon`: `INVALID_INPUT`. A value out of range: `INVALID_INPUT` with the correct range.
+- Turning on `dang_day` when the WIP limit is already reached: **still allowed**, not blocked; the WIP gauge turns red.
+- Turning on `duy_tri` turns off `dang_day` automatically (a maintenance project is not "pushed").
+- Every change to the fields above is recorded in History like other fields (section 4).
+- CLI: `baton project set <CODE> [--nhom] [--uu-tien 1-5] [--dang-day on|off] [--duy-tri on|off] [--ten-ngan "…"]`; `baton ticket set <CODE> [--khoi-lon <seq>|off] [--doi 0-100]`. The API and MCP have corresponding operations.
+- Old data: every project receives the default values; no project becomes "pushing" or "maintenance" by itself. Old behaviour does not change.
 
-### 20.2 Bố cục Tổng quan
-Khối **"1. Dự án"** của mục 11 được thay bằng bản đồ, từ trên xuống:
-1. **Thanh đầu:** đồng hồ WIP "Đang đẩy n/<giới hạn>" (đỏ khi n > giới hạn) và ô Cần Chủ gọn (mục 11).
-2. **Bản đồ (trái) + thẻ dự án (phải)**. Dưới 768px thì bản đồ ở trên, thẻ xếp dưới.
-3. **Dải "Khu vực duy trì · n"** cuối khối: mỗi dự án `duy_tri` là một chip (tên ngắn + chấm: xanh bình thường, vàng có Cần Chủ Chờ). Bấm chip mở trang dự án.
+### 20.2 Overview layout
+The **"1. Projects"** block of section 11 is replaced by the map, from top to bottom:
+1. **Top bar:** the WIP gauge "Đang đẩy n/<giới hạn>" (Pushing n/<limit>; red when n > limit) and the compact Needs Owner box (section 11).
+2. **Map (left) + project cards (right)**. Below 768px the map is on top and the cards are stacked below.
+3. **The strip "Khu vực duy trì · n"** (Maintenance area · n) at the end of the block: each `duy_tri` project is a chip (short name + dot: green normally, yellow when it has a Waiting Needs Owner item). Clicking a chip opens the project page.
 
-Các khối 2–5 của mục 11 (Việc đang chạy, Agent, Vừa xong, Cần chú ý) giữ nguyên, nằm dưới.
+Blocks 2–5 of section 11 (Work in progress, Agents, Just done, Needs attention) are unchanged and sit below.
 
-### 20.3 Cây tròn
-- Tâm là tên chủ → vòng 1 là mảng → vòng 2 là dự án. Chỉ dự án **không** lưu trữ và **không** duy trì lên cây.
-- **Kích thước bong bóng** theo `uu_tien`. **Màu bong bóng:** vàng = có mục Cần Chủ Chờ; xám = dự án Tạm dừng; còn lại xanh. Màu mảng lấy từ bảng màu cố định theo tên nhóm (không thêm trường), dùng cho nhánh và nhãn mảng.
-- Dự án `dang_day`: viền đậm. Dự án không `dang_day`: mờ đi (hàng chờ).
-- Dự án có khối lớn: **vòng tiến độ** quanh bong bóng + chữ "Xong/Tổng" khối.
-- **Thu gọn/mở mảng:** bấm mảng để gập/mở. Mảng gập thành một bong bóng to bằng tổng ưu tiên các dự án con, ghi "+n". Ba nút nhanh: "Chỉ giữ dự án đang đẩy", "Mở hết", "Thu gọn hết". **Mặc định khi mở trang:** mảng không có dự án đang đẩy thì gập.
-- **Phóng vào dự án:** bấm bong bóng dự án → dự án vào tâm, các khối lớn thành vòng ngoài đánh số 01, 02… theo `khoi_lon` (Xong = xanh; Đang làm/Chờ kiểm chứng = vàng viền đậm; còn lại = xám nét đứt). Bấm tâm để quay lại. Không bao giờ vẽ ba tầng cùng lúc.
-- Bấm mảng cũng lọc thẻ dự án bên phải theo mảng đó; bấm lại để bỏ lọc.
-- Rê chuột/chạm giữ một bong bóng: hiện tên đầy đủ, trạng thái, "Đang làm".
+### 20.3 Radial tree
+- The centre is the owner's name → ring 1 is the domains → ring 2 is the projects. Only projects that are **not** archived and **not** maintenance go on the tree.
+- **Bubble size** follows `uu_tien`. **Bubble colour:** yellow = has a Waiting Needs Owner item; grey = Paused project; otherwise green. The domain colour is taken from a fixed palette by group name (no added field), used for the domain's branch and label.
+- A `dang_day` project: bold border. A project that is not `dang_day`: dimmed (queue).
+- A project with large blocks: a **progress ring** around the bubble + the text "Done/Total" blocks.
+- **Collapse/expand a domain:** click a domain to fold/unfold it. A folded domain becomes one bubble sized by the sum of its child projects' priorities, labelled "+n". Three quick buttons: "Chỉ giữ dự án đang đẩy" (Keep only projects being pushed), "Mở hết" (Expand all), "Thu gọn hết" (Collapse all). **Default when the page opens:** a domain with no project being pushed is folded.
+- **Zoom into a project:** click a project bubble → the project moves to the centre, and its large blocks become the outer ring numbered 01, 02… by `khoi_lon` (Done = green; In progress/Awaiting verification = yellow with a bold border; the rest = grey dashed). Click the centre to go back. Three levels are never drawn at once.
+- Clicking a domain also filters the project cards on the right by that domain; click again to clear the filter.
+- Hovering/long-pressing a bubble: shows the full name, status, "Đang làm" (In progress).
 
-### 20.4 Thẻ dự án
-- Ba làn: **Đang đẩy** (dự án `dang_day`) · **Hàng chờ** (còn lại, đang chạy) · **Tạm dừng** (dự án Tạm dừng).
-- Mỗi thẻ: tên, chấm sức sống (mục 2), ưu tiên, người cầm (agent quản lý, không có thì tên chủ), **Đang làm** = việc nổi bật nhất (mục 11), **Chờ Chủ** = tiêu đề mục Cần Chủ Chờ mới nhất của dự án (bấm mở mục), **Mốc tới** = khối lớn nhỏ số nhất chưa Xong.
-- **Hill Chart** trong thẻ: một đường đồi, mỗi khối lớn đang Đang làm/Chờ kiểm chứng là một chấm tại `doi`. Dưới 50 ghi "chưa rõ cách làm", từ 50 trở lên ghi "đã rõ cách, đang làm". Khối chưa có `doi` thì không vẽ chấm.
-- Bấm thẻ đi tới bảng việc của dự án.
+### 20.4 Project cards
+- Three lanes: **Đang đẩy** (Pushing; `dang_day` projects) · **Hàng chờ** (Queue; the rest, running) · **Tạm dừng** (Paused; Paused projects).
+- Each card: name, health dot (section 2), priority, holder (the managing agent, or the owner's name if none), **Đang làm** (In progress) = the most prominent piece of work (section 11), **Chờ Chủ** (Waiting for Owner) = the title of the project's newest Waiting Needs Owner item (click to open the item), **Mốc tới** (Next milestone) = the lowest-numbered large block not yet Done.
+- **Hill Chart** in the card: one hill line, each large block that is In progress/Awaiting verification is a dot at `doi`. Below 50 it reads "chưa rõ cách làm" (approach not yet clear), from 50 up it reads "đã rõ cách, đang làm" (approach clear, in progress). A block with no `doi` gets no dot.
+- Clicking a card goes to the project's work board.
 
-### 20.5 Ô Cần Chủ trên Tổng quan
-Giữ ô gọn của mục 11; danh sách mở ra xếp **mục của dự án đang đẩy lên đầu**, gắn nhãn "· đang đẩy". Sidebar Cần Chủ không đổi.
+### 20.5 Needs Owner box on the Overview
+Keeps the compact box of section 11; the expanded list puts **items of projects being pushed at the top**, labelled "· đang đẩy" (· pushing). The Needs Owner sidebar entry does not change.
 
-### 20.6 Hiệu năng và điện thoại
-- 200 dự án vẫn mở dưới 1 giây sau lần tải đầu (mục 17.10). Cây chỉ vẽ dự án không duy trì; mảng mặc định gập theo 20.3.
-- 375px: Tổng quan dùng được — bản đồ thu vừa bề ngang, chạm thay rê chuột, thẻ xếp dưới.
+### 20.6 Performance and phone
+- 200 projects still open in under 1 second after the first load (section 17.10). The tree only draws non-maintenance projects; domains are folded by default per 20.3.
+- 375px: the Overview is usable — the map shrinks to fit the width, tap replaces hover, cards are stacked below.
 
-### 20.7 KHÔNG làm
-4 kiểu nhìn phụ của mockup (ô vuông, thanh tầng, mind map, vòng tròn); kéo thả đổi ưu tiên; tự tính vị trí trên đồi; tự đổi tên dự án cũ; cấp "milestone/epic" riêng; chặn cứng khi vượt WIP.
+### 20.7 NOT done
+The 4 secondary view styles of the mockup (squares, layered bars, mind map, circles); drag and drop to change priority; computing the hill position automatically; renaming old projects automatically; a separate "milestone/epic" level; hard blocking when WIP is exceeded.
 
-### 20.8 Thanh công cụ dự án (Chủ chốt 04/11/2026, T-131)
-**Người dùng nhận được:** đổi mức ưu tiên và trạng thái của dự án ngay trên giao diện, không phải sửa file hay gõ lệnh.
+### 20.8 Project toolbar (Owner decided 04/11/2026, T-131)
+**What the user gets:** changing a project's priority and status right in the interface, without editing a file or typing a command.
 
-- **Trạng thái bản đồ** — một ô chọn 4 giá trị, ghi xuống trường đã có:
+- **Map status** — one select box with 4 values, written to existing fields:
 
-| Chọn | `trang_thai` | `dang_day` | `duy_tri` |
+| Choice | `trang_thai` | `dang_day` | `duy_tri` |
 |---|---|---|---|
-| Đang đẩy | `active` | có | không |
-| Hàng chờ | `active` | không | không |
-| Tạm dừng | `paused` | không | không |
-| Duy trì | `active` | không | có |
+| Đang đẩy (Pushing) | `active` | yes | no |
+| Hàng chờ (Queue) | `active` | no | no |
+| Tạm dừng (Paused) | `paused` | no | no |
+| Duy trì (Maintenance) | `active` | no | yes |
 
-  Lưu trữ (`archived`) không nằm trong ô này; vẫn chỉ chủ làm ở chỗ cũ (mục 2).
-- **Nơi hiện:** thẻ dự án trên bản đồ Tổng quan (20.4) và đầu trang dự án. Ô **Ưu tiên** 1–5, ô **Trạng thái**; chủ thấy thêm ô **Nhóm**.
-- **Ai đổi được:**
+  Archiving (`archived`) is not in this box; it is still done by the owner only, in the old place (section 2).
+- **Where shown:** the project card on the Overview map (20.4) and the top of the project page. A **Priority** box 1–5, a **Status** box; the owner also sees a **Group** box.
+- **Who can change:**
 
-| Ai | Ưu tiên | Trạng thái bản đồ | Nhóm |
+| Who | Priority | Map status | Group |
 |---|---|---|---|
-| Chủ | được | được | được |
-| `coordinator` | được | được | không |
-| `manager` **của dự án đó** | không | được | không |
-| `manager` dự án khác, `worker`, `reviewer` | không | không | không |
+| Owner | yes | yes | yes |
+| `coordinator` | yes | yes | no |
+| `manager` **of that project** | no | yes | no |
+| `manager` of another project, `worker`, `reviewer` | no | no | no |
 
-- **Chủ là cấp cao nhất:** chủ đổi được mọi lúc, kể cả đè lên giá trị agent vừa đặt. Agent đổi được giá trị chủ đã đặt, nhưng mỗi lần đổi ghi Lịch sử dự án (ai, lúc, cũ → mới) và thẻ hiện dòng "Đặt bởi <tên> · <thời gian>" của lần đổi cuối, để chủ thấy và đổi lại.
-- Chọn "Đang đẩy" khi đã đủ giới hạn WIP: vẫn cho, đồng hồ đỏ (20.1).
-- Đổi hiện ngay trên màn hình; server từ chối thì hoàn lại và báo lý do (mục 14).
-- CLI: `baton project set <MÃ> --trang-thai dang-day|hang-cho|tam-dung|duy-tri`.
-- **KHÔNG làm:** khoá "chủ đã đặt thì agent không đổi được"; đổi mã dự án.
+- **The owner is the highest level:** the owner can change at any time, including overriding a value an agent has just set. An agent can change a value the owner set, but every change is recorded in the project History (who, when, old → new) and the card shows the line "Đặt bởi <tên> · <thời gian>" (Set by <name> · <time>) of the last change, so the owner sees it and can change it back.
+- Choosing "Pushing" when the WIP limit is already reached: still allowed, the gauge turns red (20.1).
+- The change shows on screen immediately; if the server rejects it, it is rolled back and the reason is reported (section 14).
+- CLI: `baton project set <CODE> --trang-thai dang-day|hang-cho|tam-dung|duy-tri`.
+- **NOT done:** a lock of "once the owner has set it, agents cannot change it"; changing the project code.

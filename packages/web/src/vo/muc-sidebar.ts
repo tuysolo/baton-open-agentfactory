@@ -9,7 +9,7 @@
  * ## Đường URL: SPEC chỉ chốt MỘT đường
  *
  * d.398 chốt `/t/<MÃ>` cho chi tiết ticket. **Mọi đường khác dưới đây là đề xuất
- * tạm** — xem `cau-hoi-spec.md` #101. Chúng gom về một chỗ đúng vì thế: khi chủ
+ * tạm** — xem `spec-questions.md` #101. Chúng gom về một chỗ đúng vì thế: khi chủ
  * chốt, đổi là đổi mảng này, không phải đi tìm chuỗi `'/bao-cao'` trong mười file.
  *
  * ## Vì sao bảng này không làm test thành tautology
@@ -85,7 +85,7 @@ export const duongHoSoDuAn = (id: string): string => `/du-an/${id}/ho-so`;
 
 /**
  * **"Việc của tôi" đã BỎ** — mục ngoài SPEC của BAT-6 đợt 1
- * (`cau-hoi-spec.md` #127), bỏ ở đợt 3 phần B theo bản soát UI mà chủ duyệt.
+ * (`spec-questions.md` #127), bỏ ở đợt 3 phần B theo bản soát UI mà chủ duyệt.
  *
  * Hai lý do, cả hai là lý do của chủ: nó **trùng nghĩa** với "Cần Chủ" (nó chỉ là
  * `/ticket?can_chu=co`, tức cùng tập mà huy hiệu đỏ đếm), và d.392 nay có một mục
@@ -101,7 +101,7 @@ export const duongTicket = (ma: string): string => `/t/${ma}`;
 
 /**
  * Khoá URL "mục Cần Chủ cần mở" trên trang Cần Chủ — `/can-chu?the=<T-số>`
- * (`cau-hoi-spec.md` #154, chốt 19/10 T-31, BAT-37). Cùng khuôn `?the=<mã>` mà
+ * (`spec-questions.md` #154, chốt 19/10 T-31, BAT-37). Cùng khuôn `?the=<mã>` mà
  * danh sách việc đã dùng cho "thẻ đang mở" (`KHOA_THE` ở `loc-ticket.ts`), nên
  * không thêm route mới. Nằm ở sổ tra này (không ở `trang/can-chu.tsx`) vì
  * command menu cần nó, và `can-chu.tsx` đã nhập từ `command-menu.tsx` — đặt ở

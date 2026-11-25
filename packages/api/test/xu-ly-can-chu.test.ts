@@ -676,7 +676,7 @@ describe('19.9 d.538 qua cửa ghi — phương án đã chọn là KHOÁ THẬT
      * Ca này **đổi chiều** so với bản trước 0021: mệnh đề 6 của 0015
      * (`resolved` + `decision` + `phuong_an_da_chon_id IS NULL` ⇒ ABORT) đã bỏ,
      * vì d.244 cho "**và/hoặc** chữ tự do" và chủ yêu cầu trực tiếp 11/10
-     * (`cau-hoi-spec.md` #121). Giữ nguyên dòng cũ dưới dạng ca mới để chỗ nới
+     * (`spec-questions.md` #121). Giữ nguyên dòng cũ dưới dạng ca mới để chỗ nới
      * này **đo được**, không chỉ nằm trong một chú thích SQL.
      */
     const a = (await taoDecision())['id'] as string;
@@ -1282,7 +1282,7 @@ describe('tra mục theo id hoặc `T-số`', () => {
  * (trừ chính việc chủ đổi `trang_thai`), nhưng 19.6 d.516 + d.281 nói đường
  * **duy nhất** thả một phiên khỏi `waiting_owner` là mục được xử lý — nên áp câu
  * 25 ở đây sinh ra một phiên kẹt **vĩnh viễn** mà không cảnh báo nào bắn. Lệch
- * đang chờ chủ chốt ở **`cau-hoi-spec.md` #75**.
+ * đang chờ chủ chốt ở **`spec-questions.md` #75**.
  *
  * Có ca này thì một lượt sau "sửa cho đúng câu 25" làm **đỏ** chỗ này, chứ không
  * lặng lẽ đổi nghĩa một đường mà dữ liệu đã đi qua.

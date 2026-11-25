@@ -3,7 +3,7 @@
  *
  * Ba nơi kể tên lệnh `baton`: sổ lệnh `SO_LENH` (`packages/cli/src/lenh.ts`, key
  * = `khai.ten`), bảng "Lệnh CLI" của SPEC mục 13, và bảng mục 6 của
- * `HUONG-DAN-AGENT.md`. Thêm một lệnh vào CLI mà quên một trong hai bảng — hoặc
+ * `AGENT-GUIDE.md`. Thêm một lệnh vào CLI mà quên một trong hai bảng — hoặc
  * kể trong bảng một lệnh CLI không có — thì agent đọc tài liệu sẽ gọi sai. File
  * này làm lệch đó thành **đỏ**, và thông điệp nói rõ lệnh nào thiếu ở đâu.
  *
@@ -21,8 +21,8 @@
  * trên Node, nên tới Worker chỉ còn một chuỗi. Hai file nằm ở gốc repo, ngoài
  * `packages/api` — `server.fs.allow` của `vitest.config.ts` cho phép tường minh.
  */
-import SPEC_VAN from '../../../SPEC.md?raw';
-import HUONG_DAN_VAN from '../../../HUONG-DAN-AGENT.md?raw';
+import SPEC_VAN from '../../../docs/vi/SPEC.md?raw';
+import HUONG_DAN_VAN from '../../../docs/vi/HUONG-DAN-AGENT.md?raw';
 import { describe, expect, it } from 'vitest';
 import { SO_LENH } from '@baton/cli';
 
@@ -95,9 +95,9 @@ interface Muc6HuongDan {
   so_baton_mot_minh: number;
 }
 
-/** Mục 6 của `HUONG-DAN-AGENT.md` — bảng, tiêu đề, đoạn lệnh ngoài bảng, câu đếm. */
+/** Mục 6 của `AGENT-GUIDE.md` — bảng, tiêu đề, đoạn lệnh ngoài bảng, câu đếm. */
 function muc6HuongDan(van: string): Muc6HuongDan {
-  const than = mucMd(van, 6, 'HUONG-DAN-AGENT.md');
+  const than = mucMd(van, 6, 'AGENT-GUIDE.md');
 
   const hang = cotDauCuaBang(than, '| Lệnh | Cú pháp |').map((x) => {
     const khop = /^`([a-z]+)`$/.exec(x);
@@ -217,14 +217,14 @@ describe('BAT-45 — bảng lệnh trong tài liệu khớp SO_LENH', () => {
     });
   });
 
-  describe('HUONG-DAN-AGENT.md mục 6 — "Bảng N lệnh"', () => {
+  describe('AGENT-GUIDE.md mục 6 — "Bảng N lệnh"', () => {
     const muc6 = muc6HuongDan(HUONG_DAN_VAN);
 
     it('hàng bảng ∪ lệnh ở đoạn "Lệnh thứ N" = đúng các lệnh CLI', () => {
       expect(
         lechVoiCli(
           [...muc6.hang, muc6.lenh_ngoai_bang],
-          'HUONG-DAN-AGENT.md mục 6 (bảng + đoạn "Lệnh thứ N")',
+          'AGENT-GUIDE.md mục 6 (bảng + đoạn "Lệnh thứ N")',
         ),
       ).toEqual([]);
     });

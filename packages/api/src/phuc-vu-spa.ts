@@ -1,7 +1,7 @@
 /**
  * **Ranh giới `/v1/*` ↔ SPA** — một Worker phục vụ cả API và giao diện chủ.
  *
- * `quyet-dinh.md` 05/10 (CoS chốt): giao diện là một SPA React, phục vụ bằng
+ * `decisions.md` 05/10 (CoS chốt): giao diện là một SPA React, phục vụ bằng
  * **Workers Static Assets** cùng Worker Hono này. `/v1/*` là API, **mọi đường
  * khác trả SPA**.
  *

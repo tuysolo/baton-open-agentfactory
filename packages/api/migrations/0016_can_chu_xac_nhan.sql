@@ -149,7 +149,7 @@ CREATE INDEX ix_can_chu_da_xu_ly
 -- là `can_chu_ma:T-<số>`, và nó chỉ đúng nếu `ma_so` của một mục bất biến. Chỗ
 -- dựa của lời khai, tới trước migration này, **chỉ** là **sự vắng mặt của mã**:
 -- không đường ghi nào `UPDATE` cột đó. Reviewer của lượt 3a bắt đúng loại lời khai
--- này, và nếp đã chốt của dự án (`quyet-dinh.md`, lượt 2b sửa review) là **siết
+-- này, và nếp đã chốt của dự án (`decisions.md`, lượt 2b sửa review) là **siết
 -- cấu trúc cho lời khai thành đúng**, không hạ lời khai.
 --
 -- `BEFORE UPDATE OF ma_so` (có `OF`), khác cặp trigger của 0015: ở đây mệnh đề

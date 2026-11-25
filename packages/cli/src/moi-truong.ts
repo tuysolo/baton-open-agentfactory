@@ -56,7 +56,7 @@ export const TEN_BIEN_URL = 'BATON_URL';
 export const TEN_BIEN_TOKEN = 'BATON_TOKEN';
 /**
  * Lượt giao **mặc định** cho `heartbeat`, `log`, `plan` khi agent có nhiều phiên
- * mở (BAT-56, `cau-hoi-spec.md` #83). Cờ `--luot` (MCP: tham số `luot`) thắng
+ * mở (BAT-56, `spec-questions.md` #83). Cờ `--luot` (MCP: tham số `luot`) thắng
  * biến này. Xem `phien-hien-tai.ts`.
  */
 export const TEN_BIEN_LUOT = 'BATON_LUOT';

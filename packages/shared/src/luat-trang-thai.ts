@@ -235,7 +235,7 @@ export function apDungLuat(su_kien: SuKienTrangThai, bc: BoiCanhLuat): KetQuaLua
        *
        * SPEC viết "(về Cần làm)"; không nói ca rời `closed` sang trạng thái khác
        * (`in_progress`, `backlog`, hay từ Xong sang Huỷ). Chốt tạm: **mọi** lần
-       * rời nhóm `closed` là "mở lại", nên chỉ chủ — xem `cau-hoi-spec.md` #18.
+       * rời nhóm `closed` là "mở lại", nên chỉ chủ — xem `spec-questions.md` #18.
        * Chọn rộng hơn chữ SPEC vì hướng này là hướng an toàn: agent không bao giờ
        * sửa được kết luận của một ticket đã kết.
        */
@@ -322,7 +322,7 @@ export function apDungLuat(su_kien: SuKienTrangThai, bc: BoiCanhLuat): KetQuaLua
      *   - **SPEC 19.3**: "Ticket đã Xong **không bị hạ**." Nộp `done` + cổng đủ
      *     làm ticket Xong trong khi lượt còn `submitted`; người giao `huy` lượt
      *     đó sau sẽ kéo ticket về Cần làm nếu không có nhánh này.
-     *   - **SPEC mục 4 dòng 138** + chốt `cau-hoi-spec.md` #18: mọi lần rời nhóm
+     *   - **SPEC mục 4 dòng 138** + chốt `spec-questions.md` #18: mọi lần rời nhóm
      *     `closed` **chỉ chủ** làm được. `huy` lượt là đường mà **agent** người
      *     giao đi được, nên nó không được là cửa sau để rời `closed`.
      */
@@ -386,7 +386,7 @@ export function apDungLuat(su_kien: SuKienTrangThai, bc: BoiCanhLuat): KetQuaLua
 
 /**
  * "Ticket gốc **hợp lệ**" — SPEC mục 4 nêu mã lỗi nhưng **không định nghĩa hợp
- * lệ** (`cau-hoi-spec.md` #19). Chốt tạm, kiểm ở đây để một chỗ duy nhất quyết:
+ * lệ** (`spec-questions.md` #19). Chốt tạm, kiểm ở đây để một chỗ duy nhất quyết:
  *
  *   1. Tồn tại và chưa xoá mềm.
  *   2. **Cùng workspace** (dữ liệu tách theo workspace từ đầu — SPEC mục 1).

@@ -27,7 +27,7 @@ import { laMaHopLe, type LoaiCanChu, type MucCanChu } from './ma-nhan.js';
  * nói múi giờ nào** cho tính toán phía server: chỗ duy nhất SPEC nhắc giờ Việt
  * Nam là mục 0 nguyên tắc 8, và câu đó nói về **giao diện** ("Giao diện tiếng
  * Việt mặc định …, giờ Việt Nam (UTC+7), nền sáng") — tức hiển thị, không phải
- * một hằng của nghiệp vụ. Xem `cau-hoi-spec.md` **#68**.
+ * một hằng của nghiệp vụ. Xem `spec-questions.md` **#68**.
  *
  * Hướng an toàn đã chọn: lấy đúng **UTC+7** của nguyên tắc 8 và khai nó ở **một
  * chỗ duy nhất** — chính hằng này. Mọi giờ-trên-tường của Baton đi qua
@@ -93,7 +93,7 @@ export const GIO_HAN_TRONG_NGAY = 20;
  *
  * Mốc **bằng đúng** 18:00 thuộc nhánh "hôm sau": SPEC viết "tạo **trước** 18:00"
  * cho nhánh cùng ngày và "**từ 18:00 trở đi**" cho nhánh hôm sau, nên 18:00:00.000
- * nằm ở nhánh sau theo đúng chữ. (Cùng nếp đọc ranh giới của `cau-hoi-spec.md`
+ * nằm ở nhánh sau theo đúng chữ. (Cùng nếp đọc ranh giới của `spec-questions.md`
  * #61: một ranh giới không chốt là một ranh giới hai lượt sau cài hai kiểu.)
  */
 export function hanMacDinh(
@@ -134,7 +134,7 @@ export function quaHan(han_luc: number | null, bay_gio: number): boolean {
  * `null` khi **chưa** quá hạn (gồm cả mục không có hạn) — không `0`: một thẻ hiện
  * "quá hạn 0 giờ" là một thẻ nói sai.
  *
- * **Làm tròn LÊN**, và SPEC không nói làm tròn thế nào (`cau-hoi-spec.md` #77):
+ * **Làm tròn LÊN**, và SPEC không nói làm tròn thế nào (`spec-questions.md` #77):
  * `Math.floor` cho ra "quá hạn 0 giờ" trong suốt giờ đầu — đúng cái câu không
  * được phép hiện. Làm tròn lên thì một mục quá hạn 5 phút hiện "quá hạn 1 giờ",
  * tức nói **quá** chứ không nói **thiếu**; với một màn hình mà việc của nó là đẩy
@@ -311,7 +311,7 @@ export interface FileReviewDaKiem {
 }
 
 /**
- * **Lệnh kèm** — trường **chung của mọi loại** (`cau-hoi-spec.md` #130).
+ * **Lệnh kèm** — trường **chung của mọi loại** (`spec-questions.md` #130).
  *
  * d.250 viết chung cho mọi thẻ ("Mỗi thẻ hiện đủ: … **lệnh có nút Copy** …"), và
  * d.237 chỉ nói `run_command` **bắt buộc** có lệnh, không nói loại khác không
@@ -494,7 +494,7 @@ export function kiemLenhChay(lenh_tho: unknown, can_tty_tho: unknown): { lenh: s
 
 /**
  * Lệnh **tuỳ chọn** của ba loại còn lại (`decision`, `review`, `fyi`) — d.250
- * ("lệnh có nút Copy", viết chung cho **mọi** thẻ); `cau-hoi-spec.md` #130.
+ * ("lệnh có nút Copy", viết chung cho **mọi** thẻ); `spec-questions.md` #130.
  *
  * Khác `kiemLenhChay` đúng một vế: **không** có lệnh thì **không** phải lỗi
  * (`COMMAND_REQUIRED` là luật của riêng `run_command` — d.287). Mọi giới hạn còn
@@ -592,7 +592,7 @@ function loaiCuaDiaChi(dia_chi: string, i: number): 'file' | 'link' {
  * `lenh` / `can_tty` **không** thuộc nhóm "theo loại": d.250 cho **mọi** thẻ có
  * "lệnh có nút Copy", nên cả bốn nhánh đều mang chúng — bắt buộc với
  * `run_command` (d.237 ⇒ `kiemLenhChay`, `COMMAND_REQUIRED`), tuỳ chọn với ba
- * loại kia (`kiemLenhKem`). Xem `cau-hoi-spec.md` #130.
+ * loại kia (`kiemLenhKem`). Xem `spec-questions.md` #130.
  */
 export function kiemNoiDungCanChu(
   loai: LoaiCanChu,
@@ -660,7 +660,7 @@ export interface MucChoDeSoTrung {
  * của ASCII**: `"Chon DB"` và `"chon db  "` là cùng một câu hỏi với chủ, và cờ này
  * chỉ là một lời nhắc chứ không chặn gì (SPEC nói rõ "**vẫn tạo**"), nên hướng
  * rộng hơn ở đây không làm mất mục nào. SPEC không nói rõ cách so — xem
- * `cau-hoi-spec.md` **#70**.
+ * `spec-questions.md` **#70**.
  *
  * Phép so sống ở **hai** chỗ và hai chỗ đó phải nói **cùng một thứ**: câu truy vấn
  * lọc `lower(tieu_de) = lower(?)` (đi index biểu thức `ix_can_chu_trung` của

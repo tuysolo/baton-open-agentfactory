@@ -211,7 +211,7 @@ describe('d.181 — hai hệ quả bắt buộc', () => {
   });
 
   /**
-   * **Vế "agent không còn cầm nó" — đọc theo `cau-hoi-spec.md` #141.**
+   * **Vế "agent không còn cầm nó" — đọc theo `spec-questions.md` #141.**
    *
    * d.181 nói "agent không còn *cầm* nó", nhưng "người đang cầm" là dẫn xuất **5
    * bậc của 19.1** tính từ **lượt giao mở**, không từ phiên — và d.181 không nói

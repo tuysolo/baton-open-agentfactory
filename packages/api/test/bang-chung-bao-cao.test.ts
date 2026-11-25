@@ -1,6 +1,6 @@
 /**
  * **Bằng chứng "Báo cáo" (`bao_cao`) + cờ "ticket không code"** — BAT-37 việc 2,
- * chủ chốt T-31 câu 3.4 A (19/10), `cau-hoi-spec.md` #161, migration 0027.
+ * chủ chốt T-31 câu 3.4 A (19/10), `spec-questions.md` #161, migration 0027.
  *
  *   A. Cổng — luật thuần (`congXong`): `bao_cao` chỉ mở cổng cho ticket KHÔNG code.
  *   B. Migration 0027: cột, trigger tổ hợp, bất biến, dữ liệu cũ, rollback.

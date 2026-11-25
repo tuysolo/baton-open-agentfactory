@@ -25,7 +25,7 @@
  * mà Vite đã giải — không có một đường dẫn tương đối nào tự tính, nên không có
  * chỗ nào để lệch khi thư mục đổi.
  */
-import SPEC_VAN from '../../../SPEC.md?raw';
+import SPEC_VAN from '../../../docs/vi/SPEC.md?raw';
 
 export interface MucSidebarTuSpec {
   /** Sáu nhãn của d.391–392, theo thứ tự SPEC. */

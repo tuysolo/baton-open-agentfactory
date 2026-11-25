@@ -22,7 +22,7 @@
  *   * `--type run_command` mà **không gõ** `--command` → `COMMAND_REQUIRED`
  *     (mục 8: "Loại `Chủ chạy lệnh` mà thiếu lệnh").
  *
- * **`--command` đi được với MỌI `--type`** (`cau-hoi-spec.md` #130): d.250 cho
+ * **`--command` đi được với MỌI `--type`** (`spec-questions.md` #130): d.250 cho
  * mọi thẻ có "lệnh có nút Copy", và d.237 chỉ nói `run_command` **bắt buộc** có
  * lệnh, không nói loại khác không được có. Trước lượt này máy chủ **bỏ im lặng**
  * lệnh của ba loại kia — lỗi thật chủ gặp 13/10 ("mục kêu chạy lệnh nhưng không
@@ -49,7 +49,7 @@
  *     sau đó sẽ trỏ nhầm phương án;
  *   * cho **bỏ hẳn** tiền tố (`--option "Dùng Hono"`), vì nhãn vốn do vị trí
  *     quyết.
- * SPEC không nói tiền tố đó là chữ thật hay chữ minh hoạ — `cau-hoi-spec.md` #91.
+ * SPEC không nói tiền tố đó là chữ thật hay chữ minh hoạ — `spec-questions.md` #91.
  *
  * ## Lý do của phương án đề xuất — một vế SPEC đòi mà bảng lệnh không có chỗ
  *
@@ -57,7 +57,7 @@
  * khi thiếu), nhưng d.375 **không có cờ nào** mang lý do đó. Nên `--recommend`
  * nhận thêm dạng `"A: <lý do>"` — đúng hình của `--option`, và dạng trần `A` vẫn
  * chạy đúng chữ d.375. Thiếu lý do thì lỗi là `OPTIONS_REQUIRED` của máy chủ,
- * **không** bị CLI nuốt. Khai ở `cau-hoi-spec.md` #92.
+ * **không** bị CLI nuốt. Khai ở `spec-questions.md` #92.
  */
 
 import { batonFetch } from '@baton/client';

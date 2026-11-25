@@ -25,7 +25,7 @@
 --      nên mọi hành vi trước migration giữ nguyên y hệt.
 --   4. Cột `thong_bao.bo_qua_gui_luc` — mốc "không gửi vì chủ đã tắt loại này".
 --      Tắt = không gửi Telegram, tin VẪN ở trong chuông (không mất dấu vết).
---      Mốc, không cờ (nếp quyet-dinh.md), và chỉ đặt một lần.
+--      Mốc, không cờ (nếp decisions.md), và chỉ đặt một lần.
 --   5. Dựng lại index riêng phần `ix_thong_bao_cho_gui` để tin đã bỏ gửi rời
 --      hàng chờ — nếu không, mỗi tin của một loại bị tắt nằm lại trong index mãi
 --      mãi và lượt cron mỗi phút phải đi qua chúng. Index không mang dữ liệu

@@ -1,5 +1,5 @@
 /**
- * **UI BAT-69** — khép đợt UI theo `THIET-KE.md`. Không ca nào ở đây kiểm hành vi
+ * **UI BAT-69** — khép đợt UI theo `DESIGN.md`. Không ca nào ở đây kiểm hành vi
  * SPEC mới: hành vi không đổi (phân tích markdown, `hinhCuaDiaChi`, chống XSS vẫn
  * do `markdown.test.tsx` canh). Ca ở đây ghim **quy tắc trình bày**:
  *

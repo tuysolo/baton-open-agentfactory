@@ -6,7 +6,7 @@
  *
  * Ticket gán trước khi agent bị tắt **giữ nguyên**: sửa trường khác, hay gửi lại
  * đúng người chịu trách nhiệm đang ghi, vẫn thành công. Người chịu trách nhiệm
- * mặc định rơi về chủ khi agent quản lý của dự án đã tắt (`cau-hoi-spec.md` #173).
+ * mặc định rơi về chủ khi agent quản lý của dự án đã tắt (`spec-questions.md` #173).
  */
 
 import { env } from 'cloudflare:test';

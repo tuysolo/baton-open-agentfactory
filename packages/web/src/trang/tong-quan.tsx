@@ -370,7 +370,7 @@ const NHAN_MUC = {
  * **Trần dòng của khối Dự án** — bằng `TRAN_DU_AN` của
  * `packages/api/src/doc-tong-quan.ts` (máy chủ lấy một trang `lietKeDuAn` cỡ đó
  * và không trả số còn lại). Gõ lại ở đây vì giao diện không nhập từ gói API; đổi
- * một bên phải đổi bên kia. `cau-hoi-spec.md` #181, BAT-73.
+ * một bên phải đổi bên kia. `spec-questions.md` #181, BAT-73.
  */
 export const TRAN_DU_AN_TONG_QUAN = 200;
 

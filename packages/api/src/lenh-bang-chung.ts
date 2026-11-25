@@ -303,7 +303,7 @@ function cotNoiDung(nd: NoiDungBangChung): {
 /*
  * ------------------------------------------------------------------ *
  * KHÔNG có chặng `SESSION_CLOSED` ở hai lệnh bằng chứng — **cố ý**, không sót.
- * SPEC 19.12 câu 45 + `cau-hoi-spec.md` #67.
+ * SPEC 19.12 câu 45 + `spec-questions.md` #67.
  *
  * Câu 45 chốt `SESSION_CLOSED` chỉ áp cho "lệnh gắn rõ **một lượt giao**", và kể
  * "**bằng chứng của lượt**" vào nhóm bị chặn. Nhưng trong mô hình dữ liệu hiện
@@ -371,7 +371,7 @@ export async function handlerGuiBangChung(
   if (noi_dung.loai === 'review') {
     /*
      * **Nguồn của review, và luật riêng của `manager`** — migration 0022 khối B,
-     * `quyet-dinh.md` 13/10.
+     * `decisions.md` 13/10.
      *
      * Vì sao `manager` được ghi review: reviewer thật của hệ này là sub-agent do
      * Manager gọi (`claude -p`) và **không có token Baton**, nên trước lượt này
@@ -420,7 +420,7 @@ export async function handlerGuiBangChung(
    * bao giờ thấy. Chặng ghi kết luận sẽ **xoá** mốc này nếu đã kết luận được.
    *
    * `so_lan_thu` vẫn là **0**: d.220 đếm "tự thử **lại**", và lần chạy ngay khi
-   * gửi không phải một lần thử lại. Xem `quyet-dinh.md`.
+   * gửi không phải một lần thử lại. Xem `decisions.md`.
    */
   const thu_lai_luc = can ? bay_gio + CHO_THU_LAI_MS : null;
 
@@ -603,7 +603,7 @@ interface DongBangChungRut {
 
 /*
  * Cũng **không** có chặng `SESSION_CLOSED` — cùng lý do với `handlerGuiBangChung`
- * (SPEC 19.12 câu 45, `cau-hoi-spec.md` #67, hướng (a)). Cố ý, không sót.
+ * (SPEC 19.12 câu 45, `spec-questions.md` #67, hướng (a)). Cố ý, không sót.
  */
 export async function handlerRutBangChung(
   lenh: LenhRutBangChung,
@@ -644,7 +644,7 @@ export async function handlerRutBangChung(
    * **Ai được rút: "người gửi hoặc chủ"** — d.222, nguyên văn.
    *
    * Kiểm theo **danh tính**, không qua một hàng nào của bảng quyền mục 3 — cùng
-   * lý do đã chốt ở `cau-hoi-spec.md` #37 cho nộp/nghiệm thu/huỷ: SPEC nói theo
+   * lý do đã chốt ở `spec-questions.md` #37 cho nộp/nghiệm thu/huỷ: SPEC nói theo
    * danh tính, và mượn một hàng của bảng quyền là âm thầm đổi nghĩa hàng đó. Nói
    * riêng, **không** dùng hàng "Xoá bất cứ thứ gì": d.222 phân biệt rõ rút lại
    * với xoá ("không sửa, **không xoá**. Chỉ có thể rút lại"), nên gắn rút lại vào

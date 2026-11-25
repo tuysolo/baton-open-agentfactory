@@ -169,7 +169,7 @@ describe('SPEC 0.1 — từng nhóm mã đủ mã và đúng nhãn', () => {
       'test',
       'file',
       'note',
-      // Mã Baton thêm — T-31 câu 3.4 A, `cau-hoi-spec.md` #161 (migration 0027).
+      // Mã Baton thêm — T-31 câu 3.4 A, `spec-questions.md` #161 (migration 0027).
       'bao_cao',
     ]);
     expect(LOAI_BANG_CHUNG.note).toBe('Ghi chú');
@@ -191,7 +191,7 @@ describe('SPEC 0.1 — từng nhóm mã đủ mã và đúng nhãn', () => {
   });
 
   /**
-   * `cau-hoi-spec.md` #55 — `not_required` là mã **Baton thêm**, vì bảng 0.1
+   * `spec-questions.md` #55 — `not_required` là mã **Baton thêm**, vì bảng 0.1
    * không có mã nào cho "Không xác minh" của d.209–211. Ca này khoá danh sách
    * mã thêm lại: thêm một mã nữa ngoài bảng 0.1 mà không có dòng câu hỏi thì ca
    * này đỏ, chứ không im lặng đi vào v0.1.

@@ -5,7 +5,7 @@
  * Brief là **8 trường có cấu trúc** của mục 4 d.112: Mục tiêu · Bối cảnh · Phạm
  * vi · File và nguồn liên quan · Điều cấm · Xong là gì · Cách kiểm chứng · Nộp
  * lại. Bảng lệnh chỉ viết `--brief f.md` và **không nói file đó trông thế nào** —
- * `cau-hoi-spec.md` **#89**.
+ * `spec-questions.md` **#89**.
  *
  * Hướng tạm: **đúng một bộ luật đọc với `bao-cao-md.ts`**, chỉ đổi bảng nhãn.
  * Một người đã biết viết file báo cáo của `baton submit` không phải học thêm một

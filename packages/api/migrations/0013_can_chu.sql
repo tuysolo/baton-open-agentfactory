@@ -15,7 +15,7 @@
 --
 -- ## Vì sao PHƯƠNG ÁN và FILE là BẢNG CON, không JSON
 --
--- Lựa chọn có chủ ý, ghi cả vào `quyet-dinh.md`. Bốn căn cứ:
+-- Lựa chọn có chủ ý, ghi cả vào `decisions.md`. Bốn căn cứ:
 --
 --  1. **Dự án này có nếp "khoá thật, không chữ tự do"** (ghi chú của 0012 về bốn
 --     cột khoá liên quan: "chúng là thứ phần 6 dựng link từ đó, nên chúng là khoá
@@ -278,7 +278,7 @@ CREATE INDEX ix_can_chu_khoi ON can_chu (workspace_id, trang_thai, muc, han_luc,
 -- chọn lọc nhất, `tao_luc` sau nó cho cửa sổ 24 giờ.
 --
 -- Index **biểu thức**, không `tieu_de` thô: phép so trùng của mục 8 không phân
--- biệt hoa/thường (`cau-hoi-spec.md` #70), nên nó phải ở **trong** câu truy vấn —
+-- biệt hoa/thường (`spec-questions.md` #70), nên nó phải ở **trong** câu truy vấn —
 -- lọc đúng chuỗi rồi mới hạ chữ trong bộ nhớ là một phép so không khớp thêm gì.
 -- `lower()` của SQLite chỉ biết ASCII, `chuanHoaTieuDe` của `@baton/shared` là bản
 -- sao đúng của nó, và giới hạn "chữ **có dấu** khác hoa/thường thì không khớp"

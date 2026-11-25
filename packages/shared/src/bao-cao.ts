@@ -215,7 +215,7 @@ export interface DuLieuBaoCaoToi extends DuLieuBaoCaoChung {
   trong_tam: MucTrongTamBaoCao[];
   /** 2. d.332 — "Trạng thái từng dự án". */
   du_an: DuAnBaoCao[];
-  /** 3. d.333 — "Chuyển sang mai". Xem `cau-hoi-spec.md` #119. */
+  /** 3. d.333 — "Chuyển sang mai". Xem `spec-questions.md` #119. */
   chuyen_sang_mai: ViecBaoCao[];
   /** 4. d.334 — "Cần Chủ **mới phát sinh**" (mới **trong ngày**, không mọi mục chờ). */
   can_chu_moi: MucGapNhatBaoCao[];
@@ -314,7 +314,7 @@ function dongViec(v: ViecBaoCao): string {
  * **Markdown của báo cáo sáng** — sáu vế của d.322–328, đúng thứ tự.
  *
  * Hàm **thuần**: không `Date.now()`, không đọc DB. Mốc và ngày tới qua `du_lieu`
- * (nếp đã chốt cho máy trạng thái, `quyet-dinh.md` 01/10), nên một ca test ghim
+ * (nếp đã chốt cho máy trạng thái, `decisions.md` 01/10), nên một ca test ghim
  * được cả chữ bằng một con số thay vì chờ thật.
  */
 export function dungBaoCaoSangMd(du_lieu: DuLieuBaoCaoSang): string {
@@ -428,7 +428,7 @@ export function dungBaoCaoMd(loai: LoaiBaoCao, du_lieu: DuLieuBaoCao): string {
  * khối markdown thô trong app chat thay vì mở trang đọc được.
  *
  * Link của tin do `linkCuaTin` (`packages/api/src/thong-bao.ts`) dựng từ
- * `BATON_URL_CONG_KHAI` — một chỗ duy nhất, xem `cau-hoi-spec.md` #116.
+ * `BATON_URL_CONG_KHAI` — một chỗ duy nhất, xem `spec-questions.md` #116.
  */
 
 /** Số dòng chi tiết tối đa dưới dòng tổng của tin Telegram. */

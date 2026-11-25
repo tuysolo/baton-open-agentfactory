@@ -129,7 +129,7 @@ function taiKhoanTrongDb(): Promise<{
 }
 
 /* ================================================================== *
- * Thiết lập lần đầu — cau-hoi-spec.md #3
+ * Thiết lập lần đầu — spec-questions.md #3
  * ================================================================== */
 
 describe('SPEC mục 15 d.415 — thiết lập tài khoản chủ lần đầu', () => {
@@ -752,7 +752,7 @@ describe('SPEC mục 15 d.417 — băm mật khẩu, muối và secret TOTP khô
 });
 
 /* ================================================================== *
- * Chống dò mật khẩu — SPEC IM LẶNG (cau-hoi-spec.md)
+ * Chống dò mật khẩu — SPEC IM LẶNG (spec-questions.md)
  * ================================================================== */
 
 describe('chống dò mật khẩu (hướng tạm — SPEC không nêu số lần thử)', () => {
@@ -889,10 +889,10 @@ describe('khoaBaoLauMs — bảng giá trị, trần, và số rất lớn', () 
  * Hạn mức chống dò khoá theo **tài khoản**, và `/v1/dang-nhap` là đường công
  * khai không qua bộ đếm 600 req/phút. Nên một kẻ **không biết mật khẩu** lặp mãi
  * một mật khẩu sai giữ được tài khoản trong trạng thái khoá vô hạn: chủ không
- * bao giờ vào được nữa (`cau-hoi-spec.md` #98). Đây là cửa thoát, và nó phải
+ * bao giờ vào được nữa (`spec-questions.md` #98). Đây là cửa thoát, và nó phải
  * không trở thành một cửa hậu.
  */
-describe('mở khoá tài khoản chủ qua TOKEN_CHU (cau-hoi-spec.md #98)', () => {
+describe('mở khoá tài khoản chủ qua TOKEN_CHU (spec-questions.md #98)', () => {
   beforeEach(dungNen);
 
   /** Đẩy tài khoản vào trạng thái **đang bị khoá**. */

@@ -9,7 +9,7 @@
  *   D. Ticket (`PATCH /v1/ticket/:id`): `khoi_lon`/`doi`, quyền, lịch sử, đường đọc.
  *   E. CLI `project set` / `ticket set` và MCP.
  *
- * Mọi câu hỏi SPEC im lặng đã chốt tạm (a)–(f) ở `cau-hoi-spec.md` có ca riêng.
+ * Mọi câu hỏi SPEC im lặng đã chốt tạm (a)–(f) ở `spec-questions.md` có ca riêng.
  */
 
 import { SELF, applyD1Migrations, env } from 'cloudflare:test';

@@ -12,7 +12,7 @@
  *   * **Nhật ký quyết định** (`nhat_ky`, 0014) với `nguoi_loai = 'chu'`, dự án
  *     trống ("Chung", 19.12 câu 4). "Lịch sử" của mục 4 là `ticket_history`, mà
  *     cột `ticket_id` ở đó `NOT NULL` — một sự kiện tài khoản không thuộc ticket
- *     nào (`cau-hoi-spec.md` #148). `nhat_ky` là bảng chỉ-thêm (trigger của 0014,
+ *     nào (`spec-questions.md` #148). `nhat_ky` là bảng chỉ-thêm (trigger của 0014,
  *     "kể cả chủ"), trả lời đúng câu "ai, lúc nào, vì sao" — nên không cần bảng mới.
  *   * **Kho thông báo** (`thong_bao`) với `loai = 'can_chu_do'`, `uu_tien = 'khan'`,
  *     `bao_mat = <sự kiện>` (xem đầu 0026). Từ đó cron mỗi phút gửi Telegram bằng

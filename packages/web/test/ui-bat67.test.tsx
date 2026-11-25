@@ -1,11 +1,11 @@
 /**
  * **UI BAT-67** — Chi tiết phiên, Báo cáo, Hồ sơ dự án lên mức "làm kỹ" của
- * `THIET-KE.md`, cộng phần dọn cùng họ (focus nhìn thấy được trên khung hộp, chip
+ * `DESIGN.md`, cộng phần dọn cùng họ (focus nhìn thấy được trên khung hộp, chip
  * cờ không tô nền, chấm agent sidebar). Không ca nào ở đây kiểm hành vi SPEC mới:
  * hành vi không đổi, các ca hành vi vẫn ở `doi-agent.test.tsx` (phiên),
  * `bao-cao.test.tsx`, `ban-do.test.tsx` (hồ sơ), `phim-vo`/`tao-viec`/
  * `command-menu`/`giao-viec`/`the-viec`/`vo-linear`. Ca ở đây ghim **quy tắc
- * trình bày** đã ghi vào `THIET-KE.md`:
+ * trình bày** đã ghi vào `DESIGN.md`:
  *
  *   1. khối dùng `vo/khoi` (`section[aria-label][data-khoi]` + `header`
  *      `LOP_DAU_KHOI` + `h2` `LOP_TIEU_DE_MUC`);
@@ -101,7 +101,7 @@ function khongToNen(e: Element | null | undefined): void {
  * **375px không tràn** (THIET-KE "Bảng và danh sách", bài học BAT-66): một dòng
  * KHÔNG `flex-wrap` thì không con nào được có bề rộng cố định không tiền tố `sm:`
  * (`w-32`, `min-w-16`…; `min-w-0` thì được). jsdom không dàn trang nên chỉ ghim
- * được bằng lớp (`cau-hoi-spec.md` #109).
+ * được bằng lớp (`spec-questions.md` #109).
  */
 function khongTran375(dong_: Element): void {
   const l = lop(dong_);

@@ -1,7 +1,7 @@
 /**
  * **Phiên đang mở của chính mình** — thứ ba lệnh `heartbeat` (d.362), `log`
  * (d.363) và `plan` (d.364) cần, mà bảng lệnh SPEC mục 13 không cho tham số nào
- * để chỉ (`cau-hoi-spec.md` **#83**).
+ * để chỉ (`spec-questions.md` **#83**).
  *
  * Ba lệnh đó trong bảng mục 13 không nhận mã lượt giao hay mã phiên:
  * `baton heartbeat [ghi chú]`, `baton log <type> "<nội dung>"`,

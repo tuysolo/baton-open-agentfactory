@@ -16,7 +16,7 @@
  * `status` (d.371, luật mục 4), `comment` (d.374), `evidence` (d.365 + mục 7).
  * Lượt 6 khép bảng d.357–378: `ask` (d.375), `result` (d.376 + 19.9 d.543 —
  * lệnh **duy nhất** phát mã thoát 4), `decision` (d.377).
- * BAT-43 (T-50 = A, `cau-hoi-spec.md` #168) thêm `link` và cờ `assign --review`.
+ * BAT-43 (T-50 = A, `spec-questions.md` #168) thêm `link` và cờ `assign --review`.
  * BAT-56 (#83) thêm `cancel` (huỷ lượt) và cờ `--luot` cho `heartbeat`/`log`/`plan`.
  * Bản đồ L1 (SPEC 20.1) thêm `project set` và `ticket set` — hai lệnh `project`,
  * `ticket` với thao tác `set` ở tham số vị trí đầu.

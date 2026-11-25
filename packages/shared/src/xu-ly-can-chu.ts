@@ -106,7 +106,7 @@ export type KetQuaXuLyDaKiem =
       /**
        * **Khoá thật** trỏ tới một dòng `can_chu_phuong_an` của chính mục này.
        *
-       * **`null` = chủ trả lời TỰ DO**, không chọn phương án nào — `cau-hoi-spec.md`
+       * **`null` = chủ trả lời TỰ DO**, không chọn phương án nào — `spec-questions.md`
        * **#121**. Đây là chỗ **nới** so với chữ d.259/19.9 d.539 ("bắt buộc chọn 1
        * phương án"), theo yêu cầu trực tiếp của chủ 11/10, và nó khớp vế
        * "**và/hoặc** chữ tự do" của d.244. Lúc đó `ket_qua` là **chính chữ tự do**.
@@ -143,7 +143,7 @@ function chuTuDo(nguon: unknown, ten: string): string | null {
  * `"A, ngưỡng 500"`. Câu thứ hai là **nhãn phương án, phẩy, chữ ghi thêm** —
  * nên công thức ở đây là đúng chữ đó, không một cách viết nghĩ ra.
  *
- * **`nhan === null` = trả lời tự do** (`cau-hoi-spec.md` #121): câu kết quả là
+ * **`nhan === null` = trả lời tự do** (`spec-questions.md` #121): câu kết quả là
  * **đúng chữ tự do**, không một nhãn rỗng ghép thành `", abc"` — chữ đó đi
  * nguyên văn vào dòng Nhật ký (d.279) và câu bình luận (d.280), nên một dấu phẩy
  * mở đầu là một dòng Nhật ký **không sửa được** mà trông như lỗi dữ liệu.
@@ -174,7 +174,7 @@ export function cauKetQuaDecision(nhan: string | null, ghi_them: string | null):
  */
 export const CAU_DECISION_CAN_PHUONG_AN_HOAC_CHU =
   'Mục loại Quyết định cần chọn một phương án (nhãn A, B, C…) hoặc viết câu trả lời ' +
-  'vào "Ghi thêm" (cau-hoi-spec.md #121).';
+  'vào "Ghi thêm" (spec-questions.md #121).';
 
 /**
  * **Kiểm kết quả theo LOẠI** — 19.9 d.538–539, mục 8 d.261.
@@ -211,7 +211,7 @@ export function kiemKetQuaXuLy(
     case 'decision': {
       if (nguon.phuong_an === undefined || nguon.phuong_an === null || nguon.phuong_an === '') {
         /*
-         * **Trả lời TỰ DO** — `cau-hoi-spec.md` **#121**, chỗ **nới** so với
+         * **Trả lời TỰ DO** — `spec-questions.md` **#121**, chỗ **nới** so với
          * d.259/19.9 d.539 theo yêu cầu trực tiếp của chủ 11/10; vế SPEC đỡ nó là
          * d.244 ("phương án đã chọn **và/hoặc** chữ tự do").
          *
@@ -302,7 +302,7 @@ export function kiemKetQuaXuLy(
  * **`skipped` cũng ra `ALREADY_RESOLVED`, và đó là một lựa chọn khai rõ.** SPEC
  * chỉ vẽ `Chờ` → hai nhánh (d.244) và chỉ nói mở lại **từ Đã xử lý** (d.246),
  * nên "xử lý tiếp một mục đã bỏ qua" là chỗ SPEC **im lặng** — xem
- * `cau-hoi-spec.md` **#73**. Hướng tạm là **đóng**, cùng khuôn 19.10: một mục đã
+ * `spec-questions.md` **#73**. Hướng tạm là **đóng**, cùng khuôn 19.10: một mục đã
  * kết thì phải **mở lại trước**. Đường mở lại vì vậy nhận cả `skipped` (xem
  * `batBuocMoLaiDuoc`), nếu không thì câu "mở lại trước" không thực hiện được và
  * một mục bỏ qua nhầm là vĩnh viễn.
@@ -321,7 +321,7 @@ export function batBuocXuLyDuoc(trang_thai: TrangThaiCanChu, ma: string): void {
  * **Mở lại được không** — mục 8 d.246 ("từ Đã xử lý về Chờ"), 19.9 d.542.
  *
  * Nhận `resolved` **và** `skipped` — xem căn cứ ở `batBuocXuLyDuoc` và
- * `cau-hoi-spec.md` #73.
+ * `spec-questions.md` #73.
  *
  * Mục đang `open` thì không có gì để mở lại. **Không** mượn `ALREADY_RESOLVED`:
  * mã đó nói "đã xử lý rồi", đúng ngược với sự thật ở đây, và thông điệp của nó
@@ -359,7 +359,7 @@ export function cauBinhLuanDaXuLy(ma: string, ket_qua: string): string {
  * Chọn đúng khuôn hai câu SPEC **có** cho — `"T-x bỏ qua: <lý do>"` của dòng
  * Nhật ký ngay trong cùng câu d.541, và `"T-số đã xử lý: <kết quả>"` của d.280.
  * Nên đây không phải một câu nghĩ ra: nó là cùng công thức `<mã> <việc>: <nội
- * dung>` mà SPEC đã dùng hai lần. Ghi ở `cau-hoi-spec.md` **#73**.
+ * dung>` mà SPEC đã dùng hai lần. Ghi ở `spec-questions.md` **#73**.
  */
 export function cauBinhLuanBoQua(ma: string, ly_do: string): string {
   return `${ma} bỏ qua: ${ly_do.trim()}`;

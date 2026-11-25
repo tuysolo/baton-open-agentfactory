@@ -259,7 +259,7 @@ describe('baton ask — d.375 "Tạo mục Cần Chủ, in `T-số`"', () => {
 
   /**
    * **`--command` đi được với MỌI `--type`** — mục 8 d.250 ("lệnh có nút Copy",
-   * chung cho mọi thẻ) vs d.237; `cau-hoi-spec.md` #130.
+   * chung cho mọi thẻ) vs d.237; `spec-questions.md` #130.
    *
    * Lỗi thật 13/10: `baton ask --type decision … --command "…"` chạy xong, mã
    * thoát 0, mà lệnh **mất không dấu vết**. Ca này đi đường thật từ dòng lệnh tới

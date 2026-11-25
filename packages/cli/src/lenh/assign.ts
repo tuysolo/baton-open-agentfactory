@@ -5,7 +5,7 @@
  * `<MÃ>` là **mã ticket** `MÃ-số` → `ticketTheoMaHoacId`.
  *
  * **`<agent>` là tên HOẶC ID** (BAT-47, Chủ chốt T-55 = A, 22/10 —
- * `cau-hoi-spec.md` #171). `agentTheoTenHoacId` tra trên `GET /v1/agent` (đã lọc
+ * `spec-questions.md` #171). `agentTheoTenHoacId` tra trên `GET /v1/agent` (đã lọc
  * theo phạm vi người gọi): khớp đúng 1 ⇒ gửi id của agent đó; khớp > 1 ⇒
  * `INVALID_INPUT` liệt kê các ID, **không** tạo lượt; khớp 0 ⇒ đầu vào đi lên
  * `nguoi_nhan_agent_id` như cũ, và "có tồn tại / có được vào dự án không" vẫn là
@@ -20,7 +20,7 @@
  * `kiemHanPhanHoiPhut` ở `@baton/shared`, chạy ở cửa ghi — không chép bản thứ hai.
  *
  * **Loại lượt giao: `--review` ⇒ `review`, không cờ ⇒ `work`** (BAT-43, Chủ chốt
- * T-50 = A, 22/10 — `cau-hoi-spec.md` #168; bảng lệnh mục 13 đã thêm cờ). Không cờ
+ * T-50 = A, 22/10 — `spec-questions.md` #168; bảng lệnh mục 13 đã thêm cờ). Không cờ
  * thì **không gửi** `loai_luot` — mặc định `work` là luật của `kiemLoaiLuotGiao` ở
  * `@baton/shared`, chạy ở cửa ghi, không chép bản thứ hai. Luật "lượt review chỉ
  * manager/coordinator tạo" (19.3) cũng ở server. CLI nói thẳng nó đã tạo lượt loại

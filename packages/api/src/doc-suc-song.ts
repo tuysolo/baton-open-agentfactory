@@ -14,7 +14,7 @@
  * Cách hiển nhiên là `... AND project_id IN (?, ?, …)` theo đúng trang dự án đang
  * vẽ. Hai lý do không làm vậy:
  *
- *   1. **Giới hạn tham số bind của D1.** 200 dự án (mốc nghiệm thu, `quyet-dinh.md`
+ *   1. **Giới hạn tham số bind của D1.** 200 dự án (mốc nghiệm thu, `decisions.md`
  *      01/10) là 200 dấu `?`, vượt trần; đường ra là chia lô 90 như
  *      `trangThaiPhienTheoAgent` — tức **nhiều** truy vấn, đúng thứ cần tránh.
  *   2. **`GROUP BY project_id` không đắt hơn.** Cả ba câu dưới đây bị chặn bởi
@@ -44,7 +44,7 @@ export const CUA_SO_VUA_XONG_MS = 24 * 60 * 60 * 1000;
  * **Trạng thái KHÔNG tính vào "tổng" của thanh tiến độ** — d.317 ("thanh tiến độ
  * xong/tổng").
  *
- * SPEC không nói tổng gồm những trạng thái nào (`cau-hoi-spec.md` #138). Đang
+ * SPEC không nói tổng gồm những trạng thái nào (`spec-questions.md` #138). Đang
  * cài: tổng = mọi ticket chưa xoá **trừ** `canceled` và `duplicate` — hai trạng
  * thái nghĩa là "không làm nữa", nên để chúng trong tổng thì một dự án càng huỷ
  * nhiều càng trông càng ít xong. `backlog` **có** trong tổng: nó là việc còn

@@ -179,7 +179,7 @@ export interface KetQuaCanChuRa extends MucCanChuRa {
  * đóng.
  *
  *   * `gui`      — lần chạy **ngay khi gửi** (d.219). Dòng phải đang `pending`;
- *                  `so_lan_thu` **không** nhích (xem `quyet-dinh.md`).
+ *                  `so_lan_thu` **không** nhích (xem `decisions.md`).
  *   * `thu_lai`  — một lần **thử lại** của Cron (d.220). Dòng phải đang `pending`;
  *                  `so_lan_thu` nhích, hết 3 lần thì `failed` kèm lý do.
  *   * `theo_doi` — một lần **kiểm lại commit `pushed`** (d.221 + 19.7). Dòng phải
@@ -792,7 +792,7 @@ export class WorkspaceGate implements DurableObject {
        * `so_lan_thu`, kể cả lần kết luận được: con số đó là "đã thử lại bao nhiêu
        * lần", không phải "đã thất bại bao nhiêu lần". Lần chạy **ngay khi gửi**
        * (`nguon = 'gui'`) thì không nhích — nó không phải một lần thử *lại*. Xem
-       * `quyet-dinh.md`.
+       * `decisions.md`.
        */
       const qd =
         yc.nguon === 'thu_lai' ? quyetDinhThuLai(dong.so_lan_thu, kq.ly_do, bay_gio) : null;
@@ -1775,7 +1775,7 @@ export class WorkspaceGate implements DurableObject {
    *
    * **Chỉ lệnh GHI tính.** Lệnh đọc không đi qua cửa ghi nên tự nhiên không
    * tính, đúng tinh thần SPEC mục 6 ("Lệnh đọc không tính"). Phân biệt mốc này
-   * với "tín hiệu phiên" của mục 6 (phần 2) — xem `cau-hoi-spec.md` #13.
+   * với "tín hiệu phiên" của mục 6 (phần 2) — xem `spec-questions.md` #13.
    *
    * Chỉ nhích về sau (`max`): các lệnh trong một batch có thể về không đúng thứ
    * tự thời gian, và mốc "lần cuối" không bao giờ được chạy lùi.
@@ -1811,7 +1811,7 @@ export class WorkspaceGate implements DurableObject {
    *      không test nào của lệnh mới đó đỏ, chỉ có một cảnh báo sai lúc 3 giờ sáng.
    *
    * **Phiên nào được nhích?** (BAT-57 — CoS/Chủ giao, **thu hẹp** 19.12 câu 41
-   * cho ca nhiều phiên; `cau-hoi-spec.md` mục BAT-57, chờ Chủ chốt sửa câu 41.)
+   * cho ca nhiều phiên; `spec-questions.md` mục BAT-57, chờ Chủ chốt sửa câu 41.)
    * Câu 41 chữ nguyên: "nhích tín hiệu của **mọi** phiên còn mở của chính agent
    * gọi lệnh". Hệ quả thật: agent có lượt A (đã chết) và lượt B (đang chạy) thì
    * mọi lệnh ghi của B làm A "sống" mãi, và cron d.196 **không bao giờ** báo A
@@ -2049,7 +2049,7 @@ export class WorkspaceGate implements DurableObject {
 
       /*
        * 4. **Token còn hiệu lực không.** SPEC không nói ca "token bị thu hồi / agent
-       * bị tắt giữa lúc đang chờ" (`cau-hoi-spec.md` #51). Chốt tạm hướng đóng: mỗi
+       * bị tắt giữa lúc đang chờ" (`spec-questions.md` #51). Chốt tạm hướng đóng: mỗi
        * lần tỉnh thì kiểm lại, mất hiệu lực thì cắt ngay. Hướng mở (chờ tiếp vì đã
        * xác thực lúc vào) để một token đã thu hồi còn đọc được dữ liệu tới 60 giây.
        *
@@ -2114,7 +2114,7 @@ export class WorkspaceGate implements DurableObject {
    * Song hình với `choViec`, và cố ý **giống từng bước** — mọi lý lẽ ở đó áp ở
    * đây: vòng lặp nằm trong DO vì chỉ ở đây mới chen được một lần đọc D1 vào sau
    * khi waiter đã vào sổ; `finally` dọn sổ ở **mọi** đường thoát kể cả ném lỗi;
-   * token được kiểm lại mỗi lần tỉnh (`cau-hoi-spec.md` #51); d.387 "lệnh chờ dài
+   * token được kiểm lại mỗi lần tỉnh (`spec-questions.md` #51); d.387 "lệnh chờ dài
    * tính 1 request" nên vòng lặp không gọi `demMotRequest` lần nào.
    *
    * ## Ba điểm riêng của đường này

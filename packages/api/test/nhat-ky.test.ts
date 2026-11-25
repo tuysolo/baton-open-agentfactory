@@ -1016,7 +1016,7 @@ describe('mục 1, 18 — dữ liệu workspace khác không lọt, khoá ngoài
     ).rejects.toThrow(/INVALID_INPUT/);
   });
 
-  // BAT-58 (19.12 câu 15, `cau-hoi-spec.md` #176): trước là 403; nay ticket người
+  // BAT-58 (19.12 câu 15, `spec-questions.md` #176): trước là 403; nay ticket người
   // gọi không thấy ra 404 GIỐNG HỆT id bịa.
   it('căn cứ trỏ tới một ticket của dự án agent không được vào → 404 giống hệt id bịa (BAT-58)', async () => {
     const tk = await dungTicket(PJ_KHAC, 1, 'Việc của dự án khác');

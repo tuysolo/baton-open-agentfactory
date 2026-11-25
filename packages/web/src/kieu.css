@@ -5,12 +5,12 @@
  * TOKEN MÀU — một chỗ duy nhất cho CẢ HAI chế độ (tối / sáng)
  * ==================================================================
  *
- * Nguồn sự thật cho GIÁ TRỊ là `THIET-KE.md` ở gốc repo (hệ thiết kế kiểu
+ * Nguồn sự thật cho GIÁ TRỊ là `DESIGN.md` ở gốc repo (hệ thiết kế kiểu
  * Linear, Chủ chốt 29/10): bảng token ở đó và hai cột dưới đây phải khớp từng
  * dòng. Từ 29/10 **tối là chế độ chính** (mặc định cho người chưa chọn, xem
  * `vo/theme.ts`); sáng giữ nguyên vai trò token, chỉ đảo giá trị.
  *
- * SPEC mục 14 không nói gì về chế độ tối (`cau-hoi-spec.md` #125); cái SPEC đòi
+ * SPEC mục 14 không nói gì về chế độ tối (`spec-questions.md` #125); cái SPEC đòi
  * là **đọc được** (d.411 "dùng tốt", d.408 "báo lỗi ghi rõ lý do" — một câu lỗi
  * tàng hình thì không ghi rõ gì cả). Nên luật ở đây là: **không component nào
  * chọn màu**, chúng chỉ gọi tên vai trò của màu; bảng màu thật nằm trong file
@@ -68,7 +68,7 @@
 
   /*
    * **Màu nhấn duy nhất** (tím-chàm): nút chính, mục đang chọn, focus ring,
-   * liên kết. Không dùng để trang trí — xem "Quy tắc màu nhấn" ở `THIET-KE.md`.
+   * liên kết. Không dùng để trang trí — xem "Quy tắc màu nhấn" ở `DESIGN.md`.
    *   * `nhan-manh`      — nền nút chính, focus ring, vạch chọn;
    *   * `nhan-manh-dam`  — hover của nút chính (đậm hơn: chữ trắng vẫn đọc tốt);
    *   * `nhan-manh-nen`  — nền nhạt (chip/hàng đang chọn có màu nhấn);
@@ -96,7 +96,7 @@
 
   /*
    * **Sáu cặp màu nhãn** — mỗi cặp là một **nền** và một **chữ** đi với nhau.
-   * SPEC không có bảng màu nhãn (`cau-hoi-spec.md` #135): màu được **suy từ chữ
+   * SPEC không có bảng màu nhãn (`spec-questions.md` #135): màu được **suy từ chữ
    * của nhãn** bằng một băm ổn định (`vo/mau-the.ts`). Từng cặp được **đo tương
    * phản** ở cả hai chế độ (lưới trong `test/vo-linear.test.tsx`).
    */
@@ -115,7 +115,7 @@
 }
 
 /*
- * Chữ, bo góc, bóng, chuyển động — giá trị của `THIET-KE.md`.
+ * Chữ, bo góc, bóng, chuyển động — giá trị của `DESIGN.md`.
  *
  * `--font-sans`: Inter **chỉ khi máy đã cài sẵn** — không `@font-face`, không
  * CDN, không gói font (lượt này cấm thêm thư viện). Không có Inter thì rơi về
@@ -164,7 +164,7 @@
   --t-chu: #171717;
   /** Bằng `--t-n500`, cùng lý do ghi ở đó. */
   --t-chu-mo: #6e6e6e;
-  /** ≥ 4.5:1 trên `nen` và `nen-lop`; ≥ 3:1 trên lớp hover. Xem `THIET-KE.md`. */
+  /** ≥ 4.5:1 trên `nen` và `nen-lop`; ≥ 3:1 trên lớp hover. Xem `DESIGN.md`. */
   --t-chu-mo-hon: #737373;
   --t-vien: rgb(0 0 0 / 0.09);
   --t-loi: #b91c1c;
@@ -242,7 +242,7 @@
   /*
    * `#7f838a`, không `#62666d` của bản mô tả: `#62666d` chỉ đạt 3.3:1 trên nền
    * trang — số đếm và ngày vẫn là chữ chủ cần đọc. Nâng tới mức 4.5:1 trên
-   * `nen`/`nen-lop` (≥ 3:1 trên lớp hover). Lý do ghi ở `THIET-KE.md`.
+   * `nen`/`nen-lop` (≥ 3:1 trên lớp hover). Lý do ghi ở `DESIGN.md`.
    */
   --t-chu-mo-hon: #7f838a;
   --t-vien: rgb(255 255 255 / 0.08);
@@ -312,7 +312,7 @@ html {
 
   /*
    * **Focus ring dùng màu nhấn**, chỉ khi focus bằng bàn phím (`:focus-visible`)
-   * — bàn phím trước (THIET-KE.md). Một chỗ cho mọi phần tử; component không
+   * — bàn phím trước (DESIGN.md). Một chỗ cho mọi phần tử; component không
    * tự vẽ vòng focus riêng.
    */
   :focus-visible {

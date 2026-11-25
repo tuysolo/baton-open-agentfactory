@@ -6,7 +6,7 @@
  * còn việc vẽ dấu `›` giữa các chặng.
  *
  * SPEC mục 14 **không chốt breadcrumb** (d.391–412 không nhắc tiêu đề trang) —
- * yêu cầu đến từ brief của chủ; `cau-hoi-spec.md` #126. Nhãn các chặng lấy từ
+ * yêu cầu đến từ brief của chủ; `spec-questions.md` #126. Nhãn các chặng lấy từ
  * `muc-sidebar.ts` khi đường là một mục sidebar, nên đổi một nhãn ở SPEC là đổi
  * **một** chỗ.
  *

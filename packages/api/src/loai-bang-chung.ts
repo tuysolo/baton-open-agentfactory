@@ -1,6 +1,6 @@
 /**
  * **Chiều ĐỌC của cách "mượn mã" cho bằng chứng `bao_cao`** — migration 0027,
- * T-31 câu 3.4 A, `cau-hoi-spec.md` #161.
+ * T-31 câu 3.4 A, `spec-questions.md` #161.
  *
  * Trong DB một báo cáo lưu `loai = 'note'` (có nội dung) hoặc `'file'` (chỉ đường
  * dẫn), và mang `bao_cao_nguon` khác NULL. **Mọi** câu SQL đọc `evidence.loai` để

@@ -1,6 +1,6 @@
 /**
  * **Ticket sang Xong ⇒ mục xác nhận TỰ SINH còn `Chờ` tự đóng** — BAT-40,
- * `cau-hoi-spec.md` #163 (Chủ chốt T-38 = A, T-43 = A), SPEC mục 7, mục 8,
+ * `spec-questions.md` #163 (Chủ chốt T-38 = A, T-43 = A), SPEC mục 7, mục 8,
  * 19.12 câu 57. Migration 0028.
  *
  *   A. Migration 0028: chỉ mệnh đề 7 đổi (so văn bản với 0021), mục tạo tay vẫn

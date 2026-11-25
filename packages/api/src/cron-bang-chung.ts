@@ -115,7 +115,7 @@ const COT_QUET = `id, workspace_id, ticket_id, loai, so_lan_thu,
  * duy nhất vào bảng này. Migration và nhập dữ liệu của mục 16 ghi thẳng, và một
  * dòng `deploy` với `url = 'https://169.254.169.254/'` vào bằng đường đó sẽ biến
  * Cron thành công cụ gọi vào máy chủ metadata (luật SSRF của d.207,
- * `cau-hoi-spec.md` #57). Đường gửi bằng chứng kiểm lúc gửi; Cron là đường **thứ
+ * `spec-questions.md` #57). Đường gửi bằng chứng kiểm lúc gửi; Cron là đường **thứ
  * hai**, nên nó phải tự kiểm.
  *
  * `null` = không dựng được nội dung hợp lệ. Người gọi kết luận **`failed` kèm lý
@@ -180,7 +180,7 @@ interface DemLoi {
  *
  * Dòng độc **không bị đánh dấu** gì — nó nằm lại đúng trạng thái cũ và lượt sau
  * gặp lại. SPEC không nói hành vi "đánh dấu một dòng mà server không xử lý được"
- * (`cau-hoi-spec.md` #63), nên không tự đoán: cô lập lỗi đã đủ để hết hình lỗi
+ * (`spec-questions.md` #63), nên không tự đoán: cô lập lỗi đã đủ để hết hình lỗi
  * chặn vĩnh viễn.
  */
 async function moiDongMotLoi<R>(

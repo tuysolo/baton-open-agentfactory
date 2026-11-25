@@ -41,7 +41,7 @@
  *
  * Chọn mục ⇒ tới `/can-chu?the=<T-số>` của **đúng** mục đó (`duongMucCanChu`); trang
  * Cần Chủ đọc tham số, chọn + cuộn tới + làm nổi thẻ, hoặc báo rõ khi mục đã xử lý /
- * không có — `cau-hoi-spec.md` #154 (chốt 19/10 T-31, BAT-37).
+ * không có — `spec-questions.md` #154 (chốt 19/10 T-31, BAT-37).
  */
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -129,7 +129,7 @@ export function useCommandMenu(): { mo: boolean; moMenu: () => void; dongMenu: (
 }
 
 /* ================================================================== *
- * Gợi ý phím (hệ thiết kế 29/10 — "bàn phím trước", THIET-KE.md)
+ * Gợi ý phím (hệ thiết kế 29/10 — "bàn phím trước", DESIGN.md)
  * ================================================================== */
 
 /**
@@ -347,7 +347,7 @@ export function CommandMenu({ dong }: { dong: () => void }): React.JSX.Element {
           >
             {/*
              * Lệnh: chữ thường (tên trang). Ticket / Cần Chủ: mã xám 12px
-             * `tabular-nums` (`ma-ticket`, THIET-KE.md) rồi tiêu đề là chữ chính.
+             * `tabular-nums` (`ma-ticket`, DESIGN.md) rồi tiêu đề là chữ chính.
              * Chỉ đổi trình bày: `data-muc`, thứ tự, `role` giữ nguyên.
              */}
             <span className={m.nhom === 'lenh' ? 'shrink-0' : 'ma-ticket shrink-0'}>{m.chinh}</span>
@@ -389,7 +389,7 @@ export function CommandMenu({ dong }: { dong: () => void }): React.JSX.Element {
           }
         }}
         /*
-         * Modal 8px, lớp nổi, viền mờ (`LOP_TAM_NOI`, THIET-KE.md): ô tìm liền
+         * Modal 8px, lớp nổi, viền mờ (`LOP_TAM_NOI`, DESIGN.md): ô tìm liền
          * mép trên, danh sách ở giữa, chân hộp là dòng gợi ý phím.
          */
         // Khung không tắt outline (THIET-KE "Bàn phím trước", BAT-67).

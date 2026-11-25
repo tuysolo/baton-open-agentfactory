@@ -2,7 +2,7 @@
  * **Công cụ đo ca chậm** (BAT-55) — setup file, chạy cho MỌI file test api.
  *
  * Vì sao có: bộ api đầy đủ có những lượt nhiều ca thường chỉ vài trăm ms cùng ra
- * ~5,0–5,2 s, ở nhiều runtime một lúc (`vitest.config.ts`, `quyet-dinh.md` dòng
+ * ~5,0–5,2 s, ở nhiều runtime một lúc (`vitest.config.ts`, `decisions.md` dòng
  * BAT-54, BAT-55). JSON reporter của Vitest chỉ có thời lượng từng ca, không có
  * MỐC bắt đầu, không có tên project, và không tách được thời lượng ra từng chặng —
  * nên không đối chiếu được "các ca chậm có cùng một khoảng thời gian không" và

@@ -1,5 +1,5 @@
 /**
- * **BAT-56 — một agent, nhiều phiên mở** (`cau-hoi-spec.md` #83) và **huỷ lượt
+ * **BAT-56 — một agent, nhiều phiên mở** (`spec-questions.md` #83) và **huỷ lượt
  * treo** từ CLI.
  *
  * Lỗi thật: một Manager chạy song song 2–3 lượt (mỗi lượt một phiên); khi có ≥2

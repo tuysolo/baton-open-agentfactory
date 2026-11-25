@@ -70,7 +70,7 @@ export type KetQuaTinhTrangCommit =
        *   * `compare` trả **404/422** — đây mới là câu trả lời về commit.
        * Lời khai `merged_cuc_bo` của người gửi chỉ được dùng ở đường thứ ba
        * (`xac-minh-bang-chung.ts`): hai đường đầu mà vẫn nhận lời khai thì gõ sai
-       * một chữ trong tên repo là mở được cổng Xong. Xem `cau-hoi-spec.md` #122.
+       * một chữ trong tên repo là mở được cổng Xong. Xem `spec-questions.md` #122.
        */
       da_hoi_commit?: true;
     }

@@ -67,13 +67,13 @@ export interface Env {
    * tuỳ chọn: **thiếu nó thì tin vẫn gửi, chỉ không có link**. Một tin không có
    * link vẫn báo được việc gấp; một tin không gửi thì không.
    *
-   * SPEC không chốt tên hay dạng của cấu hình này — `cau-hoi-spec.md` **#116**.
+   * SPEC không chốt tên hay dạng của cấu hình này — `spec-questions.md` **#116**.
    */
   BATON_URL_CONG_KHAI?: string | undefined;
 
   /**
    * **Số vòng PBKDF2 khi ĐẶT mật khẩu chủ** — SPEC mục 15 d.415,
-   * `quyet-dinh.md` 01/10 Q6 (băm PBKDF2-SHA256).
+   * `decisions.md` 01/10 Q6 (băm PBKDF2-SHA256).
    *
    * Để trống thì dùng hằng sản phẩm `SO_VONG_PBKDF2` = **100.000** — đó là
    * **trần của Cloudflare Workers** cho PBKDF2 `iterations` (vượt trần thì

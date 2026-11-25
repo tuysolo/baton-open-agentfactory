@@ -1,9 +1,9 @@
 /**
  * **UI BAT-66** — Tổng quan, Đội agent và trang một agent đưa về ngôn ngữ
- * `THIET-KE.md` như bốn màn BAT-60. Không ca nào ở đây kiểm hành vi SPEC mới:
+ * `DESIGN.md` như bốn màn BAT-60. Không ca nào ở đây kiểm hành vi SPEC mới:
  * hành vi không đổi, các ca hành vi vẫn ở `tong-quan.test.tsx` và
  * `doi-agent.test.tsx`. Ca ở đây ghim **quy tắc trình bày** đã ghi vào
- * `THIET-KE.md`:
+ * `DESIGN.md`:
  *
  *   1. `ChamTrangThaiAgent` — năm trạng thái agent của bảng 0.1, năm **hình**
  *      khác nhau, màu token, luật ARIA của `IconTrangThai`;
@@ -176,7 +176,7 @@ describe('Tổng quan — chấm agent, icon Xong, chip cảnh báo, dòng Dự 
   it('d.411 — dòng agent không tràn 375px: `flex-wrap`, bề rộng cố định CHỈ dưới tiền tố `sm:`, chữ trạng thái không cắt', async () => {
     /*
      * jsdom không có layout, nên 375px chỉ canh được bằng **lớp** (giới hạn
-     * `cau-hoi-spec.md` #109). Lỗi reviewer bắt ở BAT-66: tên `w-32 shrink-0` +
+     * `spec-questions.md` #109). Lỗi reviewer bắt ở BAT-66: tên `w-32 shrink-0` +
      * trạng thái `w-16 shrink-0` trên một dòng không `flex-wrap` để lại ~13px cho
      * việc đang cầm và đẩy mốc tràn ngang.
      */

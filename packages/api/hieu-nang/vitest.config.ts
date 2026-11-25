@@ -14,7 +14,7 @@
  *     200.000 ticket cho từng phép đo thì vô nghĩa.
  *
  * Chạy bằng `npm run do-hieu-nang`. **Không gọi `wrangler`** (CLI đó bị chặn,
- * và Miniflare qua `vitest-pool-workers` đã đủ — `quyet-dinh.md` 01/10, Q4).
+ * và Miniflare qua `vitest-pool-workers` đã đủ — `decisions.md` 01/10, Q4).
  */
 
 import path from 'node:path';

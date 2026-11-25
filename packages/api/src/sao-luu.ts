@@ -4,7 +4,7 @@
  *
  * ## Mốc: 02:00 giờ chủ = 19:00 UTC, cửa sổ 60 phút
  *
- * SPEC chỉ nói "hằng ngày", không nói giờ (`cau-hoi-spec.md`). 02:00 giờ chủ: ngoài
+ * SPEC chỉ nói "hằng ngày", không nói giờ (`spec-questions.md`). 02:00 giờ chủ: ngoài
  * giờ làm, xa hai mốc báo cáo (07:30, 20:00), và **trước** báo cáo sáng — nên báo
  * cáo sáng nói được "bản sao lưu đêm qua có chưa". Không thêm cron mới (giới hạn 5
  * cron/tài khoản — khối chú thích `[triggers]` của `wrangler.toml`): đây là một ô
@@ -37,7 +37,7 @@
  * Khoá không mang `workspace_id` (`sao-luu/baton-<ngày>.json`, đúng brief) nên một
  * ngày có **một** object, của **workspace duy nhất** mà v0.1 có (mục 1 — cùng phép
  * `workspaceDuyNhat` mà đăng nhập của chủ dùng). Nhiều workspace là việc của mục 18;
- * ghi ở `cau-hoi-spec.md`.
+ * ghi ở `spec-questions.md`.
  */
 
 import { BatonError, MUI_GIO_CHU_PHUT, ngayDiaPhuong, type AiGoi } from '@baton/shared';

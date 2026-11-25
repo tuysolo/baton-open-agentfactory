@@ -234,7 +234,7 @@ export interface KhoaTinDeDungLink {
  * **Giới hạn khai thẳng:** đường của một **thẻ** Cần Chủ cụ thể chưa có trong
  * phần 6 (`/can-chu` là cả màn hình; thẻ chỉ có `data-the="T-x"`, không id DOM),
  * nên link của tin 🔴 trỏ tới màn hình Cần Chủ, không tới đúng thẻ. Đó là một nửa
- * của `cau-hoi-spec.md` **#116**.
+ * của `spec-questions.md` **#116**.
  */
 export function linkCuaTin(khoa: KhoaTinDeDungLink, goc: string | undefined): string | null {
   const g = (goc ?? '').trim().replace(/\/+$/, '');
@@ -244,7 +244,7 @@ export function linkCuaTin(khoa: KhoaTinDeDungLink, goc: string | undefined): st
    * được"): một báo cáo không có khoá nào để trỏ tới, nên nếu không xét `loai`
    * trước thì link của nó rơi về gốc `g` — tức chủ bấm vào và ra trang Tổng quan,
    * không ra báo cáo vừa được báo. Đường `/bao-cao` là mục sidebar của d.392
-   * (`cau-hoi-spec.md` #101).
+   * (`spec-questions.md` #101).
    */
   if ((khoa.bao_mat ?? null) !== null) return `${g}/cai-dat`;
   if (Object.values(LOAI_TIN_BAO_CAO).includes(khoa.loai)) return `${g}/bao-cao`;

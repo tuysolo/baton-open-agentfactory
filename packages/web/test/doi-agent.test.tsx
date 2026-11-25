@@ -784,7 +784,7 @@ describe('d.411 — bảng của trang agent dùng được ở khổ hẹp', ()
     });
     /*
      * jsdom **không có layout**, nên 375px chỉ canh được bằng **lớp CSS** —
-     * giới hạn đã khai ở `cau-hoi-spec.md` #109. Điều canh được: mỗi bảng nằm
+     * giới hạn đã khai ở `spec-questions.md` #109. Điều canh được: mỗi bảng nằm
      * trong một khung `overflow-x-auto`.
      */
     for (const ten of ['luot-giao', 'quyen']) {

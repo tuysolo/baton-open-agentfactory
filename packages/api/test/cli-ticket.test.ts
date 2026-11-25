@@ -420,7 +420,7 @@ describe('baton assign <MÃ> <agent> — SPEC d.368', () => {
   });
 
   /*
-   * `--review` — BAT-43, Chủ chốt T-50 = A (22/10, `cau-hoi-spec.md` #168): bảng lệnh
+   * `--review` — BAT-43, Chủ chốt T-50 = A (22/10, `spec-questions.md` #168): bảng lệnh
    * mục 13 thêm cờ; lượt `review` của 19.3. Không cờ vẫn là `work`.
    */
   it('--review tạo lượt loại `review` (DB), dòng ra ghi "Loại lượt: Review (review)"', async () => {
@@ -1025,7 +1025,7 @@ describe('baton evidence <MÃ> <type> <giá trị> — SPEC d.365', () => {
   });
 
   /**
-   * d.220 + `cau-hoi-spec.md` #87: hết trần 10 giây mà **chưa** xác minh xong thì
+   * d.220 + `spec-questions.md` #87: hết trần 10 giây mà **chưa** xác minh xong thì
    * `pending` **là một kết quả hợp lệ** — mã thoát **0**, và lệnh nói rõ máy chủ
    * tự thử lại để agent không gửi lại thành hai dòng cho một việc.
    */
@@ -1303,7 +1303,7 @@ describe('baton evidence <MÃ> <type> <giá trị> — SPEC d.365', () => {
   });
 
   /**
-   * **Lưới an toàn 15 giây của CLI** (`cau-hoi-spec.md` #87) — ca này ghim đúng
+   * **Lưới an toàn 15 giây của CLI** (`spec-questions.md` #87) — ca này ghim đúng
    * lời khai ở `lenh/evidence.ts`: "chạm lưới thì `fetch` huỷ và lỗi đi đường
    * mạng của d.380 → **mã thoát 2**".
    *

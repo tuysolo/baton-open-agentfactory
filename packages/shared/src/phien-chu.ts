@@ -9,7 +9,7 @@
  * ## Id phiên lưu dạng BĂM, và băm là SHA-256
  *
  * Id phiên là 32 byte ngẫu nhiên do máy chủ sinh, y hình với token agent, nên
- * lý lẽ của `quyet-dinh.md` 01/10 ("băm token agent bằng SHA-256, không KDF
+ * lý lẽ của `decisions.md` 01/10 ("băm token agent bằng SHA-256, không KDF
  * chậm") áp **nguyên vẹn** ở đây, và đó là điều đã kiểm lại chứ không chép:
  *
  *   * **Không có gì để dò từ điển.** Giá trị là ngẫu nhiên 256 bit do máy sinh,

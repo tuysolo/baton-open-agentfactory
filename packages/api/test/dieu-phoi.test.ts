@@ -1,9 +1,9 @@
 /**
  * **Ticket điều phối — hai chốt T-64** (SPEC 19.12 câu 16 và 17).
  *
- *   * **Câu 16** (`cau-hoi-spec.md` #25): **chỉ chủ và agent vai `coordinator`**
+ *   * **Câu 16** (`spec-questions.md` #25): **chỉ chủ và agent vai `coordinator`**
  *     nối được liên kết loại `dieu_phoi`. `related` và `blocks` giữ luật cũ.
- *   * **Câu 17** (`cau-hoi-spec.md` #26): ticket dự án **xoá mềm không tính** vào
+ *   * **Câu 17** (`spec-questions.md` #26): ticket dự án **xoá mềm không tính** vào
  *     tập mà ticket điều phối theo; xoá cái **cuối cùng** thì ticket điều phối
  *     **giữ nguyên**; **khôi phục** thì tính lại.
  *
@@ -170,7 +170,7 @@ describe('19.12 câu 16 — chỉ chủ và `coordinator` nối được `dieu_p
         expect(res.status).toBe(200);
         expect(await soLienKet('dieu_phoi')).toBe(1);
       } else {
-        // Đường **GHI** → 403, theo 19.12 câu 15 (`cau-hoi-spec.md` #24).
+        // Đường **GHI** → 403, theo 19.12 câu 15 (`spec-questions.md` #24).
         expect(res.status).toBe(403);
         expect((await res.json<{ error: string }>()).error).toBe('FORBIDDEN');
         // Và không có liên kết nào bị ghi: từ chối rồi thì không nửa vời.
@@ -197,7 +197,7 @@ describe('19.12 câu 16 — chỉ chủ và `coordinator` nối được `dieu_p
     expect(d?.n).toBe(0);
   });
 
-  // BAT-58 (19.12 câu 15, `cau-hoi-spec.md` #176): trước ghim 403; nay ticket người
+  // BAT-58 (19.12 câu 15, `spec-questions.md` #176): trước ghim 403; nay ticket người
   // gọi không thấy ra 404 GIỐNG HỆT id bịa — vẫn bị chặn, không ghi gì.
   it('`coordinator` KHÔNG được vào dự án → vẫn bị chặn (404 giống hệt id bịa — BAT-58)', async () => {
     const res = await noi(TOKEN_COORD_NGOAI, 'dieu_phoi');
@@ -497,7 +497,7 @@ describe('19.12 câu 17 — xoá mềm, khôi phục và ticket điều phối (
 });
 
 /* ================================================================== *
- * C. `cau-hoi-spec.md` #54 — ticket ĐIỀU PHỐI đã xoá mềm
+ * C. `spec-questions.md` #54 — ticket ĐIỀU PHỐI đã xoá mềm
  * ================================================================== *
  * SPEC **không nói** ca này. Chốt tạm (chủ chưa trả lời), cài ở phần 3 lượt 1:
  * ticket điều phối đã xoá mềm thì lan toả **BỎ QUA** nó — không ném lỗi, không

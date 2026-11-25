@@ -90,7 +90,7 @@ export function cuoiGioYenLang(moc: number, lech_phut = MUI_GIO_CHU_PHUT): numbe
  * migration 0012 có cho d.341), nên `loai` **không** phân biệt được chúng. Nếu
  * suy mức từ `loai` thì một trong hai câu của d.535 chắc chắn sai.
  *
- * Đây **không** phải "cờ thay cho mốc" (nếp đã chốt bốn lần trong `quyet-dinh.md`):
+ * Đây **không** phải "cờ thay cho mốc" (nếp đã chốt bốn lần trong `decisions.md`):
  * nếp đó nói về trạng thái **đổi theo thời gian** (đã bắn chưa, đã gửi chưa) —
  * những thứ ấy ở đây vẫn là mốc (`gui_telegram_luc`, `nhac_do_luc`). Mức ưu tiên
  * là một **phân loại lúc sinh ra**, không bao giờ đổi, và trigger

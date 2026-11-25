@@ -110,7 +110,7 @@ export interface SoBay {
  * `doiHet` chờ **tới khi sổ rỗng**, không chỉ chờ bản chụp đầu (BAT-53): một việc
  * trong sổ (vd cả thân ca, xem `caQuaSo`) có thể ghi thêm việc mới vào sổ trong lúc
  * đang được chờ — bản cũ chụp sổ một lần rồi xoá, nên việc ghi sau lọt ra ngoài
- * (đúng lỗ đã ghi ở dòng BAT-51 lượt 2 của `quyet-dinh.md`).
+ * (đúng lỗ đã ghi ở dòng BAT-51 lượt 2 của `decisions.md`).
  */
 export function soRequestBay(): SoBay {
   const dang_bay = new Set<Promise<unknown>>();

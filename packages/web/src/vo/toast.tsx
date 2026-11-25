@@ -75,7 +75,7 @@ export function KhuToast({ children }: { children: React.ReactNode }): React.JSX
             role="alert"
             data-toast={t.loai}
             /*
-             * Hệ thiết kế 29/10 (`THIET-KE.md`): toast là một **tấm lớp nổi**
+             * Hệ thiết kế 29/10 (`DESIGN.md`): toast là một **tấm lớp nổi**
              * (bo 8px, viền mờ, chữ chính) — không tô cả tấm đỏ. Nghĩa "lỗi" đi
              * bằng **icon tròn đỏ** (`text-loi`) đứng trước câu, cộng
              * `role="alert"` và `data-toast="loi"`; câu lỗi vẫn đi nguyên văn,

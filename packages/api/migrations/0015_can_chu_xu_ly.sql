@@ -114,7 +114,7 @@ ALTER TABLE can_chu ADD COLUMN mo_lai_lan INTEGER NOT NULL DEFAULT 0
 -- `workspace_id` đi **sau** `can_chu_id`: `can_chu_id` là UUID, tức đã chọn lọc
 -- gần như tuyệt đối; nó đứng đầu thì index nhỏ và câu trên là một `SEARCH`. Cột
 -- workspace vẫn nằm trong khoá để câu truy vấn (vốn **luôn** ràng
--- `workspace_id`, `quyet-dinh.md` 01/10) không phải quay lại bảng để lọc.
+-- `workspace_id`, `decisions.md` 01/10) không phải quay lại bảng để lọc.
 CREATE INDEX ix_phien_can_chu ON phien (can_chu_id, workspace_id)
   WHERE can_chu_id IS NOT NULL;
 

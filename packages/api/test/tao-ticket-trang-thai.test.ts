@@ -1,6 +1,6 @@
 /**
  * **Trạng thái ban đầu khi tạo ticket** — BAT-63, SPEC mục 4 câu "Trạng thái khi
- * tạo" (Chủ chốt T-108 = B, 29/10; `cau-hoi-spec.md` #179): mặc định **Cần làm**,
+ * tạo" (Chủ chốt T-108 = B, 29/10; `spec-questions.md` #179): mặc định **Cần làm**,
  * người tạo được chọn **Backlog**, mọi trạng thái khác không đặt được lúc tạo
  * (`INVALID_INPUT`). Quyền tạo không đổi theo trạng thái chọn.
  *
@@ -10,7 +10,7 @@
  * đầu hàm, trước khi cấp số.
  */
 
-import SPEC_VAN from '../../../SPEC.md?raw';
+import SPEC_VAN from '../../../docs/vi/SPEC.md?raw';
 import { env } from 'cloudflare:test';
 import { afterEach, describe, expect } from 'vitest';
 import {

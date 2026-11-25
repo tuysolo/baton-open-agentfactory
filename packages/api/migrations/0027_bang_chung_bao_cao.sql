@@ -1,6 +1,6 @@
 -- ===================================================================
 -- 0027 — loại bằng chứng "Báo cáo" (`bao_cao`) + cờ "ticket không code"
--- (BAT-37 việc 2, chủ chốt T-31 câu 3.4 A ngày 19/10; cau-hoi-spec.md #161)
+-- (BAT-37 việc 2, chủ chốt T-31 câu 3.4 A ngày 19/10; spec-questions.md #161)
 -- SPEC mục 7 (bảng loại bằng chứng, cổng Xong d.213–217), 19.10, 19.12 câu 57
 -- ===================================================================
 --

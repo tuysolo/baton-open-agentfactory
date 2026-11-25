@@ -1,6 +1,6 @@
 /**
  * Phân trang **keyset (cursor)** — mốc 200 dự án + 200.000 ticket
- * (`quyet-dinh.md` 01/10).
+ * (`decisions.md` 01/10).
  *
  * Vì sao không `OFFSET`: `LIMIT 50 OFFSET 100000` buộc SQLite đi qua 100.000
  * dòng trước khi trả dòng đầu, nên trang càng sâu càng chậm. Keyset thì mỗi

@@ -14,7 +14,7 @@
 -- tim (nó đang sống, chỉ bị chặn), mà nhịp tim là một tín hiệu (d.188). Đếm 60
 -- phút từ tín hiệu cuối thì mỗi nhịp tim đẩy đồng hồ về đầu, nên luật **không bao
 -- giờ chạy** đúng trong ca duy nhất nó cần chạy. Reviewer lượt 3 nêu
--- (`cau-hoi-spec.md` #48).
+-- (`spec-questions.md` #48).
 ALTER TABLE phien ADD COLUMN waiting_assigner_luc INTEGER;
 
 -- **"Đã bắn cảnh báo cho tín hiệu nào"** — d.196: "chuyển sang `stalled` hoặc

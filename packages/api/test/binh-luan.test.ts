@@ -2,7 +2,7 @@
  * **Bình luận ticket** — SPEC mục 4: "markdown, của chủ hoặc agent. **Tác giả tự
  * sửa được** (có ghi 'đã sửa'). **Agent không xoá được**."
  *
- * Hai chỗ SPEC không nói hết, đã chốt tạm trong `cau-hoi-spec.md` và có test ghi
+ * Hai chỗ SPEC không nói hết, đã chốt tạm trong `spec-questions.md` và có test ghi
  * rõ ở đây:
  *   * #22 — bảng quyền mục 3 không có hàng cho bình luận; điều kiện là "agent
  *     được vào dự án".
@@ -98,7 +98,7 @@ describe('SPEC mục 4 — bình luận: thêm, của chủ và của agent', ()
     });
   });
 
-  it('AGENT bình luận được (mọi vai trò, miễn được vào dự án — `cau-hoi-spec.md` #22)', async () => {
+  it('AGENT bình luận được (mọi vai trò, miễn được vào dự án — `spec-questions.md` #22)', async () => {
     for (const token of [TOKEN_W1, TOKEN_W2]) {
       const id = await themBinhLuan(token, 'Agent báo tiến độ');
       expect((await dongBinhLuan(id))?.tac_gia_loai).toBe('agent');
@@ -110,7 +110,7 @@ describe('SPEC mục 4 — bình luận: thêm, của chủ và của agent', ()
      * Trước BAT-58 ca này ghim 403 FORBIDDEN, còn id bịa ra 404 — hai phản hồi
      * khác nhau là một máy dò sự tồn tại ticket, trái 19.12 câu 15 ("cả hai ca
      * phải ra phản hồi giống hệt nhau"). Cửa ghi không biết dự án trước khi tra
-     * id, nên chọn 404 cho cả hai — cùng lựa chọn #175 (`cau-hoi-spec.md` #176).
+     * id, nên chọn 404 cho cả hai — cùng lựa chọn #175 (`spec-questions.md` #176).
      */
     const res = await goiApi(`/v1/ticket/${TICKET}/binh-luan`, TOKEN_NGOAI, {
       method: 'POST',
@@ -303,7 +303,7 @@ describe('SPEC mục 4 + mục 3 — AGENT KHÔNG XOÁ ĐƯỢC bình luận', (
     expect((await dongBinhLuan(id))?.xoa_luc).toBeNull();
   });
 
-  it('ĐẠT: CHỦ xoá được (`cau-hoi-spec.md` #23), xoá MỀM và biến khỏi đường đọc', async () => {
+  it('ĐẠT: CHỦ xoá được (`spec-questions.md` #23), xoá MỀM và biến khỏi đường đọc', async () => {
     const id = await themBinhLuan(TOKEN_W1, 'Sẽ bị chủ xoá');
     await themBinhLuan(TOKEN_CHU, 'Còn lại');
 

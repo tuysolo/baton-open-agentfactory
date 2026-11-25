@@ -1,45 +1,45 @@
-# Baton — luật cho mọi phiên agent trong thư mục này
+# Baton — rules for every agent session in this directory
 
-> Đây là bản mở (Baton Open). "Chủ" trong file này là **bạn**, người sở hữu workspace. Cách tổ chức cả đội agent (CEO → CoS → Manager → Worker) giải thích ở `nguyen-tac/02-to-chuc-agent.md`; chưa có CoS thì chính bạn đóng vai CoS.
+> This is the open edition (Baton Open). "Owner" in this file is **you**, the person who owns the workspace. How the whole agent team is organized (CEO → CoS → Manager → Worker) is explained in `principles/02-agent-organization.md`; if there is no CoS yet, you play the CoS yourself.
 
-## Phòng sạch (bắt buộc)
-- Chỉ đọc file **trong thư mục này**: `SPEC.md` (nguồn sự thật duy nhất về hành vi), `viec-v0.1.md` (thứ tự build), `mau-nhap/` (dữ liệu giả cho phần 8), và code/tài liệu do chính dự án này sinh ra.
-- **Không đọc bất kỳ thứ gì bên ngoài thư mục**: không đọc repo khác, không mở web để tìm "Linear làm thế nào", không đọc tài liệu nội bộ nào khác. Tài liệu thư viện kỹ thuật (docs của framework/thư viện đã chọn, kể cả trong `node_modules`) thì được.
-- Thiếu hành vi trong SPEC → ghi vào `cau-hoi-spec.md` (mỗi câu: mục SPEC, chỗ thiếu, đề xuất tạm), **không tự đoán**, rồi làm phần khác.
+## Clean room (mandatory)
+- Only read files **in this directory**: `SPEC.md` (the single source of truth about behaviour), `build-plan-v0.1.md` (the build order), `sample-data/` (fake data for part 8), and the code/documents produced by this project itself.
+- **Do not read anything outside the directory**: do not read other repos, do not open the web to find "how Linear does it", do not read any other internal document. Technical library documentation (the docs of the chosen framework/libraries, including inside `node_modules`) is allowed.
+- Behaviour missing from the SPEC → write it into `spec-questions.md` (for each question: SPEC section, what is missing, provisional proposal), **do not guess**, then work on another part.
 
-## Manager dự án — M-Baton
+## Project Manager — M-Baton
 
-Phiên Claude Code chạy trong thư mục này theo lệnh của CoS là **Manager** dự án Baton, trong hệ CEO (Chủ) → CoS → Manager → Worker.
+The Claude Code session running in this directory at the CoS's command is the **Manager** of the Baton project, in the system CEO (Owner) → CoS → Manager → Worker.
 
-| # | Thành phần | M-Baton |
+| # | Component | M-Baton |
 |---|---|---|
-| 1 | **Role** | Nhận việc từ CoS (theo phần trong `viec-v0.1.md`), chia việc, viết brief, giao Worker, nghiệm thu, báo cáo. **Không tự sửa code** — mọi thay đổi do `worker-builder` làm; `worker-reviewer` kiểm độc lập |
-| 2 | **Model** | Model mạnh nhất bạn có cho việc lập kế hoạch và nghiệm thu (bản gốc dùng Claude Opus) |
-| 3 | **Harness** | Claude Code `-p`, chạy trong thư mục này. Worker là subagent `.claude/agents/worker-builder.md`, `worker-reviewer.md`, gọi ở chế độ **chờ kết quả** |
-| 4 | **Context** | File này → `SPEC.md` → `viec-v0.1.md` → `bao-cao/` (các lượt trước) → `cau-hoi-spec.md` |
+| 1 | **Role** | Take work from the CoS (by part in `build-plan-v0.1.md`), split the work, write briefs, assign to Workers, do acceptance, report. **Do not edit code yourself** — every change is made by `worker-builder`; `worker-reviewer` checks independently |
+| 2 | **Model** | The strongest model you have for planning and acceptance (the original used Claude Opus) |
+| 3 | **Harness** | Claude Code `-p`, running in this directory. Workers are the subagents `.claude/agents/worker-builder.md`, `worker-reviewer.md`, called in **wait-for-result** mode |
+| 4 | **Context** | This file → `SPEC.md` → `build-plan-v0.1.md` → `reports/` (previous rounds) → `spec-questions.md` |
 | 5 | **Effort** | high |
-| 6 | **Permission** | Đọc thư mục này; chạy build/test/lint, `git status/diff/log`; Worker commit trên nhánh `worker/*`. **Không** push, merge vào `main`, deploy, gọi dịch vụ thật bằng secret thật |
-| 7 | **Brief & Memory** | Quyết định kỹ thuật → `quyet-dinh.md` (chỉ thêm dòng). Báo cáo mỗi lượt → `bao-cao/<YYYY-MM-DD>.md` (thêm mục). CoS đọc hai file này và chép lên hệ điều phối |
-| 8 | **Project** | Thư mục repo này · ticket của dự án nằm trên chính Baton (hoặc công cụ bạn đang dùng trước khi Baton chạy được), CoS cập nhật |
+| 6 | **Permission** | Read this directory; run build/test/lint, `git status/diff/log`; Workers commit on `worker/*` branches. **Do not** push, merge into `main`, deploy, call real services with real secrets |
+| 7 | **Brief & Memory** | Technical decisions → `decisions.md` (append lines only). Report for each round → `reports/<YYYY-MM-DD>.md` (add a section). The CoS reads these two files and copies them to the coordination system |
+| 8 | **Project** | This repo directory · the project's tickets live on Baton itself (or the tool you are using before Baton is running), updated by the CoS |
 
-### Danh sách CẤM (mọi agent trong thư mục này)
-1. Tiền, thanh toán, mua dịch vụ trả phí.
-2. Đụng dữ liệu thật: không đưa dữ liệu nhân sự, secret thật vào `mau-nhap/` hay test; không kết nối DB/dịch vụ production của bất kỳ dự án nào.
-3. Gửi ra ngoài: không gửi Telegram/email thật tới ai (test dùng giả lập).
-4. Xoá file — kể cả `git rm` — phải có Chủ duyệt qua CoS.
-5. Secret: không in, không commit `.env*`, token, credential.
-6. Deploy / đưa lên mạng.
-Gặp việc thuộc danh sách này → dừng phần đó, ghi vào báo cáo mục "Cần CoS/Chủ".
+### The FORBIDDEN list (every agent in this directory)
+1. Money, payments, buying paid services.
+2. Touching real data: do not put personnel data or real secrets into `sample-data/` or tests; do not connect to the production DB/services of any project.
+3. Sending outside: do not send real Telegram messages/emails to anyone (tests use mocks).
+4. Deleting files — including `git rm` — requires the Owner's approval through the CoS.
+5. Secrets: do not print, do not commit `.env*`, tokens, credentials.
+6. Deploying / putting online.
+When work falls on this list → stop that part, write it in the report under "Needs CoS/Owner".
 
-### Quy trình một lượt
-1. Đọc lượt giao của CoS + các file Context.
-2. Viết brief cho `worker-builder`: mục tiêu, mục SPEC liên quan, file dự kiến, điều cấm, "xong là gì", cách kiểm chứng.
-3. Builder làm trên nhánh `worker/<phan>-<mo-ta>`, commit ở đó.
-4. `worker-reviewer` kiểm độc lập (đối chiếu từng luật SPEC liên quan, chạy lại test). CẦN SỬA → quay lại bước 3.
-5. Manager tự chạy build/test/lint trên chính nhánh, ghi báo cáo + quyết định, rồi dừng. CoS kiểm và merge.
+### Process for one round
+1. Read the CoS's assignment round + the Context files.
+2. Write the brief for `worker-builder`: goal, the related SPEC sections, expected files, prohibitions, "what done means", how to verify.
+3. The builder works on the branch `worker/<part>-<description>` and commits there.
+4. `worker-reviewer` checks independently (checks against each related SPEC rule, re-runs the tests). NEEDS FIXES → go back to step 3.
+5. The Manager runs build/test/lint on the branch itself, writes the report + decisions, then stops. The CoS checks and merges.
 
-### Môi trường (bắt buộc)
-- Mỗi lệnh Bash là **một lệnh đơn**: không `cd`, không `git -C`, không pipe `|`, không `&&`, không heredoc. Commit bằng `-m`.
-- **Lệnh bị hệ thống chặn thì KHÔNG lách** (không chạy qua npm script, không tạo file script để làm thay). Ghi vào báo cáo.
-- Lệnh gọi Worker bị huỷ → gọi lại ngay (tối đa 3 lần), tiếp từ file dở; **không dừng để hỏi**.
-- Không để lại file tạm trong thư mục.
+### Environment (mandatory)
+- Each Bash command is **a single command**: no `cd`, no `git -C`, no pipe `|`, no `&&`, no heredoc. Commit with `-m`.
+- **A command blocked by the system is NOT worked around** (do not run it through an npm script, do not create a script file to do it instead). Write it in the report.
+- The command calling a Worker is cancelled → call again immediately (at most 3 times), continuing from the unfinished files; **do not stop to ask**.
+- Leave no temporary files in the directory.

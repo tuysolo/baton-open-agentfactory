@@ -12,7 +12,7 @@
  *     `FORBIDDEN`/403 — mục 13. Điều kiện phạm vi nằm **trong câu SQL**, không
  *     là một lần `if` sau khi đã đọc.
  *  2. **Tầm nhìn của dòng "Chung"** (`project_id IS NULL`) là một **đề xuất tạm
- *     chờ chủ chốt** — `cau-hoi-spec.md` #69. Nó sống ở **một chỗ duy nhất**,
+ *     chờ chủ chốt** — `spec-questions.md` #69. Nó sống ở **một chỗ duy nhất**,
  *     `@baton/shared` → `pham-vi-chung.ts`, dùng chung với đường đọc Cần Chủ
  *     của lượt sau. File này chỉ **dịch** kết luận đó sang SQL.
  *  3. **Phân trang keyset**, thứ tự `(luc DESC, id DESC)` — khớp
@@ -83,7 +83,7 @@ export interface TrangNhatKy extends TrangKetQua<DongNhatKyRa> {
   /**
    * **"Gom theo ngày"** (d.311) tính **trên trang hiện tại**, theo đúng thứ tự
    * các dòng đã trả về. Gom ở server chứ không để client tự làm: ngày là một
-   * dẫn xuất theo **múi giờ của chủ** (`cau-hoi-spec.md` #68), và để client đoán
+   * dẫn xuất theo **múi giờ của chủ** (`spec-questions.md` #68), và để client đoán
    * múi giờ là mở đường cho web và CLI gom khác nhau trên cùng dữ liệu.
    */
   nhom_theo_ngay: NhomNgay[];

@@ -30,7 +30,7 @@ ALTER TABLE ticket ADD COLUMN chu_tu_lam INTEGER NOT NULL DEFAULT 0
 ALTER TABLE ticket ADD COLUMN trong_tay_tu_luc INTEGER;
 
 -- Bình luận **xoá mềm** — SPEC mục 4 ("Agent không xoá được"; chủ thì
--- `cau-hoi-spec.md` #23 chốt tạm là xoá được). Xoá mềm chứ không `DELETE`: mục 15
+-- `spec-questions.md` #23 chốt tạm là xoá được). Xoá mềm chứ không `DELETE`: mục 15
 -- đòi "mọi hành động có dấu vết ai làm", nên một bình luận biến mất không dấu vết
 -- là sai hướng. Dòng vẫn còn, đường đọc lọc `xoa_luc IS NULL`.
 ALTER TABLE comment ADD COLUMN xoa_luc INTEGER;

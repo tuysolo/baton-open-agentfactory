@@ -17,7 +17,7 @@
 --   * `ticket.trong_tay_tu_luc` cho cờ "không ai cầm" quá 24 giờ (19.1),
 --   * `phien.canh_bao_tin_hieu_luc` / `phien.error_luc` (mục 6 d.196, 0008),
 --   * `evidence.chua_merge_bao_moc` (19.7, 0010).
--- Xem `quyet-dinh.md`.
+-- Xem `decisions.md`.
 --
 -- ## Nghĩa chính xác của cột
 --

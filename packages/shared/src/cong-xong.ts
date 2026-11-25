@@ -54,12 +54,12 @@ export interface BoiCanhCong {
    * Chủ đã xác nhận mục Cần Chủ loại Review **tự sinh** chưa — d.217.
    *
    * **Đã nối thật** từ phần 4 lượt 3b: câu hỏi "mục đó sinh lúc nào, do đường
-   * nào" (`cau-hoi-spec.md` #59) được chủ chốt thành **19.12 câu 57** — sinh lúc
+   * nào" (`spec-questions.md` #59) được chủ chốt thành **19.12 câu 57** — sinh lúc
    * **kiểm cổng**, một mục mỗi ticket, dựng lại chỉ khi có bằng chứng `file`/`note`
    * mới hơn lần bỏ qua. Trường này nay đọc từ dòng `can_chu` mang mốc
    * `xac_nhan_ticket_id`: `true` **đúng khi** mục đó `resolved` **và** kết luận
    * review là `dat` (xem `api/src/muc-xac-nhan.ts` → `chuDaXacNhan`; "Cần sửa" là
-   * chủ nói **chưa được**, nên nó không mở cổng — `cau-hoi-spec.md` #78).
+   * chủ nói **chưa được**, nên nó không mở cổng — `spec-questions.md` #78).
    */
   chu_xac_nhan: boolean;
   /** Mọi bằng chứng của ticket, **kể cả đã rút** (cổng tự lọc). */
@@ -155,7 +155,7 @@ export function moDuocCong(b: BangChungChoCong): boolean {
  * Tính trên **MỌI** bằng chứng commit/deploy của ticket, **kể cả đã rút và kể cả
  * `failed`** — không chỉ các bằng chứng còn hiệu lực.
  *
- * SPEC không nói rõ tập nào (`cau-hoi-spec.md` #56); đây là hướng **an toàn hơn**,
+ * SPEC không nói rõ tập nào (`spec-questions.md` #56); đây là hướng **an toàn hơn**,
  * tức hướng làm cổng **đóng nhiều hơn**. Lý do: mốc này trả lời câu "mã đã đổi sau
  * lần review chưa". Một bằng chứng commit được gửi rồi rút vẫn là một lần có người
  * nói "mã vừa đổi"; bỏ nó ra khỏi mốc thì rút lại một bằng chứng commit trở thành

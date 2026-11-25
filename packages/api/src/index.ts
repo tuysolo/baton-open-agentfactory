@@ -178,7 +178,7 @@ app.get('/v1/_loi/:ma', (c) => {
  *
  * Công khai (có trong `DUONG_CONG_KHAI`) vì nó là đường *dựng ra* giấy tờ. Hai
  * yếu tố trong **một** request — xem `dangNhapChu` cho lý lẽ, và
- * `cau-hoi-spec.md` cho chỗ SPEC không nói một bước hay hai.
+ * `spec-questions.md` cho chỗ SPEC không nói một bước hay hai.
  *
  * Phản hồi **không mang id phiên trong thân**: nó chỉ đi vào cookie `HttpOnly`.
  * Trả nó trong JSON là đưa một thứ tương đương mật khẩu vào chỗ mà JavaScript
@@ -203,7 +203,7 @@ app.post('/v1/dang-nhap', async (c) => {
  * ------------------------------------------------------------------ */
 
 /**
- * **Thiết lập tài khoản chủ lần đầu** — `cau-hoi-spec.md` #3.
+ * **Thiết lập tài khoản chủ lần đầu** — `spec-questions.md` #3.
  *
  * Canh bằng **`TOKEN_CHU`** và chỉ `TOKEN_CHU`: `wrangler` bị chặn trong môi
  * trường này nên chủ không `wrangler secret put` được một băm mật khẩu, và một
@@ -273,7 +273,7 @@ app.post(DUONG_KHOI_TAO, async (c) => {
 /**
  * **Mở khoá tài khoản chủ** — đường thoát khi hạn mức chống dò khoá chủ ra ngoài.
  *
- * Hạn mức của `cau-hoi-spec.md` #98 khoá theo **tài khoản**, và `/v1/dang-nhap`
+ * Hạn mức của `spec-questions.md` #98 khoá theo **tài khoản**, và `/v1/dang-nhap`
  * là đường công khai không qua bộ đếm 600 req/phút. Nên một kẻ **không biết mật
  * khẩu** lặp mãi một mật khẩu sai giữ được tài khoản trong trạng thái khoá vô
  * hạn: chủ không bao giờ vào được nữa. Đường này là cửa thoát.
@@ -2088,13 +2088,13 @@ app.get('/v1/bao-cao', async (c) => {
  * `POST /v1/trong-tam` — ghi **3 việc trọng tâm hôm nay** (d.324).
  *
  * Ai gọi được: **chủ, hoặc agent `coordinator`** — kiểm **danh tính** bên trong cửa
- * ghi, không qua một hàng nào của bảng quyền mục 3 (`cau-hoi-spec.md` #117, nếp
+ * ghi, không qua một hàng nào của bảng quyền mục 3 (`spec-questions.md` #117, nếp
  * 19.12 câu 13 / câu 37). Xem `lenh-bao-cao.ts`.
  *
  * Ba trọng tâm của một ngày **đã chụp** nằm trong chính báo cáo (vế 2 của d.324,
  * vế 1 của d.331). `GET /v1/trong-tam` (dưới) là đường đọc **sống** bộ của hôm nay,
  * vì báo cáo sáng là bản chụp bất biến lúc 07:30 và bộ ghi sau đó không vào đó
- * (`cau-hoi-spec.md` #147). Nó **không** tính "đạt hay chưa" — vế đó chỉ ở báo cáo.
+ * (`spec-questions.md` #147). Nó **không** tính "đạt hay chưa" — vế đó chỉ ở báo cáo.
  */
 app.get('/v1/trong-tam', async (c) =>
   c.json(await layTrongTamSong(c.env.DB, c.get('ai'), c.get('workspace_id'), Date.now())),

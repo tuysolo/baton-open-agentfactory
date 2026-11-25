@@ -938,7 +938,7 @@ describe('d.221 + 19.7 — commit `pushed`', () => {
 describe('19.7 + d.221 — hai ranh giới mà lượt 3 chưa canh', () => {
   /**
    * **Mốc theo dõi BẰNG ĐÚNG `bay_gio`.** SPEC 19.7 nói "quá 7 ngày" mà **không nói**
-   * mốc bằng đúng thuộc bên nào (`cau-hoi-spec.md` #61). Hành vi đã cài: **bằng là
+   * mốc bằng đúng thuộc bên nào (`spec-questions.md` #61). Hành vi đã cài: **bằng là
    * đã quá** → dừng theo dõi. Ca này khoá nó lại.
    *
    * Không có ca này thì đổi `theo_doi_den_luc <= bay_gio` thành `<` trong
@@ -981,7 +981,7 @@ describe('19.7 + d.221 — hai ranh giới mà lượt 3 chưa canh', () => {
   /**
    * **Một commit đã `pushed` mà GitHub về sau không tìm thấy nữa** (force-push, repo
    * đổi tên, nhánh bị xoá). SPEC d.206 nói "không tìm thấy thì **trượt**", d.222 nói
-   * bằng chứng "không sửa" — và SPEC **không nói** ca này (`cau-hoi-spec.md` #62).
+   * bằng chứng "không sửa" — và SPEC **không nói** ca này (`spec-questions.md` #62).
    *
    * Ca này chốt **hành vi đang có**: chặng `theo_doi` ghi `failed` lên dòng, tức một
    * lần **đổi kết luận** trên một dòng đã có kết luận `pushed`. Không có nó thì thêm

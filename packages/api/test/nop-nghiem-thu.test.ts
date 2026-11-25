@@ -769,7 +769,7 @@ describe('SPEC 19.2 — lượt bị `canceled`, KHÔNG còn lượt mở nào �
  * **Huỷ lượt KHÔNG hạ ticket đã kết.** Hàng cuối bảng 19.2 nói về ticket đang
  * chạy; nó không được vượt lên hai luật khác:
  *   - **19.3**: "Ticket đã Xong **không bị hạ**."
- *   - **mục 4 dòng 138** (+ `cau-hoi-spec.md` #18): mọi lần rời nhóm `closed`
+ *   - **mục 4 dòng 138** (+ `spec-questions.md` #18): mọi lần rời nhóm `closed`
  *     chỉ **chủ** làm được — mà `huy` lượt là đường **agent** người giao đi được.
  */
 describe('SPEC 19.3 + mục 4 d.138 — huỷ lượt KHÔNG hạ ticket nhóm `closed`', () => {

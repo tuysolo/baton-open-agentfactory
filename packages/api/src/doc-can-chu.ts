@@ -8,7 +8,7 @@
  *      `WorkspaceGate.choCanChu` (cửa ghi là chỗ duy nhất nhận khoá đánh thức).
  *   2. `resolved_asks` — mục 8 d.268: "Agent **không** đang chờ thì nhận kết quả
  *      ở lần gọi kế tiếp (`heartbeat`, `tasks` hay bất kỳ lệnh nào), trong trường
- *      `resolved_asks`." Xem `asksVuaXuLy` và `cau-hoi-spec.md` **#76**.
+ *      `resolved_asks`." Xem `asksVuaXuLy` và `spec-questions.md` **#76**.
  *
  * Lượt 3b (màn hình 3 khối + bảng "Đã xử lý" của mục 8) dùng **cùng** `COT_MUC`,
  * `locPhamViCanChu` và `raMuc` của file này — một bản dịch dòng `can_chu` sang
@@ -17,14 +17,14 @@
  * ## Ba nếp đã thành luật của dự án, áp ở đây
  *
  *   * **Phạm vi nằm TRONG câu SQL**, không là một `if` sau khi đã đọc
- *     (`quyet-dinh.md`). Nhờ vậy "ngoài tầm nhìn" và "không có thật" là **cùng
+ *     (`decisions.md`). Nhờ vậy "ngoài tầm nhìn" và "không có thật" là **cùng
  *     một** đường mã, tức cùng một phản hồi — 19.12 **câu 15** đòi đúng thế
  *     ("quyền phải kiểm trước khi tra đối tượng… cả hai ca phải ra phản hồi
  *     giống hệt nhau"). Không có chỗ nào trong file này đọc dòng rồi mới hỏi
  *     "người này được xem không", nên không có máy dò sự tồn tại nào.
  *   * **Lớp "Chung" gọi `pham-vi-chung.ts`**, không tự dựng điều kiện: 19.12
  *     **câu 61** nói luật đó phải nằm ở **một chỗ duy nhất**.
- *   * **Mọi câu SQL ràng cả `workspace_id`** (`quyet-dinh.md`).
+ *   * **Mọi câu SQL ràng cả `workspace_id`** (`decisions.md`).
  *
  * ## Dự án `archived` — 19.12 câu 25
  *
@@ -139,7 +139,7 @@ export interface MucCanChuRa {
   boi_canh: string | null;
   /**
    * Lệnh cần chạy — **mọi loại** có thể có (d.250 "lệnh có nút Copy";
-   * `cau-hoi-spec.md` #130). `null` = mục không mang lệnh nào. `run_command`
+   * `spec-questions.md` #130). `null` = mục không mang lệnh nào. `run_command`
    * **luôn** có (d.237, `COMMAND_REQUIRED`).
    */
   lenh: string | null;
@@ -191,7 +191,7 @@ interface DongTho {
  * `SELECT` dùng chung cho **mọi** đường đọc của mục 8.
  *
  * **`lenh` của mọi loại đi qua một `COALESCE`** — d.250 ("mỗi thẻ hiện đủ: …
- * lệnh có nút Copy", chung cho mọi thẻ; `cau-hoi-spec.md` #130). Lệnh **bắt
+ * lệnh có nút Copy", chung cho mọi thẻ; `spec-questions.md` #130). Lệnh **bắt
  * buộc** của `run_command` nằm ở `ct.lenh` (0013), lệnh **tuỳ chọn** của ba loại
  * kia nằm ở `ct.lenh_kem` (0023, vì SQLite không gỡ được CHECK mức bảng của
  * 0013). Mỗi dòng chỉ một chỗ có giá trị — trigger `tg_can_chu_lenh_kem_*` ép
@@ -295,7 +295,7 @@ export async function layMucCanChu(
  * **Cửa sổ thời gian** của `resolved_asks` — xem `asksVuaXuLy`. 24 giờ.
  *
  * Một hằng có tên, không một số rải trong câu SQL, vì nó là **chỗ cắm** của câu
- * hỏi `cau-hoi-spec.md` #76: phiên spec chốt khác thì sửa đúng dòng này.
+ * hỏi `spec-questions.md` #76: phiên spec chốt khác thì sửa đúng dòng này.
  */
 export const CUA_SO_RESOLVED_ASKS_MS = 24 * 60 * 60 * 1000;
 
@@ -311,7 +311,7 @@ const TRAN_RESOLVED_ASKS = 50;
  * d.268 nói "lần gọi **kế tiếp**" nhưng SPEC **không nói** Baton biết bằng cách
  * nào là agent **đã nhận rồi**: không có lệnh xác nhận nào trong bảng lệnh mục
  * 13, và không có cột mốc nào cho việc đó trong mục 8. Chỗ im lặng này được ghi
- * thành `cau-hoi-spec.md` **#76**; đề xuất tạm đang cài là hướng **không trạng
+ * thành `spec-questions.md` **#76**; đề xuất tạm đang cài là hướng **không trạng
  * thái, dẫn xuất**:
  *
  *   * Hướng kia (một cột kiểu `da_giao_luc`) đòi một lệnh **GHI trên đường
@@ -361,7 +361,7 @@ export async function asksVuaXuLy(
 
 /**
  * Câu SQL của `asksVuaXuLy`, tách ra để test đo **chính câu sản phẩm** bằng
- * `EXPLAIN QUERY PLAN` — nếp đã chốt ở `quyet-dinh.md` (một chuỗi SQL viết lại
+ * `EXPLAIN QUERY PLAN` — nếp đã chốt ở `decisions.md` (một chuỗi SQL viết lại
  * trong test là một câu khác, và nó vẫn xanh sau khi câu thật đã hỏng).
  *
  * ## Hai chi tiết của câu này là **điều kiện để nó đi index**, đừng sửa rời
@@ -415,7 +415,7 @@ export function cauAsksVuaXuLy(
  *
  * `agent:<tôi>` đi kèm với đúng lý do của `chuDeKeoViec`: token bị thu hồi hay
  * agent bị tắt giữa lúc chờ thì waiter phải **tỉnh để kiểm lại rồi cắt**
- * (`cau-hoi-spec.md` #51). Để nó ngủ tiếp thì một token đã thu hồi còn đọc được
+ * (`spec-questions.md` #51). Để nó ngủ tiếp thì một token đã thu hồi còn đọc được
  * dữ liệu tới 60 giây nữa.
  */
 export function chuDeChoCanChu(ma: string, agent_id: string | null): string[] {
@@ -429,7 +429,7 @@ export function chuDeChoCanChu(ma: string, agent_id: string | null): string[] {
  * ================================================================== *
  *
  * **Phần 4 làm tầng API, KHÔNG làm giao diện** (giao diện là phần 6,
- * `viec-v0.1.md`). Nên mục tiêu của khối này là: trả **đủ dữ liệu** để phần 6
+ * `build-plan-v0.1.md`). Nên mục tiêu của khối này là: trả **đủ dữ liệu** để phần 6
  * dựng được từng chữ của d.248–252 mà **không phải tính lại một luật nào**.
  *
  * Cụ thể, ba thứ **dẫn xuất** được tính ở đây và không để phần 6 tự tính:
@@ -542,7 +542,7 @@ function veLoc(loc: LocManHinhCanChu): { sql: string[]; bind: (string | number)[
  * của index. Nối hai pha lại là **đúng** thứ tự "hạn trước, rồi không hạn".
  *
  * SPEC **không nói** mục không đặt hạn nằm đâu trong thứ tự của d.249 — xem
- * `cau-hoi-spec.md` **#77**. Hướng tạm: **cuối khối**.
+ * `spec-questions.md` **#77**. Hướng tạm: **cuối khối**.
  */
 export function cauKhoiCho(
   ai: AiGoi,
@@ -765,7 +765,7 @@ export async function huyHieuCanChu(
 /**
  * **Độ dài của "tiêu đề ngắn"** (d.251) — 80 ký tự, rồi `…`.
  *
- * SPEC nói "tiêu đề **ngắn**" mà **không cho con số** (`cau-hoi-spec.md` #77).
+ * SPEC nói "tiêu đề **ngắn**" mà **không cho con số** (`spec-questions.md` #77).
  * Cắt ở **server** chứ không để phần 6 cắt, cùng lý lẽ với `qua_han_gio`: hai bản
  * cắt là hai luật. Tiêu đề đầy đủ vẫn ra ở `tieu_de`, nên phần 6 dùng được nó cho
  * tooltip mà không phải gọi lại.

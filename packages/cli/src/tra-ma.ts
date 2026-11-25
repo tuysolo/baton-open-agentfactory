@@ -50,7 +50,7 @@ export async function duAnTheoMa(cauHinh: CauHinhClient, ma: string): Promise<Du
 
 /**
  * Một agent từ tham số người gõ — **tên hoặc ID** (BAT-47, Chủ chốt T-55 = A,
- * `cau-hoi-spec.md` #171).
+ * `spec-questions.md` #171).
  *
  * Cuộn **hết các trang** của `GET /v1/agent` — danh sách mà máy chủ đã lọc theo
  * phạm vi người gọi (`locPhamViAgent` ở `packages/api/src/doc-du-an.ts`). Không

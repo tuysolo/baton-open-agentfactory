@@ -5,7 +5,7 @@
  * **Hai chữ SPEC cho hai kết quả không trùng nhau, và cả hai đều là SPEC.**
  * Bảng lệnh d.369 viết `accept|return`; bảng mã 0.1 (nhóm `trang_thai_luot_giao`,
  * thứ d.381 bắt "nhận mã tiếng Anh") viết `accepted`/`returned`, và đó là thứ
- * API nhận. Nhận **cả hai dạng** là hướng tạm — ghi `cau-hoi-spec.md` **#86** —
+ * API nhận. Nhận **cả hai dạng** là hướng tạm — ghi `spec-questions.md` **#86** —
  * vì chọn một dạng là làm nửa kia của SPEC thành lỗi gõ. Cách dùng in ra dạng
  * của d.369; thân request luôn mang mã 0.1.
  *

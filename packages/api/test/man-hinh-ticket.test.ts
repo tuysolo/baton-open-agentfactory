@@ -409,7 +409,7 @@ describe('d.396 — thẻ việc: `nhan`, `con_tong`/`con_chua_ket`, `can_chu_so
       await dungLienKet('tk-pj-SAI-1', `tk-pj-SAI-${String(so)}`, 'parent');
     }
 
-    // "Xong/tổng" của thẻ = (3 − 1)/3 — `cau-hoi-spec.md` #134: **Huỷ cũng là kết**.
+    // "Xong/tổng" của thẻ = (3 − 1)/3 — `spec-questions.md` #134: **Huỷ cũng là kết**.
     expect(await the('SAI-1')).toMatchObject({ con_tong: 3, con_chua_ket: 1 });
   });
 
@@ -462,7 +462,7 @@ describe('d.396 — thẻ việc: `nhan`, `con_tong`/`con_chua_ket`, `can_chu_so
   /**
    * **`xong_luc` trên thẻ** — mốc của "ẩn Xong cũ". `cap_nhat_luc` nhích vì mọi
    * lần sửa, nên nó không trả lời được "ticket này xong bao lâu rồi"
-   * (`cau-hoi-spec.md` #132, cùng họ lỗi #104).
+   * (`spec-questions.md` #132, cùng họ lỗi #104).
    */
   it('`xong_luc` ra đúng mốc máy chủ ghi, và là `null` khi ticket chưa Xong', async () => {
     await dungTicket(P, 1, 'Đã xong', { trang_thai: 'done' });

@@ -11,7 +11,7 @@
  *   * **Agent không xoá được** — hàng "Xoá bất cứ thứ gì = không bao giờ" của
  *     bảng quyền SPEC mục 3 là **tuyệt đối**. Module quyền chặn (`delete_anything`).
  *   * Chủ xoá được: SPEC chỉ nói "Agent không xoá được" nên không nói về chủ —
- *     `cau-hoi-spec.md` #23 chốt tạm "chủ xoá được, xoá **mềm**".
+ *     `spec-questions.md` #23 chốt tạm "chủ xoá được, xoá **mềm**".
  */
 
 import {
@@ -59,7 +59,7 @@ export async function handlerThemBinhLuan(
   const ticket = await ticketBatBuoc(db, lenh.workspace_id, lenh.ticket_id, false, lenh.ai);
 
   // Bảng quyền SPEC mục 3 không có hàng cho bình luận; điều kiện là "được vào dự
-  // án" (xem `batBuocVaoDuocDuAn` và `cau-hoi-spec.md` #22).
+  // án" (xem `batBuocVaoDuocDuAn` và `spec-questions.md` #22).
   batBuocVaoDuocDuAn(lenh.ai, ticket.project_id, 'bình luận');
   batBuocKhongLuuTru(await duAnBatBuoc(db, lenh.workspace_id, ticket.project_id));
 
@@ -113,7 +113,7 @@ export interface BinhLuanDeGhi {
  * **hai** đường ghi với **hai** luật khác nhau về dự án `archived` —
  * `handlerThemBinhLuan` áp `batBuocKhongLuuTru` (dòng trên), còn đường tự động
  * của d.280 đi qua đây nên **không** áp; đó là cùng một lệch có chủ ý đang chờ
- * chủ chốt ở `cau-hoi-spec.md` **#75**.
+ * chủ chốt ở `spec-questions.md` **#75**.
  */
 export function cauLenhThemBinhLuan(
   db: D1Database,

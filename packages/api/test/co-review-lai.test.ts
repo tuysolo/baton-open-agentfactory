@@ -131,7 +131,7 @@ describe('A. luật thuần: cờ "cần review lại" phải là gì', () => {
    * (`congXong`), nên cổng **mở**. Nếu cờ vẫn bật trong ca ấy thì cổng và cờ nói
    * hai chuyện khác nhau về cùng một ticket — đúng cái mà `co-review-lai.ts` tồn
    * tại để tránh. Hệ quả: tie-break "KHÔNG ĐẠT thắng" chỉ áp **khi không có review
-   * ĐẠT nào mở được cổng**. Xem `cau-hoi-spec.md` #65.
+   * ĐẠT nào mở được cổng**. Xem `spec-questions.md` #65.
    */
   it('review ĐẠT mở được cổng thì cờ TẮT, dù có một review `fail` cùng lúc (#65)', () => {
     expect(tinh('verifying', [commit(100), review(200, 'fail'), review(200, 'pass')]).co).toBe(

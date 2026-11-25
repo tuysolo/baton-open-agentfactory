@@ -9,7 +9,7 @@
  *
  * SPEC viết `<giá trị> [...]` và **không nói giá trị nào ứng với trường nào** của
  * từng loại; bảng mục 7 d.204–211 thì nói rõ mỗi loại gồm những gì.
- * `cau-hoi-spec.md` **#88**; hướng tạm ở `HINH_GIA_TRI` dưới đây là **đọc thẳng
+ * `spec-questions.md` **#88**; hướng tạm ở `HINH_GIA_TRI` dưới đây là **đọc thẳng
  * bảng d.204–211 theo đúng thứ tự SPEC viết trong ô "Giá trị"**, không thêm bớt:
  *
  *   | loại | `<giá trị>` | `[...]` |
@@ -47,7 +47,7 @@
  * Hết 10 giây mà **chưa xác minh xong** thì **không** phải lỗi: d.220 nói rõ trạng
  * thái lúc đó là `pending` và server tự thử lại sau 5 phút. Nên lệnh in `pending`
  * kèm lý do và thoát **0**. SPEC **không** nói mã thoát nào cho ca này —
- * `cau-hoi-spec.md` **#87**, đây là hướng tạm, không phải một chọn lựa im lặng.
+ * `spec-questions.md` **#87**, đây là hướng tạm, không phải một chọn lựa im lặng.
  */
 
 import { batonFetch } from '@baton/client';

@@ -610,7 +610,7 @@ describe('d.207 — `deploy`: chỉ https, KHÔNG localhost hay IP nội bộ (l
   });
 
   /* ---------------------------------------------------------------- *
-   * Lượt 2 sửa review: hậu tố tên miền chỉ-nội-bộ — `cau-hoi-spec.md` #58
+   * Lượt 2 sửa review: hậu tố tên miền chỉ-nội-bộ — `spec-questions.md` #58
    * ---------------------------------------------------------------- *
    * Lỗ thật reviewer tìm ra: `metadata.google.internal` có dấu chấm, không phải
    * IP, không phải `localhost` — nên cả `TEN_MIEN_CHAN` lẫn nhánh "nhãn đơn" đều
@@ -946,7 +946,7 @@ describe('d.213–217 — Cổng vào Xong (luật thuần)', () => {
   });
 
   /**
-   * `cau-hoi-spec.md` #56 — mốc "commit/deploy cuối cùng" tính trên **MỌI** bằng
+   * `spec-questions.md` #56 — mốc "commit/deploy cuối cùng" tính trên **MỌI** bằng
    * chứng commit/deploy, kể cả đã rút. Hướng an toàn hơn: nếu tính trên tập còn
    * hiệu lực thì **rút lại** một commit là cách làm sống lại một review đã hết
    * hiệu lực, tức một đường vòng qua 19.3.

@@ -44,7 +44,7 @@ export function kiemQuyetDinh(quyet_dinh: unknown): string {
  * **Bắt buộc, không rỗng.** SPEC không nói tường minh nó có bắt buộc hay không
  * (`baton decision` ở mục 13 d.377 ghi `--why "…"` **không** trong ngoặc vuông,
  * tức bắt buộc, nhưng đó là chữ của bảng lệnh chứ không của mục 10) — xem
- * `cau-hoi-spec.md` **#71**. Hướng tạm là **chặt**: một dòng Nhật ký không có
+ * `spec-questions.md` **#71**. Hướng tạm là **chặt**: một dòng Nhật ký không có
  * "vì sao" làm hỏng đúng cái câu mà cả mục 10 hứa trả lời, và nới ra về sau dễ
  * hơn siết vào (dữ liệu đã ghi thì **không sửa được** — d.309).
  */
@@ -152,7 +152,7 @@ export function canhBaoDuLieuNhanSu(quyet_dinh: string): CanhBaoDuLieu[] {
  * `toLocaleLowerCase('vi')`: hàm này phải là **bản sao đúng** của `lower()`
  * trong câu truy vấn của `doc-nhat-ky.ts`, và `lower()` của SQLite chỉ biết
  * ASCII. Hai bên lệch nhau thì một bên thành mã chết — đúng lỗi mà lượt 1 của
- * phần 4 đã mắc với `chuanHoaTieuDe` (xem `cau-hoi-spec.md` #70).
+ * phần 4 đã mắc với `chuanHoaTieuDe` (xem `spec-questions.md` #70).
  *
  * Giới hạn kéo theo, khai rõ: tìm `"CHỌN"` **không** khớp `"chọn"`; tìm
  * `"CHON"` **có** khớp `"chon"`.
@@ -200,7 +200,7 @@ const MOT_PHUT_MS = 60_000;
  * ("gom theo ngày").
  *
  * Là một **dẫn xuất**, không một cột trong DB: xem ghi chú của 0014. Múi giờ đi
- * qua đúng một hằng, `MUI_GIO_CHU_PHUT` của `can-chu.ts` (`cau-hoi-spec.md`
+ * qua đúng một hằng, `MUI_GIO_CHU_PHUT` của `can-chu.ts` (`spec-questions.md`
  * #68), nên khi chủ chốt "múi giờ là một cài đặt của workspace" thì chỉ một chỗ
  * phải đổi.
  *

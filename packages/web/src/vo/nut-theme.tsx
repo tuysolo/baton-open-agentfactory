@@ -1,7 +1,7 @@
 /**
  * **Nút sáng / tối / theo máy** — ba lựa chọn, một nhóm radio.
  *
- * Chỗ đặt: **thanh trên, góc trên phải** (xem `quyet-dinh.md`). Một chỗ duy
+ * Chỗ đặt: **thanh trên, góc trên phải** (xem `decisions.md`). Một chỗ duy
  * nhất: nút này KHÔNG được lặp lại dưới chân sidebar — hai nút cho một trạng
  * thái là hai chỗ phải nhớ đồng bộ, và ở màn hình 375px cái dưới chân sidebar
  * nằm trong menu trượt (chủ phải mở menu mới đổi được màu).
@@ -127,7 +127,7 @@ export function NutTheme(): React.JSX.Element {
 
 /**
  * Icon **SVG nội tuyến**, đơn sắc (`currentColor`) — không thêm một gói icon
- * nào (xem `quyet-dinh.md`: `package.json` chưa có gói icon, và một dependency
+ * nào (xem `decisions.md`: `package.json` chưa có gói icon, và một dependency
  * mới cho ba hình vẽ là một cái giá không đáng).
  */
 function IconTheme({ chon }: { chon: ChonTheme }): React.JSX.Element {

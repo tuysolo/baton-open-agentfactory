@@ -4,7 +4,7 @@
  *
  * Cùng kỷ luật với `luat-trang-thai.ts`, `nguoi-cam.ts`, `luot-giao.ts`: không
  * I/O, không `Date.now()`. Mọi hàm phụ thuộc thời gian nhận `bay_gio` **qua tham
- * số** (`quyet-dinh.md` 01/10).
+ * số** (`decisions.md` 01/10).
  *
  * **Một máy trạng thái duy nhất.** Handler không được viết `if` trạng thái phiên
  * ở chỗ khác: luật nằm trọn ở đây, handler chỉ gọi.
@@ -18,7 +18,7 @@
  *
  * Theo **0.1**: nó là bảng mã máy **duy nhất** của SPEC và nói rõ áp cho "API,
  * CLI, MCP, **cơ sở dữ liệu** và log". Đây đúng cùng hình huống với
- * `cau-hoi-spec.md` #29 (0.1 `work` thắng văn xuôi 19.1 `worker`): bảng mã thắng
+ * `spec-questions.md` #29 (0.1 `work` thắng văn xuôi 19.1 `worker`): bảng mã thắng
  * văn xuôi. Đề nghị phiên spec bổ sung `waiting_assigner` vào danh sách ở mục 6.
  * -------------------------------------------------------------------------
  */
@@ -67,7 +67,7 @@ export function kiemNguongDungPhut(phut: unknown): number | null {
  * Ngưỡng đứng áp cho một phiên — SPEC mục 6: "mặc định 30 phút; chỉnh **theo dự
  * án** hoặc **theo agent** (5–1440 phút)".
  *
- * **SPEC không nói bậc nào thắng khi cả hai được đặt** (xem `cau-hoi-spec.md`,
+ * **SPEC không nói bậc nào thắng khi cả hai được đặt** (xem `spec-questions.md`,
  * câu gửi M-Baton lượt này). Chốt tạm: **agent thắng dự án**, vì agent là bậc
  * **cụ thể hơn** — chủ đặt riêng cho một agent là để nói về chính agent đó, còn
  * ngưỡng của dự án là một mặc định cho mọi agent chạy trong dự án. Thứ tự:
@@ -168,14 +168,14 @@ export interface PhienLuu {
    * tim (nó đang sống, chỉ là bị chặn), và nhịp tim là một tín hiệu (d.188). Đếm
    * theo `tin_hieu_cuoi_luc` thì mỗi nhịp tim đẩy đồng hồ về đầu, nên luật "quá
    * 60 phút thì hiện ở Cần chú ý" **không bao giờ chạy** đúng trong ca duy nhất
-   * nó cần chạy. Lỗi này do reviewer lượt 3 nêu (`cau-hoi-spec.md` #48).
+   * nó cần chạy. Lỗi này do reviewer lượt 3 nêu (`spec-questions.md` #48).
    *
    * `null` chỉ còn ở dòng cũ dựng trước migration 0007; khi đó rơi về
    * `tin_hieu_cuoi_luc` để cờ vẫn có một mốc để đếm.
    */
   waiting_assigner_luc?: number | null;
   /**
-   * "Đã bắn cảnh báo cho tín hiệu nào" — SPEC mục 6 d.196, `cau-hoi-spec.md` #46.
+   * "Đã bắn cảnh báo cho tín hiệu nào" — SPEC mục 6 d.196, `spec-questions.md` #46.
    * Xem `canhBaoDung` bên dưới.
    */
   canh_bao_tin_hieu_luc?: number | null;
@@ -607,7 +607,7 @@ export function kiemKeHoach(ds: unknown): BuocKeHoach[] {
  *     tín hiệu cuối. `error` là trạng thái **ghi trong DB**: nhịp tim hay mục
  *     `thought` nhích `tin_hieu_cuoi_luc` mà **không** đưa phiên ra khỏi `error`,
  *     nên gắn mốc vào tín hiệu cuối thì **cùng một lần lỗi** bị bắn lại mỗi lần
- *     có ai mở Tổng quan — lỗi reviewer lượt 4 nêu (`cau-hoi-spec.md` #50). Phiên
+ *     có ai mở Tổng quan — lỗi reviewer lượt 4 nêu (`spec-questions.md` #50). Phiên
  *     ra khỏi `error` rồi vào lại → `error_luc` mới → bắn lại.
  *
  * Dòng cũ trước migration 0008 không có `error_luc`; khi đó rơi về

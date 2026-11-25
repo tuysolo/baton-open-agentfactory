@@ -19,7 +19,7 @@
  *     chủ (`kiemTrangThaiKhiTao`), nên thông điệp hai bên là một câu; mã thoát 1.
  *
  * `--brief f.md` → 8 trường của mục 4, đọc bằng `brief-md.ts` (và
- * `cau-hoi-spec.md` #89 cho chỗ SPEC im lặng về hình của file).
+ * `spec-questions.md` #89 cho chỗ SPEC im lặng về hình của file).
  */
 
 import { batonFetch } from '@baton/client';

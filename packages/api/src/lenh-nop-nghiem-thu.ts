@@ -514,7 +514,7 @@ export async function handlerNghiemThu(
   if (ket_qua === 'returned' && ly_do !== null) {
     const max = await db
       .prepare(
-        // `workspace_id` trong mọi câu trên `luot_giao` — xem `quyet-dinh.md`.
+        // `workspace_id` trong mọi câu trên `luot_giao` — xem `decisions.md`.
         'SELECT coalesce(max(so_luot), 0) AS n FROM luot_giao WHERE workspace_id = ? AND ticket_id = ?',
       )
       .bind(lenh.workspace_id, luot.ticket_id)

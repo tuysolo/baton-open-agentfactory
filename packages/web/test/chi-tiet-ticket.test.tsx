@@ -401,7 +401,7 @@ describe('d.400 — bằng chứng và dòng bình luận–lịch sử', () => 
  * E. d.401 — cột phải: thuộc tính, liên quan (kể cả điều phối), Cần Chủ
  * ================================================================== */
 
-describe('UI-B (THIET-KE.md) — icon trạng thái ở đầu trang và ở thuộc tính', () => {
+describe('UI-B (DESIGN.md) — icon trạng thái ở đầu trang và ở thuộc tính', () => {
   it('đầu trang: icon đúng trạng thái đứng trước chữ trạng thái; thuộc tính "Trạng thái" cũng có icon, chữ máy chủ còn nguyên', async () => {
     mayChiTiet(
       manHinhTicket(

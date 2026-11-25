@@ -108,7 +108,7 @@ END;
 -- ===================================================================
 
 -- "Mọi ticket của một dự án, sắp theo ưu tiên" — không lọc trạng thái.
--- Khoá keyset là `(hang_uu_tien, tao_luc DESC, id DESC)` (`quyet-dinh.md` 01/10),
+-- Khoá keyset là `(hang_uu_tien, tao_luc DESC, id DESC)` (`decisions.md` 01/10),
 -- và index phải mang đúng bộ ba đó **ngay sau** `project_id`, không có
 -- `trang_thai` chen vào, nếu không SQLite phải sắp bằng B-tree tạm.
 CREATE INDEX ix_ticket_du_an_uu_tien

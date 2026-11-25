@@ -3,7 +3,7 @@
  *
  * Cùng kỷ luật với `luat-trang-thai.ts` và `nguoi-cam.ts`: không I/O, không
  * `Date.now()`. Mọi hàm phụ thuộc thời gian nhận `bay_gio` qua tham số, nên test
- * được bằng giờ tiêm vào (`quyet-dinh.md` 01/10, bài học của `apDungLuat`).
+ * được bằng giờ tiêm vào (`decisions.md` 01/10, bài học của `apDungLuat`).
  */
 
 import { BatonError } from './loi.js';

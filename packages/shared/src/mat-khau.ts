@@ -1,7 +1,7 @@
 /**
  * **Mật khẩu chủ** — lớp thứ nhất của đường đăng nhập (SPEC mục 15 d.415).
  *
- * Băm bằng **PBKDF2-SHA256**, đã chốt ở `quyet-dinh.md` 01/10 (Q6 A): Workers
+ * Băm bằng **PBKDF2-SHA256**, đã chốt ở `decisions.md` 01/10 (Q6 A): Workers
  * không chạy được argon2id (không có WASM nào trong danh sách cấm-phụ-thuộc, và
  * CPU của một request Worker không chịu nổi bộ nhớ của argon2id), còn PBKDF2 thì
  * nằm ngay trong WebCrypto.
@@ -30,7 +30,7 @@ import { bangNhauAnToan } from './token.js';
  * `iterations > 100000`. Đây là lỗi **thật đã gặp**: lúc deploy 06/10, hằng này
  * còn là 600.000 và `POST /v1/khoi-tao` trả **500** trên
  * `baton-api.*.workers.dev`; bản đang chạy sống được chỉ vì chủ đặt tay secret
- * `PBKDF2_SO_VONG=100000`. Workers là nền tảng đã chốt (`quyet-dinh.md` 01/10
+ * `PBKDF2_SO_VONG=100000`. Workers là nền tảng đã chốt (`decisions.md` 01/10
  * Q2), nên trần ấy là trần của Baton.
  *
  * **Nên NÂNG hằng này lên là làm hỏng bản thật** — mọi đường đặt mật khẩu sẽ
@@ -57,7 +57,7 @@ export const SO_BYTE_MUOI = 16;
 /** Số byte của khoá dẫn xuất — bằng độ dài khối ra của SHA-256. */
 const SO_BYTE_BAM = 32;
 
-/** Độ dài mật khẩu cho phép. Xem `cau-hoi-spec.md`: SPEC không nêu luật mật khẩu. */
+/** Độ dài mật khẩu cho phép. Xem `spec-questions.md`: SPEC không nêu luật mật khẩu. */
 export const MAT_KHAU_DAI_TOI_THIEU = 12;
 export const MAT_KHAU_DAI_TOI_DA = 256;
 
@@ -137,7 +137,7 @@ export async function kiemMatKhau(mat_khau: string, dong: MatKhauDaBam): Promise
 /**
  * Hình dạng mật khẩu nhận được.
  *
- * **SPEC không nêu luật mật khẩu nào** (`cau-hoi-spec.md`) — đây là hướng tạm:
+ * **SPEC không nêu luật mật khẩu nào** (`spec-questions.md`) — đây là hướng tạm:
  * chỉ chặn độ dài, không đòi "một chữ hoa một ký tự đặc biệt". Lý do: luật ký tự
  * đẩy người ta về những mật khẩu ngắn khó nhớ, còn độ dài tối thiểu 12 là ràng
  * buộc duy nhất có sức thật khi đã có PBKDF2 100.000 vòng (trần của Workers) và

@@ -183,7 +183,7 @@ describe('mục 3 — hàng "Nộp bằng chứng"', () => {
     expect(d?.nguoi_gui_agent_id).toBe(ID.worker);
   });
 
-  // BAT-58 (19.12 câu 15, `cau-hoi-spec.md` #176): trước ghim 403 FORBIDDEN; nay
+  // BAT-58 (19.12 câu 15, `spec-questions.md` #176): trước ghim 403 FORBIDDEN; nay
   // ticket ngoài phạm vi ra 404 NOT_FOUND giống hệt id bịa (403 cho id thật là máy dò).
   it('CỬA DỰ ÁN: agent không được vào dự án → 404 giống hệt id bịa (BAT-58); ĐỐI CHỨNG cùng vai trò được vào → 201', async () => {
     const xau = await gui(TOKEN.ngoai, { loai_bang_chung: 'note', noi_dung: 'x' });
@@ -996,7 +996,7 @@ describe('chặng ghi kết luận: không ghi đè, và không biến lỗi th�
    * `cron-bang-chung.test.ts`, BAT-41), không ngủ cố định. Bản cũ dùng `cham_ms:
    * 1_500`: 1,5 giây ngủ thật ăn gần một phần ba trần 5 giây của thân ca, nên khi
    * máy tải nặng (mọi request chậm đi, có lượt cả runtime đứng ~5 giây — đo ở bộ đầy
-   * đủ, xem `quyet-dinh.md` dòng BAT-54) ca hết giờ; và cuộc đua chỉ đúng nếu lệnh
+   * đủ, xem `decisions.md` dòng BAT-54) ca hết giờ; và cuộc đua chỉ đúng nếu lệnh
    * rút về TRƯỚC khi 1,5 giây hết — tải nặng thì rút về sau chặng 3, ca đỏ vì sai
    * điều kiện đầu vào chứ không vì mã. Có cửa: lệnh rút chắc chắn rơi giữa chặng 2
    * (nguồn đã được gọi, đang "chờ mạng") và chặng 3 (chỉ chạy sau khi thả cửa), và

@@ -169,7 +169,7 @@ describe('worker KHÔNG tự khai được "ticket của lượt mình" (SPEC m�
       than: { tieu_de: 'Vượt phạm vi', ticket_cua_luot_minh: true },
     });
     // BAT-58: trước ghim 403; nay ticket ngoài phạm vi ra 404 giống hệt id bịa
-    // (19.12 câu 15, `cau-hoi-spec.md` #176). Vẫn không sửa được — đó là điều ca này canh.
+    // (19.12 câu 15, `spec-questions.md` #176). Vẫn không sửa được — đó là điều ca này canh.
     expect(res.status).toBe(404);
     expect(
       await env.DB.prepare('SELECT tieu_de FROM ticket WHERE id = ?').bind(inc).first('tieu_de'),

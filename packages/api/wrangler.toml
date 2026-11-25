@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 # D1 — cơ sở dữ liệu chính (SPEC mục 1–4).
 # `database_id` là chỗ trống: chủ điền sau khi tự tạo DB. Agent KHÔNG chạy
-# wrangler, không deploy (quyet-dinh.md 01/10).
+# wrangler, không deploy (decisions.md 01/10).
 [[d1_databases]]
 binding = "DB"
 database_name = "baton"
@@ -37,7 +37,7 @@ new_sqlite_classes = ["GioiHanToken"]
 
 # --- Workers Static Assets — giao diện chủ (SPEC mục 14) --------------
 #
-# `quyet-dinh.md` 05/10 (CoS chốt): giao diện là một SPA React + Vite, phục vụ
+# `decisions.md` 05/10 (CoS chốt): giao diện là một SPA React + Vite, phục vụ
 # bằng **cùng Worker này**. `/v1/*` là API, mọi đường khác trả SPA.
 #
 # `directory` trỏ vào bản build của `packages/web` (`npm run build:web`, tức
@@ -87,7 +87,7 @@ run_worker_first = ["/v1/*"]
 # trữ khác DB chính (19.12 câu 7). BAT-8 bật khối này; handler là `src/sao-luu.ts`,
 # nhịp là ô `sao_luu` của `viecCuaCron` (19:00 UTC = 02:00 giờ chủ — xem `[triggers]`).
 #
-# **Bucket phải có TRƯỚC khi deploy** — chủ tạo một lần (`TRIEN-KHAI.md`, mục "Sao lưu
+# **Bucket phải có TRƯỚC khi deploy** — chủ tạo một lần (`DEPLOYMENT.md`, mục "Sao lưu
 # (BAT-8)"): `npx wrangler r2 bucket create baton-sao-luu`. Agent KHÔNG chạy wrangler.
 # Binding `SAO_LUU` là **tuỳ chọn** trong mã: thiếu nó thì nhịp sao lưu bỏ qua + log,
 # không lỗi, và báo cáo sáng/tối có một dòng "Sao lưu tự động chưa bật".
@@ -124,13 +124,13 @@ enabled = true
 #
 # Giá trị dưới đây là **CHỖ TRỐNG — chủ phải tự điền** địa chỉ thật của Worker trên
 # `workers.dev` (thay `TEN-TAI-KHOAN`) hoặc tên miền riêng, sau lần deploy đầu
-# (`TRIEN-KHAI.md` bước 7 và 37). Nó **không phải secret** — nó chính là thứ nằm trong
+# (`DEPLOYMENT.md` bước 7 và 37). Nó **không phải secret** — nó chính là thứ nằm trong
 # mọi tin gửi cho chủ, nên nó ở `[vars]` và commit được. Không có dấu `/` ở cuối.
 #
 # Chủ gắn tên miền riêng về sau thì **sửa đúng dòng này** rồi deploy lại; link trong
-# tin cũ không tự đổi theo. Cách kiểm: `TRIEN-KHAI.md`, mục phần 7.
+# tin cũ không tự đổi theo. Cách kiểm: `DEPLOYMENT.md`, mục phần 7.
 #
-# SPEC không chốt tên hay dạng của cấu hình này — `cau-hoi-spec.md` #116.
+# SPEC không chốt tên hay dạng của cấu hình này — `spec-questions.md` #116.
 [vars]
 BATON_URL_CONG_KHAI = "https://baton-api.TEN-TAI-KHOAN.workers.dev"
 
@@ -163,7 +163,7 @@ BATON_URL_CONG_KHAI = "https://baton-api.TEN-TAI-KHOAN.workers.dev"
 #     mục 8 d.283 — `src/cron-thong-bao.ts`, `CRON_THONG_BAO`). Cùng nhịp một phút
 #     vì giãn cách thử lại nhỏ nhất của 19.12 câu 6 là **10 giây**; nhịp thưa hơn
 #     thì lần thử lại thứ nhất tới muộn hơn cả lần thứ hai đáng ra phải tới.
-#     Thiếu hai secret Telegram ⇒ **không gửi và không lỗi** (xem `TRIEN-KHAI.md`
+#     Thiếu hai secret Telegram ⇒ **không gửi và không lỗi** (xem `DEPLOYMENT.md`
 #     §i); link trong tin cần `BATON_URL_CONG_KHAI` ở `[vars]` trên.
 #   * **phút chia hết 5** (`GIAN_CANH_BAO_PHUT`) — **cảnh báo phiên đứng hoặc lỗi**
 #     (SPEC mục 6 d.196). Nhịp 5 phút là **chốt của chủ**, 19.12 câu 46: "Cảnh báo

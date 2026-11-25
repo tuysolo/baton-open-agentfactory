@@ -6,7 +6,7 @@
  * "Trạng thái khi tạo" (T-108 = B: chọn được Backlog, còn lại `INVALID_INPUT`),
  * mục 14 d.413 (tạo ticket trên web — hộp Tạo việc của vỏ), mục 14 câu sáu cột
  * Bảng (T-111 = A, 29/10), mục 2 + 19.12 câu 25 (`archived` chỉ đọc), 19.12 câu
- * 26 (chủ tạo được trong dự án `paused`). `cau-hoi-spec.md` #179, #180: Bảng có
+ * 26 (chủ tạo được trong dự án `paused`). `spec-questions.md` #179, #180: Bảng có
  * `+` ở cột Backlog (mở với Backlog chọn sẵn) và cột Cần làm; Danh sách chỉ nhóm
  * Backlog có `+`, mở hộp với Backlog chọn sẵn.
  *

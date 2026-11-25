@@ -29,7 +29,7 @@
 --
 -- ## `STRICT` và `workspace_id` ở mọi bảng
 --
--- Nếp từ 0001 (`quyet-dinh.md` 01/10): mọi bảng mới ràng cả `workspace_id`, kể
+-- Nếp từ 0001 (`decisions.md` 01/10): mọi bảng mới ràng cả `workspace_id`, kể
 -- cả khi khoá đã là duy nhất toàn cục — mọi câu SQL lọc được theo workspace mà
 -- không phải `JOIN` lên `project`.
 

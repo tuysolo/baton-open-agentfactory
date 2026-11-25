@@ -117,7 +117,7 @@ export function locThayDongConGhi(
  * `doc-phien.ts`. Thấy được ⇔ ticket trong phạm vi đọc **HOẶC** `p.agent_id` là
  * người gọi **HOẶC** người gọi là người giao của lượt của phiên. Cùng lý lẽ với
  * `locPhamViLuot`. Đường **đọc** (`GET /v1/phien/:id`…) không dùng hàm này —
- * vẫn đúng luật đọc của `layTicket` như trước BAT-57 (`cau-hoi-spec.md` #175).
+ * vẫn đúng luật đọc của `layTicket` như trước BAT-57 (`spec-questions.md` #175).
  */
 export function locThayPhienGhi(ai: AiGoi): { sql: string; bind: string[] } {
   const agent_hep = agentHepPhamVi(ai);

@@ -10,7 +10,7 @@
  * nhích tín hiệu phiên, không "lần cuối lên tiếng"). Người gọi **thấy** được mà
  * không có quyền ⇒ vẫn 403. Phạm vi kiểm **trước** mọi luật nghiệp vụ (thông điệp
  * của `INVALID_INPUT`/`PROJECT_NOT_ACCEPTING`… cũng kể trạng thái đối tượng).
- * Chọn 404 (không 403) cùng lý do #175 — `cau-hoi-spec.md` #176.
+ * Chọn 404 (không 403) cùng lý do #175 — `spec-questions.md` #176.
  *
  * Bảng route đã rà (agent ngoài phạm vi, id THẬT; trước → sau):
  *   PATCH /v1/ticket/:id (sửa trường)                      403 → 404

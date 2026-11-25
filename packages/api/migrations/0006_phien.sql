@@ -16,7 +16,7 @@
 -- Chú ý: mục 6 dòng 181–187 chỉ liệt kê **6** mã — **thiếu `waiting_assigner`**.
 -- Lấy theo **0.1** vì đó là bảng mã máy duy nhất và nói rõ áp cho cả "cơ sở dữ
 -- liệu"; 19.6 cũng dùng `waiting_assigner` như một trạng thái thật. Đúng cùng
--- hình huống `cau-hoi-spec.md` #29 (0.1 `work` thắng văn xuôi 19.1 `worker`).
+-- hình huống `spec-questions.md` #29 (0.1 `work` thắng văn xuôi 19.1 `worker`).
 --
 -- `stalled` nằm trong CHECK nhưng **mã sản phẩm không bao giờ ghi nó**: nó là
 -- kết luận **dẫn xuất** từ `tin_hieu_cuoi_luc` ở đường đọc (xem
@@ -53,7 +53,7 @@ CREATE TABLE phien (
   -- quên thì phiên bị tính đứng trong khi agent đang làm — tức sai đúng thứ mục 6
   -- sinh ra để bảo đảm.
   --
-  -- Mốc này **khác** `agent.len_tieng_luc` (mục 3): xem `cau-hoi-spec.md` #13.
+  -- Mốc này **khác** `agent.len_tieng_luc` (mục 3): xem `spec-questions.md` #13.
   tin_hieu_cuoi_luc  INTEGER NOT NULL,
 
   -- `baton heartbeat [ghi chú]` — SPEC mục 13. Dòng hoạt động của phiên (mục 6

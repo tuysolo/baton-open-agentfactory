@@ -59,7 +59,7 @@ import { chayTheoLo } from './chia-lo-tham-so.js';
  *
  * d.400 nói bình luận "xen lịch sử (**lịch sử thu gọn**)" — tức lịch sử là nền
  * cho dòng bình luận, không phải nội dung chính. SPEC **không** chốt con số
- * (`cau-hoi-spec.md` #110); 50 là đề xuất tạm, và nó là một hằng có tên nên một
+ * (`spec-questions.md` #110); 50 là đề xuất tạm, và nó là một hằng có tên nên một
  * lần chốt khác chỉ sửa đúng dòng này.
  */
 export const SO_LICH_SU_MAN_HINH = 50;
@@ -114,7 +114,7 @@ export interface ManHinhTicketRa {
  * "Số việc con xong/tổng" của thẻ = `con_tong − con_chua_ket`. `con_chua_ket` là
  * **đúng** dẫn xuất 19.11 mà `layTicket` đã tính (con **không** thuộc
  * `done`/`canceled`/`duplicate`), nên "xong" ở đây là "đã kết" — một định nghĩa
- * cho cả hai màn hình, không hai. Xem `cau-hoi-spec.md` #134.
+ * cho cả hai màn hình, không hai. Xem `spec-questions.md` #134.
  */
 export interface TheDanhSachRa extends TicketDanhSachRa {
   /** Nhãn của ticket (mục 4) — thẻ hiện nhãn màu. Sắp theo chữ. */
@@ -130,7 +130,7 @@ export interface TheDanhSachRa extends TicketDanhSachRa {
    *
    * Cần cho vế "ẩn/hiện **Xong cũ**" của brief: `cap_nhat_luc` nhích vì **mọi**
    * lần sửa, nên một ticket Xong từ 100 ngày trước bị thêm một nhãn sẽ thành
-   * "mới" lại — cùng họ lỗi mà `cau-hoi-spec.md` #104 đã phải sửa cho đồng hồ 24
+   * "mới" lại — cùng họ lỗi mà `spec-questions.md` #104 đã phải sửa cho đồng hồ 24
    * giờ. Trường này ở `TheDanhSachRa`, **không** ở `TicketDanhSachRa`: thêm vào
    * kia là đổi đầu ra `baton list --json` (mục 13).
    */

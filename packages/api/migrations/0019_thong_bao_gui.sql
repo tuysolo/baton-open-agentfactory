@@ -32,7 +32,7 @@
 -- nhất mà `CHECK` của 0012 có cho d.341 — nên `loai` không phân biệt được chúng,
 -- và suy mức ưu tiên từ `loai` làm **một trong hai** câu của d.535 chắc chắn sai.
 --
--- Nếp "mốc, không cờ" đã chốt bốn lần trong `quyet-dinh.md` nói về trạng thái
+-- Nếp "mốc, không cờ" đã chốt bốn lần trong `decisions.md` nói về trạng thái
 -- **đổi theo thời gian** (đã bắn chưa, đã gửi chưa); ở đây những thứ đó **vẫn** là
 -- mốc (`gui_telegram_luc`, `nhac_do_luc`). `uu_tien` thì được quyết **lúc tin sinh
 -- ra** và không bao giờ đổi — nên nó đi vào trigger bất biến, đứng cạnh `loai`.

@@ -9,7 +9,7 @@
  *
  * **SPEC không nói file markdown đó trông thế nào** — không nói mục là tiêu đề
  * `##` hay một dòng `Mục: nội dung`, và `Kết quả` lấy từ đâu khi bảng lệnh d.366
- * không có cờ nào cho nó. Đã ghi `cau-hoi-spec.md` **#84**; dưới đây là hướng
+ * không có cờ nào cho nó. Đã ghi `spec-questions.md` **#84**; dưới đây là hướng
  * tạm, chọn sao cho nó **chỉ đọc được đúng thứ mục 5 kể**, không đoán thêm:
  *
  *   * Mục bắt đầu ở một **tiêu đề markdown** (`#` tới `######`) mà **chữ tiêu đề

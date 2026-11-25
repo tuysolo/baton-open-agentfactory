@@ -242,7 +242,7 @@ describe('SPEC mục 13 — thân lỗi `{ error, message }` và mã HTTP đúng
   });
 
   it('đường GHI dùng 403: ghi vào dự án ngoài phạm vi là FORBIDDEN', async () => {
-    // Quy ước của Baton (`cau-hoi-spec.md` #24): **ĐỌC → 404** (không lộ sự tồn
+    // Quy ước của Baton (`spec-questions.md` #24): **ĐỌC → 404** (không lộ sự tồn
     // tại), **GHI → 403** (nói thẳng "không có quyền", để agent không đi sửa dữ
     // liệu gửi lên vì tưởng mình gõ sai id).
     const res = await goiApi('/v1/ticket', TOKEN_HEP, {
@@ -253,7 +253,7 @@ describe('SPEC mục 13 — thân lỗi `{ error, message }` và mã HTTP đúng
     expect(await res.json()).toMatchObject({ error: 'FORBIDDEN' });
   });
 
-  it('403 của đường GHI KHÔNG là máy dò sự tồn tại của dự án (`cau-hoi-spec.md` #24)', async () => {
+  it('403 của đường GHI KHÔNG là máy dò sự tồn tại của dự án (`spec-questions.md` #24)', async () => {
     /*
      * Chỗ này từng là một **oracle**: `handlerTaoTicket` tra dự án *trước* khi
      * kiểm quyền, nên `project_id` không có thật ra 404 còn `project_id` có thật

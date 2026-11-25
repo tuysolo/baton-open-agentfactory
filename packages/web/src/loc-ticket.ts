@@ -74,7 +74,7 @@ export const COT_BANG = TRANG_THAI_THEO_THU_TU;
  * của `BangKeo`, không chỉ một thuộc tính đánh dấu.
  *
  * Chúng **không** phải `nhom_trang_thai` của máy chủ (`planned`/`active`/`closed`
- * — ba nhóm). Bảy trạng thái của bảng 0.1 vào sáu cột thế nào (`cau-hoi-spec.md`
+ * — ba nhóm). Bảy trạng thái của bảng 0.1 vào sáu cột thế nào (`spec-questions.md`
  * #131, #137):
  *
  *   * `backlog` — **có cột riêng, đứng đầu bên trái** (T-111 A). *Lịch sử:* từ
@@ -219,7 +219,7 @@ export const NHAN_LOC_NHANH: Record<LocNhanh, string> = {
  * Giá trị bên phải là **`nhom_trang_thai` máy chủ trả cho từng dòng**
  * (`NHOM_CUA_TRANG_THAI_TICKET` của mục 0.1), nên đây **không** là một bảng ánh
  * xạ trạng thái thứ hai ở client: web không gõ lại "in_progress và verifying là
- * active" ở bất cứ đâu. Xem `cau-hoi-spec.md` #133.
+ * active" ở bất cứ đâu. Xem `spec-questions.md` #133.
  */
 export const NHOM_CUA_LOC_NHANH: Record<LocNhanh, string | null> = {
   active: 'active',
@@ -236,7 +236,7 @@ export function nhanhTuUrl(sp: URLSearchParams): LocNhanh {
 /**
  * Áp lọc nhanh **trên trang đã tải**.
  *
- * Hệ quả đã khai (`cau-hoi-spec.md` #133): đường đọc chỉ nhận **một** mã trạng
+ * Hệ quả đã khai (`spec-questions.md` #133): đường đọc chỉ nhận **một** mã trạng
  * thái, nên một nhóm nhiều trạng thái không lọc được ở máy chủ mà không thêm
  * tham số truy vấn mới. Dòng "Còn trang sau" của trang vẫn nói thật, nên chủ
  * không bị một màn hình im lặng nói "hết rồi".
@@ -253,13 +253,13 @@ export function locNhanh(ds: readonly TicketDong[], nhanh: LocNhanh): TicketDong
 /**
  * **"Xong cũ" = đã kết, và vào Xong cách đây hơn 14 ngày.**
  *
- * SPEC không nói "cũ" là bao lâu (`cau-hoi-spec.md` #132); 14 ngày là đề xuất
+ * SPEC không nói "cũ" là bao lâu (`spec-questions.md` #132); 14 ngày là đề xuất
  * tạm, và nó là một hằng có tên nên một lần chốt khác chỉ sửa đúng dòng này.
  *
  * Mốc là **`xong_luc`** (đường đọc màn hình trả — `TheDanhSachRa`), **không**
  * `cap_nhat_luc`: `cap_nhat_luc` nhích vì **mọi** lần sửa, nên một ticket Xong
  * từ 100 ngày trước bị thêm một nhãn sẽ thành "mới" lại — luật sẽ không bao giờ
- * chạy đúng ca duy nhất nó cần chạy (cùng họ lỗi `cau-hoi-spec.md` #104).
+ * chạy đúng ca duy nhất nó cần chạy (cùng họ lỗi `spec-questions.md` #104).
  *
  * `xong_luc` **rỗng** (ticket `canceled`/`duplicate` chưa từng vào Xong, hoặc
  * dữ liệu nhập của mục 16) ⇒ rơi về `cap_nhat_luc`: đó là mốc duy nhất còn lại,
@@ -289,7 +289,7 @@ export function locXongCu(
 
 /**
  * Đọc lựa chọn "ẩn Xong cũ". **Mặc định `false`** (hiện hết): ẩn sẵn là một màn
- * hình tự bỏ bớt dữ liệu mà chủ chưa xin — xem `cau-hoi-spec.md` #132.
+ * hình tự bỏ bớt dữ liệu mà chủ chưa xin — xem `spec-questions.md` #132.
  */
 export function docAnXongCu(): boolean {
   return docKho(KHOA_AN_XONG_CU) === GIA_TRI_BAT;
@@ -429,7 +429,7 @@ export interface ViewDaLuu {
 }
 
 /**
- * Khoá `localStorage`. **SPEC không nói view lưu ở đâu** — `cau-hoi-spec.md` #110;
+ * Khoá `localStorage`. **SPEC không nói view lưu ở đâu** — `spec-questions.md` #110;
  * đề xuất tạm là máy khách, vì nó không cần một migration và không cần một đường
  * API nào ở lượt này. Hệ quả đã khai: view không theo chủ sang máy khác.
  */

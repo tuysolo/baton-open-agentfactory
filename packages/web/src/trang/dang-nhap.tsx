@@ -3,7 +3,7 @@
  *
  * "Chủ đăng nhập bằng mật khẩu cộng mã TOTP (2 lớp)." Tầng máy chủ đã chốt **một
  * request, hai yếu tố** (`POST /v1/dang-nhap { mat_khau, ma_totp }`; lý lẽ ở
- * `packages/api/src/chu-dang-nhap.ts`, câu hỏi còn mở ở `cau-hoi-spec.md` #99),
+ * `packages/api/src/chu-dang-nhap.ts`, câu hỏi còn mở ở `spec-questions.md` #99),
  * nên màn hình này có **một** biểu mẫu với hai ô, không hai bước.
  *
  * ## Câu lỗi là câu của máy chủ, không phải câu của trang

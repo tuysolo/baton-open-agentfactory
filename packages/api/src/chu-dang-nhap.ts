@@ -53,7 +53,7 @@ import { cauLenhSuKienBaoMat } from './su-kien-bao-mat.js';
 /**
  * Số lần sai **liên tiếp** được tha trước khi khoá.
  *
- * **SPEC không nói gì về số lần thử** — xem `cau-hoi-spec.md`. Đây là hướng tạm,
+ * **SPEC không nói gì về số lần thử** — xem `spec-questions.md`. Đây là hướng tạm,
  * và nó phải có: không có hạn mức nào thì 600 request/phút của d.387 là 600 lần
  * đoán mật khẩu mỗi phút, mãi mãi.
  */
@@ -95,10 +95,10 @@ export function khoaBaoLauMs(so_lan_sai: number): number {
  * Nói sai cái nào là cho người dò biết **mật khẩu đã đúng**, tức biến bài toán
  * "đoán mật khẩu **và** có máy TOTP" thành "đoán mật khẩu" (và lúc đó phản hồi
  * của máy chủ chính là cái oracle xác nhận). Cùng lý lẽ `FORBIDDEN` vs
- * `NOT_FOUND` của `quyet-dinh.md` (mã lỗi không được là một máy dò).
+ * `NOT_FOUND` của `decisions.md` (mã lỗi không được là một máy dò).
  *
  * Mã là `INVALID_TOKEN`/401, không một mã mới: đây đúng là "giấy tờ không hợp
- * lệ", và thêm một mã vào bảng mục 13 cần một dòng `cau-hoi-spec.md` cho một
+ * lệ", và thêm một mã vào bảng mục 13 cần một dòng `spec-questions.md` cho một
  * thứ không thêm thông tin nào cho người gọi.
  */
 export function loiDangNhapSai(): BatonError {
@@ -249,7 +249,7 @@ export function taiKhoanChu(
  * ------------------------------------------------------------------ */
 
 /**
- * **Thiết lập tài khoản chủ lần đầu** — `cau-hoi-spec.md` #3 đã chốt "một lệnh
+ * **Thiết lập tài khoản chủ lần đầu** — `spec-questions.md` #3 đã chốt "một lệnh
  * khởi tạo chạy trên máy chủ, chạy được **đúng một lần** khi chưa có chủ".
  *
  * Ở Baton nó phải là một **đường HTTP**, không một lệnh `wrangler`: `wrangler`
@@ -330,7 +330,7 @@ export async function thietLapChu(
  * `thietLapChu` gọi lần hai trả `FORBIDDEN` (cố ý: nó không phải đường đặt lại
  * mật khẩu).
  *
- * Đường "cứu" mà `TRIEN-KHAI.md` từng ghi là `DELETE FROM chu_tai_khoan` rồi
+ * Đường "cứu" mà `DEPLOYMENT.md` từng ghi là `DELETE FROM chu_tai_khoan` rồi
  * chạy lại khởi tạo. Nó **không chạy được**, và lượt này sửa chính lỗi đó:
  * `chu_phien.workspace_id` khai `REFERENCES chu_tai_khoan(workspace_id)` **không
  * có `ON DELETE`** (migration 0017 dòng 124), và 0017 khai rõ chính sách "không
@@ -481,7 +481,7 @@ const SECRET_GIA = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
  * có*, không về *hai request*. Làm một bước thì không sinh ra một "token giữa
  * chừng" (đã qua mật khẩu, chưa qua TOTP) — mà một token như vậy là một bí mật
  * mới phải bảo vệ, có hạn riêng, và là đúng chỗ mà hai lớp bị rút thành một nếu
- * cài sai. SPEC **không** đòi hai bước ở đâu; xem `cau-hoi-spec.md`.
+ * cài sai. SPEC **không** đòi hai bước ở đâu; xem `spec-questions.md`.
  *
  * ## Thời gian trả lời: hai ca sai làm CÙNG LƯỢNG VIỆC
  *
@@ -615,7 +615,7 @@ async function quaHaiLop(
      *
      * Che oracle đó thì phải giả một bộ đếm thứ hai y như thật, tức là có hai bộ
      * đếm mà một cái vô nghĩa. Nên: giữ nguyên, và trả tiền ở chỗ khác — đường
-     * `moKhoaChu` qua `TOKEN_CHU` là cửa thoát khi bị khoá, và `cau-hoi-spec.md`
+     * `moKhoaChu` qua `TOKEN_CHU` là cửa thoát khi bị khoá, và `spec-questions.md`
      * #98 khai thẳng xung đột này cho Chủ chốt.
      *
      * Ghi một lần sai: bộ đếm nhích, và khoá được đặt khi vượt ngưỡng.
@@ -691,7 +691,7 @@ export function cauKhoaDoiMatKhau(giay_cho: number): string {
  *
  * `quaHaiLop` — mật khẩu cũ **luôn** băm, TOTP **luôn** kiểm, một thông điệp lỗi
  * (`loiDangNhapSai`) cho mọi ca sai, bộ đếm `so_lan_sai`/`khoa_den_luc` **dùng
- * chung** với `/v1/dang-nhap` (`cau-hoi-spec.md` #98). Nên sai ở đây cũng làm đăng
+ * chung** với `/v1/dang-nhap` (`spec-questions.md` #98). Nên sai ở đây cũng làm đăng
  * nhập bị khoá, và ngược lại: tách hai bộ đếm là cho người giữ một cookie trộm
  * thêm 5 lần đoán mỗi chu kỳ khoá.
  *
@@ -707,7 +707,7 @@ export function cauKhoaDoiMatKhau(giay_cho: number): string {
  * cao hơn mức hiện hành (binding đổi giữa chừng) sẽ làm cả batch nổ thành 500.
  * Bình thường hai số bằng nhau và đó là `soVongHienHanh`.
  *
- * ## Nhật ký + tin Telegram (19.12 câu 3, d.594) — BAT-16, `cau-hoi-spec.md` #148
+ * ## Nhật ký + tin Telegram (19.12 câu 3, d.594) — BAT-16, `spec-questions.md` #148
  *
  *   * **Thành công** → một dòng `nhat_ky` + một tin bảo mật trong **cùng batch**
  *     (`cauLenhSuKienBaoMat`), cùng điều kiện "phiên còn sống".
@@ -947,7 +947,7 @@ export async function chamPhienChu(
  * chỉ cần lặp mãi một mật khẩu sai, giữ được tài khoản trong trạng thái khoá
  * **vô hạn** — tức khoá chính chủ ra ngoài vĩnh viễn. Hạn mức chống dò, không có
  * cửa thoát, chính là một đường từ chối dịch vụ nhắm vào **một** người dùng duy
- * nhất của hệ (`cau-hoi-spec.md` #98 có hệ quả này).
+ * nhất của hệ (`spec-questions.md` #98 có hệ quả này).
  *
  * ## Vì sao nó không phải một cửa hậu
  *
@@ -1053,7 +1053,7 @@ export async function dangXuatChu(
  *
  * Để riêng thành hằng (chứ không viết thẳng trong hàm) để ca test
  * `EXPLAIN QUERY PLAN` đo **đúng câu mà sản phẩm chạy** — nếp đã chốt ở
- * `quyet-dinh.md` cho `cauLenhDanhSachTicket`.
+ * `decisions.md` cho `cauLenhDanhSachTicket`.
  */
 export const CAU_TRA_PHIEN_CHU = `SELECT workspace_id, het_luc, dung_cuoi_luc FROM chu_phien
    WHERE bam = ? AND huy_luc IS NULL AND het_luc > ?`;

@@ -732,7 +732,7 @@ export async function lichSuTicket(
  * khớp index `ix_comment_ticket` của 0001, và cũng đúng thứ tự `baton show` cần
  * cho "10 bình luận cuối" (SPEC mục 13).
  *
- * Bình luận đã xoá (chủ xoá mềm — `cau-hoi-spec.md` #23) không trả ra.
+ * Bình luận đã xoá (chủ xoá mềm — `spec-questions.md` #23) không trả ra.
  */
 export async function binhLuanCuaTicket(
   db: D1Database,

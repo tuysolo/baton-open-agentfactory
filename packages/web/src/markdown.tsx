@@ -10,7 +10,7 @@
  * Một gói markdown đổi lại hai thứ đắt hơn hẳn: (1) phần lớn chúng trả **HTML
  * thô**, tức lối vào `dangerouslySetInnerHTML` — chỗ duy nhất trong cả giao diện
  * mà một chuỗi do **agent** viết trở thành mã chạy trong phiên của chủ; (2) một
- * bề mặt phụ thuộc mới mà `quyet-dinh.md` (danh sách CoS 05/10) chưa chốt.
+ * bề mặt phụ thuộc mới mà `decisions.md` (danh sách CoS 05/10) chưa chốt.
  *
  * Nên file này **không có** một `innerHTML` nào: nó dựng `Khoi`/`Inline` thuần
  * rồi trả về element. Chuỗi nào không khớp cú pháp nào thì hiện **nguyên văn** —
@@ -58,7 +58,7 @@ export const LOP_MD_KHONG_AN_TOAN = 'break-all text-chu-mo';
 
 /**
  * **Danh sách scheme cho phép** — fail-closed, cùng nếp `LienBangChung` của
- * trang Tổng quan (`quyet-dinh.md` 05/10: "cái gì gây hại ở chỗ vẽ thì canh ở
+ * trang Tổng quan (`decisions.md` 05/10: "cái gì gây hại ở chỗ vẽ thì canh ở
  * chỗ vẽ").
  *
  * `file:` nằm trong danh sách vì **SPEC đòi nó** (d.240). Nó an toàn ở đây theo

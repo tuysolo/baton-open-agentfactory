@@ -629,7 +629,7 @@ describe('C. công cụ MCP đi đường thật', () => {
   });
 
   /*
-   * BAT-43 (T-50 = A, `cau-hoi-spec.md` #168): cờ `assign --review` và lệnh `link`
+   * BAT-43 (T-50 = A, `spec-questions.md` #168): cờ `assign --review` và lệnh `link`
    * — công cụ MCP **tự có** vì sinh từ `SO_LENH`; hai ca này kiểm schema + đường thật.
    */
   it('assign có tham số `review` (boolean): true ⇒ lượt `review` trong DB; chuỗi "true" ⇒ INVALID_INPUT', async () => {
@@ -648,7 +648,7 @@ describe('C. công cụ MCP đi đường thật', () => {
   });
 
   /*
-   * BAT-47 (T-55 = A, `cau-hoi-spec.md` #171): `<agent>` nhận **tên hoặc ID**. Công cụ
+   * BAT-47 (T-55 = A, `spec-questions.md` #171): `<agent>` nhận **tên hoặc ID**. Công cụ
    * MCP `assign` sinh từ `SO_LENH`, nên tự có — hai ca này kiểm trên đường thật.
    */
   it('assign bằng TÊN agent qua MCP ⇒ giao đúng agent (DB)', async () => {

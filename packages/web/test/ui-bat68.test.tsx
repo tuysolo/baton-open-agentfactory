@@ -1,9 +1,9 @@
 /**
  * **UI BAT-68** — Nhật ký, Bản đồ dự án, hộp Token agent, Cài đặt, Đăng nhập lên
- * mức "làm kỹ" của `THIET-KE.md`. Không ca nào ở đây kiểm hành vi SPEC mới: hành
+ * mức "làm kỹ" của `DESIGN.md`. Không ca nào ở đây kiểm hành vi SPEC mới: hành
  * vi không đổi, các ca hành vi vẫn ở `nhat-ky.test.tsx`, `ban-do.test.tsx`,
  * `doi-agent.test.tsx` (token), `cai-dat.test.tsx`, `dang-nhap.test.tsx`. Ca ở
- * đây ghim **quy tắc trình bày** đã ghi vào `THIET-KE.md`:
+ * đây ghim **quy tắc trình bày** đã ghi vào `DESIGN.md`:
  *
  *   1. dòng `LOP_DS_DONG` + `LOP_DONG` / `LOP_DONG_NHIEU_TANG`; khối `vo/khoi`;
  *   2. nhãn trạng thái là chip viền mờ (`LOP_CHIP_CANH` / `LOP_CHIP_LOI`), không

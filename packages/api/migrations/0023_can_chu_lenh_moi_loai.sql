@@ -1,6 +1,6 @@
 -- ===================================================================
 -- 0023 — mục Cần Chủ MỌI LOẠI đều mang được lệnh
--- SPEC mục 8 (d.237, d.250, bảng d.257–262, phần Lỗi d.287); `cau-hoi-spec.md` #130
+-- SPEC mục 8 (d.237, d.250, bảng d.257–262, phần Lỗi d.287); `spec-questions.md` #130
 -- ===================================================================
 --
 -- ## Lỗi thật chủ gặp 13/10
@@ -20,7 +20,7 @@
 -- * Bảng d.257–262 (nút trả lời của từng loại) **không đổi**: lệnh chỉ là một
 --   khối hiện thêm trên thẻ, không đổi nút chính và không đổi điều kiện bật nút.
 --
--- Không có câu SPEC nào cấm loại khác mang lệnh ⇒ chốt tạm (`cau-hoi-spec.md`
+-- Không có câu SPEC nào cấm loại khác mang lệnh ⇒ chốt tạm (`spec-questions.md`
 -- #130): **mọi loại đều mang được lệnh**, và lệnh hiện trong khối code có nút
 -- Copy trên thẻ của mọi loại.
 --

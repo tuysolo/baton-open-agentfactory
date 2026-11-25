@@ -282,7 +282,7 @@ export async function lanToiTicketDieuPhoi(
    * **khôi phục** vẫn còn `xoa_luc` khác NULL, mà liên kết của nó thì không bị
    * xoá theo. Lọc ở đó là bỏ hẳn đường `khoi_phuc`.
    *
-   * **Nhưng lọc `xoa_luc` của đầu `cha`** (ticket điều phối) — `cau-hoi-spec.md`
+   * **Nhưng lọc `xoa_luc` của đầu `cha`** (ticket điều phối) — `spec-questions.md`
    * #54, cài theo đề xuất tạm (chủ **chưa** chốt):
    *
    *   Ticket điều phối **đã xoá mềm thì BỎ QUA**: không tính trạng thái mới cho
@@ -517,7 +517,7 @@ export interface KetQuaApCoReviewLai {
  * `handlerChuTuLam` trên **cùng một** chuyển trạng thái `planned → Đang làm`, nơi đã
  * chốt rằng kéo sang Chờ kiểm chứng là "nói rằng việc đã xong — trái hẳn ý chủ".
  * Hai đường không được khác nhau. SPEC không nói thẳng ranh giới này:
- * `cau-hoi-spec.md` **#66**.
+ * `spec-questions.md` **#66**.
  *
  * **Không viết tay một `UPDATE ticket SET trang_thai` nào ở đây**: nửa "về Chờ kiểm
  * chứng" đi qua đúng `apDungLuat` với sự kiện `can_review_lai`, rồi `apDungLenTicket`
@@ -723,7 +723,7 @@ export async function apSuKienLenTicket(
  * Tra ticket gốc và kiểm "hợp lệ" theo định nghĩa trong
  * `ticketGocHopLe` (tồn tại, cùng workspace, không phải chính nó, không tạo chuỗi
  * trùng vòng). SPEC nêu mã lỗi nhưng không định nghĩa hợp lệ —
- * `cau-hoi-spec.md` #19.
+ * `spec-questions.md` #19.
  */
 async function tiketGocHopLeTrongDb(
   db: D1Database,
@@ -735,7 +735,7 @@ async function tiketGocHopLeTrongDb(
    * BAT-58, 19.12 câu 15). Gốc thật ngoài phạm vi ⇒ coi như không có ⇒ cùng
    * `INVALID_DUPLICATE_TARGET` với id bịa. Trước BAT-58 câu tra cả workspace, nên
    * gốc thật ở dự án khác ra **thành công** (và ghi id đó lên ticket) còn id bịa
-   * ra lỗi — một máy dò sự tồn tại ticket ngoài phạm vi. `cau-hoi-spec.md` #176.
+   * ra lỗi — một máy dò sự tồn tại ticket ngoài phạm vi. `spec-questions.md` #176.
    */
   ai: AiGoi,
 ): Promise<{ hop_le: boolean; id: string | null }> {
@@ -872,7 +872,7 @@ export async function handlerDoiTrangThai(
    *
    * **Không truyền `dieu_chinh`**: lệnh này không chạm bảng `evidence`, nên nó **chỉ
    * bật/tắt cờ** và **không** kéo ticket về Chờ kiểm chứng. Đó là ranh giới của d.494
-   * (`cau-hoi-spec.md` #66) — nếu không, chủ không bao giờ đưa được một ticket mang cờ
+   * (`spec-questions.md` #66) — nếu không, chủ không bao giờ đưa được một ticket mang cờ
    * về Đang làm để đi sửa mã, và lệnh này sẽ cư xử **ngược** với `handlerChuTuLam` trên
    * cùng một chuyển trạng thái `planned → Đang làm`.
    *

@@ -13,7 +13,7 @@
  * Lượt giao chưa có id, số lượt (19.5), hạn phản hồi cho tới khi máy chủ cấp; và
  * máy chủ còn có thể đổi trạng thái ticket (`planned → Đang làm`, mục 4 dòng 134)
  * và người đang cầm (19.1). Hiện một lượt "tạm" là đoán cả bốn thứ đó. Nên cùng
- * khuôn hộp tạo việc (`cau-hoi-spec.md` #149, #153): khoá nút "Đang giao…" trong lúc
+ * khuôn hộp tạo việc (`spec-questions.md` #149, #153): khoá nút "Đang giao…" trong lúc
  * gửi; thành công thì đóng hộp và **làm mới** (`lamMoiTheoSo`) để chi tiết hiện lượt
  * thật; máy chủ từ chối (`ASSIGNMENT_OPEN`, `FORBIDDEN`, `INVALID_INPUT`,
  * `PROJECT_NOT_ACCEPTING`…) thì câu **nguyên văn** ra toast (d.418), hộp **giữ

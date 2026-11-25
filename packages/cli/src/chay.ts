@@ -20,7 +20,7 @@
  *   * `baton tasks --wait` hết giờ → `het_gio: true` và mã **0**, vì "không có
  *     việc mới" là một câu trả lời đúng của mô hình kéo việc (d.352).
  *   * `baton evidence` hết 10 giây mà xác minh còn `pending` → mã **0** (mục 7
- *     d.220, `cau-hoi-spec.md` #87).
+ *     d.220, `spec-questions.md` #87).
  *
  * Hàm này **không ném**: mọi ngoại lệ thành một dòng lỗi + một mã thoát.
  */

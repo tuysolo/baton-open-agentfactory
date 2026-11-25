@@ -517,7 +517,7 @@ export async function canChuTrongDb(id: string): Promise<{
   ly_do_de_xuat: string | null;
   lenh: string | null;
   can_tty: number;
-  /* Cột của **0023** — lệnh của loại **khác** `run_command` (`cau-hoi-spec.md` #130). */
+  /* Cột của **0023** — lệnh của loại **khác** `run_command` (`spec-questions.md` #130). */
   lenh_kem: string | null;
   can_tty_kem: number;
   trung_voi_can_chu_id: string | null;

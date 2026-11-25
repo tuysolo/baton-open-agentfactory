@@ -123,7 +123,7 @@ export const BANG_LOI = {
    * dùng mã nghiệp vụ. Dùng `INVALID_INPUT`/422 thì CLI hiểu là "lỗi nghiệp vụ"
    * và thoát mã 1, trong khi đúng ra phải là mã 2 "lỗi xác thực hoặc mạng"
    * (SPEC mục 13 bảng mã thoát) — agent sẽ tưởng dữ liệu mình gửi sai và tự sửa
-   * mãi, thay vì thử lại hoặc báo người. Xem `quyet-dinh.md` 01/10.
+   * mãi, thay vì thử lại hoặc báo người. Xem `decisions.md` 01/10.
    * Thông điệp **không bao giờ** mang chi tiết lỗi gốc (SPEC mục 15). */
   INTERNAL: {
     http: 500,
@@ -210,7 +210,7 @@ export type MaThoat = (typeof MA_THOAT)[keyof typeof MA_THOAT];
  * bằng cách đổi dữ liệu gửi lên**: token sai (`INVALID_TOKEN`), quá giới hạn
  * (`RATE_LIMITED` — phải **chờ**, không phải sửa lệnh), và lỗi máy chủ
  * (`INTERNAL` — ra mã 1 thì agent tưởng dữ liệu mình gửi sai và đi sửa dữ liệu
- * mãi). Hai quyết định đó đã chốt ở `quyet-dinh.md` 01/10. Còn lại là mã **1**
+ * mãi). Hai quyết định đó đã chốt ở `decisions.md` 01/10. Còn lại là mã **1**
  * "lỗi nghiệp vụ (in mã lỗi)" — SPEC mục 13 d.380.
  *
  * Viết **từng mã một** trong một `Record<MaLoi, MaThoat>` thay vì "một danh sách

@@ -1,7 +1,7 @@
 /**
  * BAT-48 — **người chịu trách nhiệm** (SPEC mục 4) là agent ngoài phạm vi người
  * gọi ⇒ phản hồi **giống hệt** agent không tồn tại (SPEC mục 13 d.399, 19.12 câu
- * 15; `cau-hoi-spec.md` #172). Cùng khuôn với người nhận lượt giao
+ * 15; `spec-questions.md` #172). Cùng khuôn với người nhận lượt giao
  * (`luot-giao.test.ts`, khối BAT-48).
  *
  * Trước BAT-48, `kiemChiuTrachNhiem` tra cả workspace: agent tạo ticket với

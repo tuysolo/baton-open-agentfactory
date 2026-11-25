@@ -576,7 +576,7 @@ describe('tronBinhLuanVaLichSu — "bình luận xen lịch sử" của d.400', 
 /* ================================================================== *
  * G. BAT-6 đợt 2 — nhóm cột của bảng (sáu từ BAT-64), lọc nhanh, "Xong cũ", màu thẻ
  * ================================================================== *
- * Bốn vế ngoài SPEC của brief (`cau-hoi-spec.md` #131–#136). Ca ở đây ghim **đề
+ * Bốn vế ngoài SPEC của brief (`spec-questions.md` #131–#136). Ca ở đây ghim **đề
  * xuất tạm đang dùng**, nên khi chủ chốt khác thì ca đỏ, không âm thầm lệch.
  */
 

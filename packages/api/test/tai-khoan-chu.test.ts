@@ -7,7 +7,7 @@
  *
  * SPEC mục 15: d.425 (mật khẩu + TOTP, phiên 30 ngày, đăng xuất mọi nơi), d.426
  * (agent không đăng nhập web), d.427 (bí mật không ra API/UI), d.428 (dấu vết);
- * `cau-hoi-spec.md` #98 (hạn mức thử sai — bộ đếm DÙNG CHUNG với đăng nhập).
+ * `spec-questions.md` #98 (hạn mức thử sai — bộ đếm DÙNG CHUNG với đăng nhập).
  *
  * Mọi mật khẩu/secret ở đây là **giả**, chỉ sống trong Miniflare.
  *

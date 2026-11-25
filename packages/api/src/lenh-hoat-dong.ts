@@ -28,7 +28,7 @@
  * **Ai được gọi.** Bảng quyền SPEC mục 3 **không có hàng nào** cho dòng hoạt
  * động, kế hoạch hay trả lời; SPEC nói theo **danh tính** ("agent gửi", "chỉ
  * người giao của lượt đó"). Nên các lệnh này kiểm danh tính và **không mượn** hàng
- * nào của bảng quyền — cùng lý do đã ghi ở `cau-hoi-spec.md` #22, #37, #44.
+ * nào của bảng quyền — cùng lý do đã ghi ở `spec-questions.md` #22, #37, #44.
  */
 
 import {
@@ -94,7 +94,7 @@ function batBuocLaAgentCuaPhien(lenh: LenhChung, phien: DongPhien, viec: string)
   /*
    * Mục 6 d.190 và d.191 đều mở đầu bằng "**agent** gửi". Chủ **không** gửi hộ:
    * dòng hoạt động là lời khai của agent về việc nó đang làm (cùng lý do đã chốt
-   * cho nhịp tim, `cau-hoi-spec.md` #31), và một dòng hoạt động có mục do chủ
+   * cho nhịp tim, `spec-questions.md` #31), và một dòng hoạt động có mục do chủ
    * chèn thì nó không còn là bằng chứng về agent nữa.
    */
   if (lenh.ai.loai !== 'agent' || lenh.ai.agent_id !== phien.agent_id) {

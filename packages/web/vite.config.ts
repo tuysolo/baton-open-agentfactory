@@ -2,7 +2,7 @@
  * Bản build của giao diện chủ (SPEC mục 14).
  *
  * Đầu ra đi vào `dist/`, và `packages/api/wrangler.toml` trỏ `[assets]` vào đúng
- * thư mục đó: **một** Worker phục vụ cả `/v1/*` và SPA (quyet-dinh.md 05/10,
+ * thư mục đó: **một** Worker phục vụ cả `/v1/*` và SPA (decisions.md 05/10,
  * "CoS chốt"). `dist/` **không** commit — xem `.gitignore` của root.
  */
 

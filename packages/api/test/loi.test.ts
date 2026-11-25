@@ -50,7 +50,7 @@ const MA_TOI_THIEU: MaLoi[] = [
 /**
  * Mã **không** nằm trong bảng của SPEC, Baton tự thêm. SPEC mục 13 gọi bảng của
  * nó là "mã lỗi **tối thiểu**", nên thêm là hợp lệ; mỗi mã thêm phải có một dòng
- * trong `quyet-dinh.md`.
+ * trong `decisions.md`.
  */
 const MA_THEM: MaLoi[] = [
   'INTERNAL',

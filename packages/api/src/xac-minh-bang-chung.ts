@@ -26,7 +26,7 @@
  * thái d.220 dựng ra cho ca này, với `thu_lai_luc` đã đặt sẵn ở chặng 1, nên Cron
  * của lượt 3 nhặt nó lên. Hướng "một giao dịch" thì phải gọi mạng trong DO, tức
  * đánh đổi tính toàn vẹn của một dòng bằng **thời gian đáp của cả workspace**.
- * Xem `quyet-dinh.md`.
+ * Xem `decisions.md`.
  */
 
 import {
@@ -98,7 +98,7 @@ export async function xacMinhMotBangChung(
 
     /*
      * **GitHub là nguồn ƯU TIÊN; `local` chỉ là đường cuối** — migration 0022
-     * khối A, `quyet-dinh.md` 13/10.
+     * khối A, `decisions.md` 13/10.
      *
      * Rơi về lời khai `merged_cuc_bo` ở **đúng một** ca: `khong_thay` **kèm
      * `da_hoi_commit`**, tức GitHub đã được hỏi **về chính commit này** (chặng
@@ -122,7 +122,7 @@ export async function xacMinhMotBangChung(
      * **chưa** đặt `GITHUB_TOKEN`, nên nhánh đó biến **mọi** commit có lời khai
      * thành `merged` mà không hỏi GitHub một lần nào — kể cả commit đã push nhưng
      * chưa vào nhánh mặc định, tức đúng ca mà d.206 gọi là `pushed`. Một cấu hình
-     * thiếu không được phép mở cổng Xong. Xem `cau-hoi-spec.md` #122.
+     * thiếu không được phép mở cổng Xong. Xem `spec-questions.md` #122.
      */
     if ('loi' in ra) {
       // d.220 + 19.7: lỗi mạng, lỗi GitHub, hoặc thiếu token → `pending`.

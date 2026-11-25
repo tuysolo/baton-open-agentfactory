@@ -5,7 +5,7 @@
 --        d.416 (agent chỉ dùng token, **không đăng nhập web**),
 --        d.417 (bí mật phía server **không bao giờ** ra API hay UI),
 --        d.418 (mọi hành động có dấu vết ai làm)
--- `quyet-dinh.md` 01/10: Q6 A = tự làm mật khẩu + TOTP, băm **PBKDF2-SHA256**;
+-- `decisions.md` 01/10: Q6 A = tự làm mật khẩu + TOTP, băm **PBKDF2-SHA256**;
 --        và hàng `xac-thuc.ts` ("phần 6 thay nhánh `'chu'` mà không sửa chỗ
 --        khác") — migration này là nửa dữ liệu của món nợ đó.
 -- ===================================================================
@@ -19,7 +19,7 @@
 -- Số lần nhập sai là một thuộc tính của **đúng cái tài khoản ấy**, và đã có đúng
 -- một hàng cho mỗi workspace, nên một bảng riêng sẽ là một bảng khoá-một-một —
 -- tức cùng dữ liệu, cộng một phép `JOIN` trên đường đăng nhập, cộng một chỗ nữa
--- để lệch. SPEC **im lặng** về số lần thử (xem `cau-hoi-spec.md`), nên luật ở đây
+-- để lệch. SPEC **im lặng** về số lần thử (xem `spec-questions.md`), nên luật ở đây
 -- là hướng tạm; để nó nằm cạnh tài khoản làm việc đổi luật về sau chỉ chạm một
 -- bảng.
 
@@ -72,7 +72,7 @@ CREATE TABLE chu_tai_khoan (
   -- NULL = chưa đăng nhập lần nào.
   totp_buoc_cuoi INTEGER CHECK (totp_buoc_cuoi IS NULL OR totp_buoc_cuoi > 0),
 
-  -- Chống dò mật khẩu — SPEC IM LẶNG, xem `cau-hoi-spec.md`
+  -- Chống dò mật khẩu — SPEC IM LẶNG, xem `spec-questions.md`
 
   -- Số lần nhập **sai liên tiếp** (một lần đúng đặt lại về 0).
   so_lan_sai    INTEGER NOT NULL DEFAULT 0 CHECK (so_lan_sai >= 0),
@@ -98,7 +98,7 @@ CREATE TABLE chu_tai_khoan (
 -- nếp `agent.token_bam` của 0001. Lý lẽ đầy đủ ở đầu `shared/src/phien-chu.ts`;
 -- ba điểm:
 --   1. SHA-256 (không KDF chậm) vì giá trị là **máy sinh** 256 bit — không có gì
---      để dò từ điển, đúng lý lẽ `quyet-dinh.md` 01/10 cho token agent.
+--      để dò từ điển, đúng lý lẽ `decisions.md` 01/10 cho token agent.
 --   2. Cookie tới trong **mọi** request của web, nên phép tra phải là **một** lần
 --      tra khoá. Băm làm khoá chính ⇒ `SEARCH … USING INDEX sqlite_autoindex`
 --      (hay PK) chứ không quét. KDF chậm thì muối nằm cùng dòng, tức phải quét
@@ -238,7 +238,7 @@ CREATE TRIGGER tg_chu_tai_khoan_so_vong_chi_tang
 BEFORE UPDATE OF so_vong ON chu_tai_khoan
 FOR EACH ROW WHEN NEW.so_vong < OLD.so_vong
 BEGIN
-  SELECT RAISE(ABORT, 'FORBIDDEN: so vong PBKDF2 chi tang, khong ha (quyet-dinh.md 01/10 Q6)');
+  SELECT RAISE(ABORT, 'FORBIDDEN: so vong PBKDF2 chi tang, khong ha (decisions.md 01/10 Q6)');
 END;
 
 -- **Bước TOTP đã dùng chỉ tăng** — đây là **cả** hàng rào chống dùng lại mã, ép

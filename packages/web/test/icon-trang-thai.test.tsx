@@ -1,5 +1,5 @@
 /**
- * **Icon trạng thái ticket + chấm mức gấp** — hệ thiết kế 29/10 (`THIET-KE.md`,
+ * **Icon trạng thái ticket + chấm mức gấp** — hệ thiết kế 29/10 (`DESIGN.md`,
  * lượt UI-A). Không một mục SPEC: SPEC định nghĩa trạng thái (bảng 0.1) và mức
  * gấp (mục Cần Chủ), còn hình vẽ là trình bày. Ca ở đây canh ba điều mà phần B
  * sẽ dựa vào:

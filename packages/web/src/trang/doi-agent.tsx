@@ -143,7 +143,7 @@ export function TrangDoiAgent(): React.JSX.Element {
   );
 }
 
-/** Đường trang một agent. SPEC **không** chốt đường này — `cau-hoi-spec.md` #101. */
+/** Đường trang một agent. SPEC **không** chốt đường này — `spec-questions.md` #101. */
 export const duongAgent = (id: string): string => `/agent/${id}`;
 
 function HangAgent({ a, bay_gio }: { a: AgentDong; bay_gio: number }): React.JSX.Element {

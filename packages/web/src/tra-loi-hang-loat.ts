@@ -12,7 +12,7 @@
  * bình luận lên ticket — và không ai thấy. Nên luật tách nằm ngoài component,
  * không chạm DOM, không chạm `fetch`, và mọi ca biên có test riêng.
  *
- * ## "Áp một lần" — nguyên tử hay lần lượt? (`cau-hoi-spec.md` #107)
+ * ## "Áp một lần" — nguyên tử hay lần lượt? (`spec-questions.md` #107)
  *
  * SPEC không nói, và máy chủ **không có** đường ghi theo lô. Hướng tạm đang cài:
  * **chặn trước** ở bước xem trước (có **một** dòng không hiểu ⇒ **không áp dòng
@@ -30,7 +30,7 @@
  * 2. **Dòng không có mã = NỐI TIẾP dòng trước** — một câu trả lời nhiều dòng là
  *    một mục, một hàng xem trước, nội dung nối bằng `\n` (xem `tachHangLoat`).
  * 3. **Nội dung không khớp phương án nào trên một mục `decision` = trả lời TỰ
- *    DO**, không đỏ (`cau-hoi-spec.md` **#121**) — nhưng một **nhãn sai**
+ *    DO**, không đỏ (`spec-questions.md` **#121**) — nhưng một **nhãn sai**
  *    (`T-2: Z, …`) thì **vẫn đỏ**; lý lẽ ở `thanCuaDong`.
  *
  * Cộng một **lối tạm**: mã không khớp mục nào thì thử số T ghi ở **đầu tiêu đề**
@@ -294,7 +294,7 @@ function thanCuaDong(m: MucBiet, noi: string): ThanXuLyMuc | string {
      * **một mình** ở đầu (theo sau là hết dòng, dấu phẩy, hoặc khoảng trắng), nếu
      * không thì `đã xem` sẽ khớp thành phương án `Đ`.
      *
-     * **BA đường, không hai** — cố ý, `cau-hoi-spec.md` #121. Chúng tách nhau
+     * **BA đường, không hai** — cố ý, `spec-questions.md` #121. Chúng tách nhau
      * theo **hình của dòng**, vì hình là thứ duy nhất nói được chủ **đang định
      * làm gì**:
      *
@@ -338,7 +338,7 @@ function thanCuaDong(m: MucBiet, noi: string): ThanXuLyMuc | string {
 
   if (m.loai === 'review') {
     /*
-     * **SPEC im lặng ở đây** (`cau-hoi-spec.md` #107): d.271 cho hai ví dụ, cả
+     * **SPEC im lặng ở đây** (`spec-questions.md` #107): d.271 cho hai ví dụ, cả
      * hai đều không phải mục `review`, mà d.261 lại bắt mục `review` phải có
      * `Đạt`/`Cần sửa` — một chữ tự do không đủ để gọi đường `xu-ly` (máy chủ trả
      * `INVALID_INPUT`). Hướng tạm: đòi dòng **mở đầu** bằng một trong hai chữ

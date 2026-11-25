@@ -1,9 +1,9 @@
 /**
  * **Chế độ sáng / tối / theo máy** — luật thuần, không JSX.
  *
- * SPEC mục 14 **không nói gì về chế độ tối** (`cau-hoi-spec.md` #125): yêu cầu
+ * SPEC mục 14 **không nói gì về chế độ tối** (`spec-questions.md` #125): yêu cầu
  * đến từ chủ qua brief. Ba lựa chọn, nhớ lại lần sau. Mặc định cho người chưa
- * chọn: **tối** (Chủ chốt 29/10, hệ thiết kế kiểu Linear — `THIET-KE.md`);
+ * chọn: **tối** (Chủ chốt 29/10, hệ thiết kế kiểu Linear — `DESIGN.md`);
  * trước 29/10 là "theo máy".
  *
  * ## Ba chữ, và vì sao `may` không được lưu thành `toi`
@@ -37,7 +37,7 @@ export const NHAN_THEME: Record<ChonTheme, string> = {
 };
 
 /**
- * Mặc định: **tối** — chế độ chính của hệ thiết kế từ 29/10 (`THIET-KE.md`).
+ * Mặc định: **tối** — chế độ chính của hệ thiết kế từ 29/10 (`DESIGN.md`).
  * Ba chỗ phải khớp chữ này: hằng này, script nội tuyến của `index.html`, và
  * khối fallback `:root:not([data-theme])` của `kieu.css` (chưa có JS ⇒ tối).
  */

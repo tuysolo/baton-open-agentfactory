@@ -17,7 +17,7 @@
  * | `/agent/:id` | Trang một agent (phiên, lịch sử lượt giao, quyền) | 3 d.104 |
  * | `/phien/:id` | Chi tiết phiên (dòng hoạt động, kế hoạch, nút Dừng) | 14 d.402 |
  *
- * Trừ `/t/<MÃ>`, **SPEC không chốt một đường nào** — xem `cau-hoi-spec.md` #101.
+ * Trừ `/t/<MÃ>`, **SPEC không chốt một đường nào** — xem `spec-questions.md` #101.
  *
  * `/t/:ma` nhận **mã** (`BAT-12`), không id: d.398 viết `/t/<MÃ>`, và mã là thứ
  * chủ đọc được, gõ lại được, dán vào Telegram được (mục 12: "mỗi tin có link

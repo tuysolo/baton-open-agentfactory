@@ -107,7 +107,7 @@ export const NHAN_THOI = 'Thôi';
 
 /**
  * Đường trang hồ sơ của một dự án. SPEC **không** chốt đường này — đề xuất tạm
- * `cau-hoi-spec.md` #114 (một vế hẹp của #101). Tham số là **id** dự án, không
+ * `spec-questions.md` #114 (một vế hẹp của #101). Tham số là **id** dự án, không
  * mã: `GET /v1/du-an/:id/ho-so` tra theo id.
  */
 export const duongHoSo = (project_id: string): string =>

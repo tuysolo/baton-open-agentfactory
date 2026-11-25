@@ -22,7 +22,7 @@ export default defineConfig({
   /**
    * **`SPEC.md` nằm NGOÀI `packages/web`, nên phải cho phép tường minh.**
    *
-   * `test/doc-spec.ts` nhập `'../../../SPEC.md?raw'` — nguồn sự thật của bảng
+   * `test/doc-spec.ts` nhập `'../../../docs/vi/SPEC.md?raw'` — nguồn sự thật của bảng
    * nhãn sidebar. Vite chặn mọi file ngoài "workspace root" mà nó **tự dò**, và
    * phép dò đó phụ thuộc **cách gọi lệnh**: với `--root` là đường **tuyệt đối**
    * thì nó dò ra gốc repo và `?raw` đi qua; với đường **tương đối** thì không, và

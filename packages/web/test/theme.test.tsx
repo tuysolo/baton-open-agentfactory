@@ -1,12 +1,12 @@
 /**
- * **Giao diện sáng / tối / theo máy** — yêu cầu của chủ (BAT-6 đợt 1, `cau-hoi-spec.md`
+ * **Giao diện sáng / tối / theo máy** — yêu cầu của chủ (BAT-6 đợt 1, `spec-questions.md`
  * #125), nay là SPEC mục 14 gạch "Chế độ màu" (d.406; mặc định Tối từ 29/10, T-106 A,
  * #178) — có ca ghim chữ SPEC.
  *
  * Bốn điều ca ở đây canh, và cả bốn đều là thứ đã hỏng thật ở các bản đầu của
  * tính năng này ở mọi sản phẩm:
  *   1. mặc định là **tối** — Chủ chốt 29/10 (hệ thiết kế kiểu Linear,
- *      `THIET-KE.md`: tối là chế độ chính); trước 29/10 mặc định là theo máy;
+ *      `DESIGN.md`: tối là chế độ chính); trước 29/10 mặc định là theo máy;
  *   2. lựa chọn được **nhớ** sang lần sau — và thứ được nhớ là *lựa chọn*
  *      (`may`), không phải kết quả đã giải (`sang`), nếu không "theo máy" bị
  *      đóng băng;

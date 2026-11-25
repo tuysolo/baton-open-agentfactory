@@ -4,7 +4,7 @@
  * và menu trượt ở 375px (d.411).
  *
  * Phần SPEC chạm tới: mục 14 d.391–394 (sidebar), d.411 (375px). Phần ngoài
- * SPEC (yêu cầu của chủ qua brief) ghi ở `cau-hoi-spec.md` #125–#129 — ca ở đây
+ * SPEC (yêu cầu của chủ qua brief) ghi ở `spec-questions.md` #125–#129 — ca ở đây
  * ghim **đề xuất tạm đang dùng**, nên khi chủ chốt khác thì ca đỏ, không âm thầm
  * lệch.
  *
@@ -810,7 +810,7 @@ async function docNguon(): Promise<[string, string][]> {
 }
 
 /**
- * Token ngữ nghĩa mà lưới cặp biết đo. Hệ thiết kế 29/10 (`THIET-KE.md`) thêm
+ * Token ngữ nghĩa mà lưới cặp biết đo. Hệ thiết kế 29/10 (`DESIGN.md`) thêm
  * chữ mờ hơn, màu nhấn (5 vai trò), màu 5 trạng thái và 3 mức gấp — thêm vào
  * đây để mọi cặp nền–chữ dùng chúng **có người đo**; một token lạ với lưới thì
  * cặp của nó bị bỏ qua im lặng.
@@ -1066,7 +1066,7 @@ describe('lưới: nhãn màu và icon ưu tiên của thẻ việc đọc đư�
 });
 
 /* ================================================================== *
- * Hệ thiết kế 29/10 (`THIET-KE.md`) — token mới phải đọc được
+ * Hệ thiết kế 29/10 (`DESIGN.md`) — token mới phải đọc được
  * ================================================================== *
  * Lượt UI-A thêm: chữ mờ hơn, màu nhấn (5 vai trò), màu 5 trạng thái, 3 mức
  * gấp, và đổi mặc định sang tối. Các ca dưới đo **từ chính `kieu.css`**, ở cả
@@ -1226,7 +1226,7 @@ describe('lưới: component KHÔNG tự chọn mã màu', () => {
     }
     /*
      * Đúng một chỗ còn lại: huy hiệu đỏ của sidebar. Toast lỗi **không** còn nền
-     * đỏ chữ trắng từ hệ thiết kế 29/10 (`THIET-KE.md`): nó là tấm lớp nổi chữ
+     * đỏ chữ trắng từ hệ thiết kế 29/10 (`DESIGN.md`): nó là tấm lớp nổi chữ
      * chính, nghĩa "lỗi" đi bằng icon đỏ — nên `toast.tsx` rời danh sách này.
      * Chữ trên màu nhấn là token `tren-nhan-manh`, không `text-white`.
      */

@@ -17,7 +17,7 @@
 --      trạng thái đó. Nhét chúng vào `passed` thì "không cần xác minh" và "đã
 --      xác minh đạt" thành một giá trị, và cổng Xong (d.214) mất khả năng phân
 --      biệt — mà đúng ra `passed` của `deploy` **mở cổng** còn `note` thì không.
---      Xem `cau-hoi-spec.md` #55.
+--      Xem `spec-questions.md` #55.
 --
 --   B. `withdrawn` **không** lưu vào `xac_minh`, mà là **bốn cột rút lại riêng**
 --      (`rut_luc`, `rut_ly_do`, `rut_boi_*`). Lý do: d.222 nói bằng chứng "**không

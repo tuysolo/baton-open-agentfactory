@@ -3,7 +3,7 @@
  * chọn; áp một phím cho nhiều ticket"), BAT-35. Hàm thuần + hàng chờ giới hạn;
  * trạng thái chọn và listener phím ở `trang/danh-sach-ticket.tsx`.
  *
- * Phần SPEC không nói (`cau-hoi-spec.md` #156–#158):
+ * Phần SPEC không nói (`spec-questions.md` #156–#158):
  *   * `L` nhiều thẻ — `dichNhanLo`: mọi thẻ đã có nhãn ⇒ bỏ ở tất cả; ngược lại
  *     ⇒ gắn cho các thẻ chưa có (thẻ đã có không gửi request).
  *   * Sau khi áp: bỏ chọn thẻ thành công, **giữ đúng thẻ lỗi** để sửa và thử lại.
@@ -78,7 +78,7 @@ export function tomTatLoiLo(tong: number, loi: readonly LoiMotThe[]): string {
 }
 
 /**
- * **Luật `L` cho nhiều thẻ** (SPEC không nói — `cau-hoi-spec.md` #156): mọi thẻ đã
+ * **Luật `L` cho nhiều thẻ** (SPEC không nói — `spec-questions.md` #156): mọi thẻ đã
  * có nhãn ⇒ **bỏ** ở tất cả; ngược lại ⇒ **gắn** cho các thẻ chưa có, thẻ đã có
  * thì không gửi gì. Trả một mục cho **mỗi** thẻ, cùng thứ tự: `null` = không gửi.
  * Nhãn trống ⇒ toàn `null`. Cắt khoảng trắng như `dichNhan`.
@@ -125,7 +125,7 @@ export const NHAN_LO_GIAO = 'Giao việc các thẻ đã chọn';
 export const NHAN_BO_CHON = 'Bỏ chọn';
 /**
  * Nút xác nhận cạnh mỗi ô của thanh — **đường duy nhất** gửi request (BAT-39,
- * `cau-hoi-spec.md` #164). Ô chỉ đặt giá trị chờ: đổi bằng chuột, mũi tên, Space,
+ * `spec-questions.md` #164). Ô chỉ đặt giá trị chờ: đổi bằng chuột, mũi tên, Space,
  * gõ chữ hay `Enter` đều không áp.
  */
 export const NHAN_NUT_AP = 'Áp';
@@ -135,7 +135,7 @@ export const NHAN_AP_NHAN = 'Áp nhãn cho các thẻ đã chọn';
 export const NHAN_DANG_AP = 'Đang áp…';
 
 /**
- * **Ngưỡng hỏi lại trước khi áp cho nhiều thẻ** — `cau-hoi-spec.md` #159, Chủ chốt
+ * **Ngưỡng hỏi lại trước khi áp cho nhiều thẻ** — `spec-questions.md` #159, Chủ chốt
  * T-38 = A (19/10), SPEC mục 14. Áp `S`/`P`/`L` từ thanh chọn nhiều cho **N ≥ 10**
  * thẻ ⇒ hộp "Áp cho N thẻ?" trước; N < 10 ⇒ áp luôn (nút "Áp" là đủ — BAT-39).
  * N = số thẻ đã chọn **đang hiện** (đúng tập mà lượt áp sẽ gửi). `A` không qua đây:

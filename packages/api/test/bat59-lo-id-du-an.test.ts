@@ -2,7 +2,7 @@
  * **BAT-59** — không lộ sự tồn tại của **id dự án** qua các đường GHI (19.12 câu
  * 15 gạch 3: "Với agent ngoài phạm vi, **cả hai ca phải ra phản hồi giống hệt
  * nhau**"). Cùng khuôn BAT-57 (id lượt/phiên, #175) và BAT-58 (id ticket, #176),
- * áp dụng chốt T-75 A — `cau-hoi-spec.md` #177.
+ * áp dụng chốt T-75 A — `spec-questions.md` #177.
  *
  * Người gọi **không thấy** được dự án (ngoài `agent_project`, luật của `layDuAn`)
  * ⇒ **cùng dòng `throw NOT_FOUND`** với id bịa: so trực tiếp status, content-type,

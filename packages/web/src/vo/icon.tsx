@@ -63,7 +63,7 @@ export function IconDong(): React.JSX.Element {
 
 /**
  * **Icon ưu tiên** — năm mức của bảng 0.1, năm hình **phân biệt được không cần
- * màu** (`cau-hoi-spec.md` #136).
+ * màu** (`spec-questions.md` #136).
  *
  *   * `urgent` — một ô vuông có dấu `!` (hình duy nhất không phải vạch: Khẩn phải
  *     khác hẳn, không chỉ "nhiều vạch hơn");
@@ -140,7 +140,7 @@ export function IconChevronXuong(): React.JSX.Element {
 }
 
 /* ================================================================== *
- * Icon trạng thái ticket + chấm mức gấp — hệ thiết kế 29/10 (THIET-KE.md)
+ * Icon trạng thái ticket + chấm mức gấp — hệ thiết kế 29/10 (DESIGN.md)
  * ================================================================== */
 
 /**

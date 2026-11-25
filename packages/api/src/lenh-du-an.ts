@@ -403,7 +403,7 @@ export async function handlerSuaDuAn(
   /*
    * Dự án lưu trữ là **chỉ đọc** (SPEC mục 2). Ngoại lệ duy nhất là chủ đổi
    * `trang_thai` để mở lại, nếu không thì lưu trữ là cửa một chiều
-   * (`cau-hoi-spec.md` #15 chỉ xin ngoại lệ cho **riêng** trường đó).
+   * (`spec-questions.md` #15 chỉ xin ngoại lệ cho **riêng** trường đó).
    *
    * Nên lệnh sửa một dự án `archived` chỉ được mang **đúng** `trang_thai`. Chỉ
    * kiểm "có đổi trạng thái không" là không đủ: gửi kèm `trang_thai` cùng một
@@ -414,7 +414,7 @@ export async function handlerSuaDuAn(
     /*
      * 20.8: Lưu trữ **không** nằm trong ô Trạng thái — chọn một giá trị của ô trên
      * dự án lưu trữ là một cách mở lại lưu trữ ngoài cửa của chủ ⇒ từ chối cho mọi
-     * người gọi (`cau-hoi-spec.md`). Mở lại vẫn là chủ dùng `trang_thai` (mục 2).
+     * người gọi (`spec-questions.md`). Mở lại vẫn là chủ dùng `trang_thai` (mục 2).
      */
     if (trang_thai_ban_do !== undefined) {
       throw new BatonError('PROJECT_NOT_ACCEPTING', {

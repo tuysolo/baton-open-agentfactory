@@ -1,6 +1,6 @@
 /**
  * Test chạy trên Miniflare qua `@cloudflare/vitest-pool-workers`:
- * **không cần wrangler CLI, không cần mạng** (quyet-dinh.md 01/10, Q4).
+ * **không cần wrangler CLI, không cần mạng** (decisions.md 01/10, Q4).
  */
 
 import fs from 'node:fs/promises';
@@ -96,7 +96,7 @@ export default defineWorkersConfig(async () => {
    * (workspace của Vitest, `extends: true` = cùng mọi cấu hình ở đây), mỗi project
    * một runtime: 25 runtime cùng lúc thay vì 75.
    *
-   * Vì sao nhóm phải NHỎ (đã đo, xem `quyet-dinh.md`): một runtime `singleWorker`
+   * Vì sao nhóm phải NHỎ (đã đo, xem `decisions.md`): một runtime `singleWorker`
    * chậm dần theo số file đã chạy trong nó — bật cho cả bộ (một nhóm 75 file) thì
    * mất ~13 phút, file sau càng chậm, rồi workerd nổ `Maximum call stack size
    * exceeded` trong lớp bọc Durable Object của pool và 45 file đỏ. Nhóm ≤ 5 file:
@@ -111,7 +111,7 @@ export default defineWorkersConfig(async () => {
    * lúc vòng sự kiện Node vẫn thông (`[node-tre]` không ghi gì) — nên không phải một
    * bộ đếm 5 s nào, không phải Node chính bị chặn. Ca > 5 s mà xanh là vì `duration`
    * của Vitest gồm cả push/pop/hook (trần 5 s chỉ áp lên thân), hoặc ca có trần riêng.
-   * Số đo và đề xuất: `quyet-dinh.md` dòng BAT-55; công cụ đo: `test/do-ca-cham.ts`
+   * Số đo và đề xuất: `decisions.md` dòng BAT-55; công cụ đo: `test/do-ca-cham.ts`
    * (`[ca-cham]`) và `[node-tre]` ở đầu file này.
    *
    * Danh sách file đọc từ thư mục (không liệt kê tay) và chia vòng tròn theo tên đã
@@ -158,7 +158,7 @@ export default defineWorkersConfig(async () => {
       ],
     },
     /*
-     * **`SPEC.md` và `HUONG-DAN-AGENT.md` nằm NGOÀI `packages/api`** —
+     * **`SPEC.md` và `AGENT-GUIDE.md` nằm NGOÀI `packages/api`** —
      * `test/bang-lenh.test.ts` (BAT-45) nhập chúng bằng `?raw`. Vite chặn file
      * ngoài "workspace root" nó tự dò, và với `--root packages/api` (đường tương
      * đối, đúng như script `test:api`) phép dò không ra gốc repo: file test chết
@@ -180,7 +180,7 @@ export default defineWorkersConfig(async () => {
        *
        * Lớp thứ nhất là quy ước đặt tên: `include` mặc định của Vitest chỉ nhận
        * file có `.test.` trong tên, và hai file ở đó (`do-200k.ts`,
-       * `sinh-du-lieu.ts`) không có. Nợ đã khai trong `quyet-dinh.md`: "lá chắn
+       * `sinh-du-lieu.ts`) không có. Nợ đã khai trong `decisions.md`: "lá chắn
        * này chỉ có **một** lớp … đặt nhầm tên file là bộ đo lọt vào `npm test`",
        * và một lần lọt là `npm test` chạy hàng phút thay vì ~35 giây — tức một
        * cổng nghiệm thu người ta bắt đầu bỏ qua.

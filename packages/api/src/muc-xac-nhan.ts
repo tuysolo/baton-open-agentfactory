@@ -39,7 +39,7 @@
  *     trước khi kiểm cổng thì một lần hỏng ở giữa để lại một mục Cần Chủ mồ côi
  *     trên màn hình của chủ cho một ticket chưa đổi gì.
  *  3. **Không đốt `T-số`.** Số cấp qua `capSo` nằm **cùng batch** với dòng mục, nên
- *     lệnh hỏng thì số **không** bị tiêu. `quyet-dinh.md` đã có một dòng về đúng
+ *     lệnh hỏng thì số **không** bị tiêu. `decisions.md` đã có một dòng về đúng
  *     chuyện này; mục 8 d.232 nói `T-số` "tăng dần, **không tái dùng**", nên một
  *     số đốt là thiệt hại không lấy lại được.
  *
@@ -119,7 +119,7 @@ export async function mucXacNhanCua(
  * `review` **hai** nút — "**Đạt**" hoặc "**Cần sửa**" — và cả hai đều đưa mục sang
  * `Đã xử lý`. Chủ bấm "Cần sửa" là chủ nói **chưa được**, nên coi đó là "chủ xác
  * nhận" sẽ mở cổng Xong bằng đúng cái nút nói ngược lại. SPEC **không** nói rõ
- * điều này (d.217 chỉ nói "chủ xác nhận") — xem `cau-hoi-spec.md` **#78**.
+ * điều này (d.217 chỉ nói "chủ xác nhận") — xem `spec-questions.md` **#78**.
  *
  * `skipped` **không** mở cổng: 19.10 nói thẳng "chủ **bỏ qua** mục xác nhận thì
  * ticket **ở lại Chờ kiểm chứng**".
@@ -143,7 +143,7 @@ export interface BangChungDeXem {
 /**
  * **Mức của mục tự sinh: 🟡 `Trong ngày`.**
  *
- * SPEC không nói mức nào (`cau-hoi-spec.md` #78). 🟡 là hướng giữa: 🔴 sẽ **bắn
+ * SPEC không nói mức nào (`spec-questions.md` #78). 🟡 là hướng giữa: 🔴 sẽ **bắn
  * thông báo ngay** (d.283) cho mỗi ticket của mọi dự án không code — tức biến một
  * việc thường lệ thành báo động; ⚪ thì **không có hạn mặc định** (d.241), nên mục
  * sẽ không bao giờ lên đầu khối và một ticket có thể treo vô hạn. 🟡 có hạn 20:00
@@ -280,7 +280,7 @@ export function boSinhMucXacNhan(db: D1Database, bay_gio: number): BoSinhMucXacN
       /*
        * **Dựng lại áp cho cả `skipped` và `resolved`+`can_sua`.** Câu 57 chỉ nói
        * `skipped`; `resolved` + "Cần sửa" là chỗ SPEC **im lặng**
-       * (`cau-hoi-spec.md` **#78**). Hướng tạm: dựng lại, cùng điều kiện. Hướng
+       * (`spec-questions.md` **#78**). Hướng tạm: dựng lại, cùng điều kiện. Hướng
        * ngược (không dựng lại) tạo đúng cái bẫy của #75: chủ bấm "Cần sửa", agent
        * sửa và gửi bằng chứng mới, mà **không đường nào** hỏi lại chủ ⇒ ticket
        * treo ở Chờ kiểm chứng **vĩnh viễn**, và đường duy nhất vào Xong là chủ ép
@@ -393,7 +393,7 @@ export function boSinhMucXacNhan(db: D1Database, bay_gio: number): BoSinhMucXacN
    * bình luận 'T-x mở lại'." Câu đó **không có chủ ngữ**, nên nó áp cho **mọi** lần
    * mở lại — kể cả lần này. Và chính hàm này tăng `mo_lai_lan`, tức **tự nhận** đây
    * là một lần mở lại. Nên đây **không** phải "d.542 không áp": đây là một **lệch**,
-   * và nó được khai ở `cau-hoi-spec.md` **#78(d)** đúng khuôn đã dùng cho d.238 ở
+   * và nó được khai ở `spec-questions.md` **#78(d)** đúng khuôn đã dùng cho d.238 ở
    * #78(c). (Bản đầu của lượt 3b khai "d.542 nói về việc mở lại **của chủ**" —
    * reviewer grep lại và chỉ ra chữ đó **không có trong SPEC**. Đã bỏ.)
    *
@@ -471,7 +471,7 @@ export function boSinhMucXacNhan(db: D1Database, bay_gio: number): BoSinhMucXacN
    * được (`evidence.noi_dung`), nên nó không dựng được một dòng `can_chu_file`:
    * `kiemFileReview` của `@baton/shared` chỉ nhận `file://`, `/…`, `http(s)://`.
    * Nội dung `note` đi vào **bối cảnh** của mục, nên chủ vẫn đọc được ngay trên
-   * thẻ. Đây là chỗ d.238 và d.217 không khớp nhau — xem `cau-hoi-spec.md` **#78**.
+   * thẻ. Đây là chỗ d.238 và d.217 không khớp nhau — xem `spec-questions.md` **#78**.
    *
    * `thu_tu` lấy bằng `coalesce(max(thu_tu), 0) + 1` **trong chính câu INSERT**,
    * không bằng một số đếm trong bộ nhớ. Hai lý do, và cả hai là luật của DB:
@@ -520,7 +520,7 @@ export const KET_QUA_TICKET_DA_XONG = 'ticket đã Xong';
 
 /**
  * **Câu lệnh tự đóng mục xác nhận** của mọi ticket vừa **sang Xong** trong lượt
- * ghi này — `cau-hoi-spec.md` #163 (Chủ chốt T-38 = A, T-43 = A), SPEC mục 8,
+ * ghi này — `spec-questions.md` #163 (Chủ chốt T-38 = A, T-43 = A), SPEC mục 8,
  * 19.12 câu 57.
  *
  * Chốt: ticket sang `done` bằng **mọi** đường ⇒ mục Cần Chủ **tự sinh cho chính
@@ -579,7 +579,7 @@ export function cauDongMucXacNhanKhiXong(
  * ------------------------------------------------------------------ */
 
 /**
- * Tiêu đề của mục tự sinh. SPEC không cho chữ (`cau-hoi-spec.md` #78); công thức
+ * Tiêu đề của mục tự sinh. SPEC không cho chữ (`spec-questions.md` #78); công thức
  * chọn theo **nếp SPEC đã tự dùng** (`"T-số đã xử lý: <kết quả>"` ở d.280):
  * `<mã ticket> <việc>: <tiêu đề ticket>`.
  *

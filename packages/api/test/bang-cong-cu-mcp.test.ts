@@ -20,7 +20,7 @@
  * SPEC nhập bằng `?raw` của Vite, không bằng `node:fs` — xem chú thích ở đầu
  * `bang-lenh.test.ts` và `server.fs.allow` của `vitest.config.ts`.
  */
-import SPEC_VAN from '../../../SPEC.md?raw';
+import SPEC_VAN from '../../../docs/vi/SPEC.md?raw';
 import { describe, expect, it } from 'vitest';
 import { SO_LENH, xuLyDong, type MoiTruongCli } from '@baton/cli';
 

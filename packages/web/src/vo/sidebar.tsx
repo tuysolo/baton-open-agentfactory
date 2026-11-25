@@ -90,7 +90,7 @@ const KHOA_NHIP_SIDEBAR = [KHOA_HUY_HIEU] as const;
 /**
  * **Tên workspace** — brief đòi hiện ở đầu sidebar, nhưng `GET /v1/toi` chỉ trả
  * `workspace_id` (một id, không một cái tên), và SPEC không có đường nào trả tên
- * workspace: `cau-hoi-spec.md` #128. Đề xuất tạm đang dùng: tên sản phẩm.
+ * workspace: `spec-questions.md` #128. Đề xuất tạm đang dùng: tên sản phẩm.
  */
 export const TEN_WORKSPACE = 'Baton';
 
@@ -170,7 +170,7 @@ export function Sidebar({
     <nav
       aria-label="Điều hướng chính"
       /*
-       * Hệ thiết kế 29/10 (`THIET-KE.md`): sidebar 240px, nền **cùng tông nền
+       * Hệ thiết kế 29/10 (`DESIGN.md`): sidebar 240px, nền **cùng tông nền
        * trang** (`bg-nen`) — tách khỏi vùng chính bằng viền mờ của `<aside>`,
        * không bằng một mảng màu. Mục cao 28px, icon 16px + chữ.
        */
@@ -514,7 +514,7 @@ function Nhom({
  *
  * **Đây là đường vào Bản đồ dự án** — d.398: "Bản đồ dự án không có mục riêng ở
  * sidebar; trang vẫn còn và **vào từ một dự án**." Mục này trước đây tên "Tổng
- * quan dự án" (`cau-hoi-spec.md` #129: SPEC không có trang ấy) và trỏ vào đúng
+ * quan dự án" (`spec-questions.md` #129: SPEC không có trang ấy) và trỏ vào đúng
  * đường này; nay nó mang **đúng tên trang nó mở**, vì một nhãn nói sai chỗ mình
  * dẫn tới là lý do chủ phải bấm thử mới biết.
  */
@@ -646,7 +646,7 @@ function Lien({
             {muc.huy_hieu === true && so_cho > 0 ? (
               /*
                * Huy hiệu GIỮ đỏ đậm + chữ trắng: nó mang nghĩa "có việc chờ chủ"
-               * (màu chỉ để mang nghĩa — THIET-KE.md), và đỏ đậm chữ trắng đọc
+               * (màu chỉ để mang nghĩa — DESIGN.md), và đỏ đậm chữ trắng đọc
                * tốt trên cả hai nền. Chỗ `text-white` DUY NHẤT có lý do của `src/`.
                */
               <span
@@ -665,7 +665,7 @@ function Lien({
 }
 
 /* ------------------------------------------------------------------ *
- * Lớp của một mục sidebar — hệ thiết kế 29/10 (THIET-KE.md)
+ * Lớp của một mục sidebar — hệ thiết kế 29/10 (DESIGN.md)
  * ------------------------------------------------------------------ *
  * Mục cao 28px (`h-7`), bo 6px. **Đang chọn** ⇒ nền lớp nổi đậm (`nen-noi`)
  * + chữ chính; **hover** ⇒ lớp nổi nhạt (`nen-lop`) — hai bậc, để mục đang chọn

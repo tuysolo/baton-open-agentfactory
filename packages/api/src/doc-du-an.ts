@@ -14,7 +14,7 @@
  *     không có đường nào trả về dòng mà agent không được thấy.
  *
  *  2. **Phân trang keyset, không `OFFSET`.** Mốc 200 dự án + 200.000 ticket
- *     (`quyet-dinh.md` 01/10). Thứ tự chuẩn là `(ten, id)` — có `id` nên là thứ
+ *     (`decisions.md` 01/10). Thứ tự chuẩn là `(ten, id)` — có `id` nên là thứ
  *     tự **toàn phần**, hai dự án trùng tên vẫn có thứ tự xác định và cursor
  *     không bỏ sót, không trả trùng.
  */
@@ -391,7 +391,7 @@ export interface YeuCauLietKeDuAn extends YeuCauTrang {
    *
    * SPEC mục 2 nói `archived` là "**ẩn** khỏi sidebar, chỉ đọc", nhưng không nói
    * rõ việc ẩn đó là của **API đọc** hay chỉ của UI. Chốt tạm: API ẩn mặc định
-   * (`cau-hoi-spec.md` #17), vì nếu để UI tự lọc thì mọi client — web, CLI, MCP —
+   * (`spec-questions.md` #17), vì nếu để UI tự lọc thì mọi client — web, CLI, MCP —
    * phải nhớ lọc, và `baton list` sẽ hiện dự án lưu trữ trong khi sidebar thì
    * không. Lọc ở API thì "ẩn" là một luật, không phải ba lần cài giống nhau.
    *
@@ -458,7 +458,7 @@ export async function lietKeDuAn(
   /*
    * **Sức sống của cả trang bằng BA truy vấn, không ba truy vấn cho mỗi hàng.**
    * Sidebar vẽ một chấm cho **từng** dự án (d.393), nên một lượt đọc cho mỗi
-   * hàng là N+1 — đúng thứ mốc 200 dự án của `quyet-dinh.md` cấm. Xem đầu
+   * hàng là N+1 — đúng thứ mốc 200 dự án của `decisions.md` cấm. Xem đầu
    * `doc-suc-song.ts` cho lý lẽ của việc gom cả workspace.
    */
   const so_lieu = so_lieu_san ?? (await soLieuDuAn(db, workspace_id, bay_gio));
@@ -573,7 +573,7 @@ function raAgent(d: DongAgent, trang_thai_phien: readonly TrangThaiPhien[] = [])
  *
  * Ai đọc được: chủ thấy mọi agent. Agent đọc được **chính mình** và các agent
  * dùng chung dự án với nó — SPEC mục 3 nói mục đích là "biết đội mình có ai", mà
- * mục 13 lại đòi không lộ thứ ngoài phạm vi; xem `cau-hoi-spec.md` #14.
+ * mục 13 lại đòi không lộ thứ ngoài phạm vi; xem `spec-questions.md` #14.
  */
 /**
  * Một agent, kèm **tỉ lệ đạt lần đầu** 30 ngày gần nhất — SPEC mục 3 ("trang
@@ -704,7 +704,7 @@ export const VE_DU_AN_CUA_AGENT =
 
 /**
  * Dựng câu lệnh **danh sách ticket** theo thứ tự chuẩn của SPEC:
- * `(hang_uu_tien ASC, tao_luc DESC, id DESC)` (`quyet-dinh.md` 01/10).
+ * `(hang_uu_tien ASC, tao_luc DESC, id DESC)` (`decisions.md` 01/10).
  *
  * Đặt ở đây, trong mã sản phẩm, thay vì để lượt 3 tự viết: test
  * `EXPLAIN QUERY PLAN` đo **chính hàm này**, nên không có chuyện test xanh trên

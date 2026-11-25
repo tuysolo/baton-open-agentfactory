@@ -28,7 +28,7 @@
 -- ## Vì sao (3) là một MỐC, không một cờ boolean
 --
 -- Cùng nếp đã chốt cho `phien.canh_bao_tin_hieu_luc` / `phien.error_luc` (SPEC
--- mục 6 d.196, `cau-hoi-spec.md` #46, migration 0008): mốc chống bắn lặp gắn với
+-- mục 6 d.196, `spec-questions.md` #46, migration 0008): mốc chống bắn lặp gắn với
 -- **lần chuyển sang**, không phải một cờ "đã bắn".
 --
 -- `chua_merge_bao_moc` = **giá trị `theo_doi_den_luc` của cửa sổ theo dõi mà tin
@@ -44,7 +44,7 @@
 -- đúng vì một chi tiết ở chỗ khác, và nó hỏng **im lặng** ngày nào một đường khác
 -- đặt lại `theo_doi_den_luc` trên dòng cũ: cờ đã bật thì cửa sổ thứ hai **không
 -- bao giờ** được báo, và không có dữ liệu nào để phát hiện. Mốc thì tự đúng.
--- Xem `quyet-dinh.md`.
+-- Xem `decisions.md`.
 
 ALTER TABLE evidence ADD COLUMN chua_merge_luc INTEGER;
 ALTER TABLE evidence ADD COLUMN chua_merge_bao_moc INTEGER;

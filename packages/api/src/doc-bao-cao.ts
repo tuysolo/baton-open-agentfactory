@@ -31,7 +31,7 @@
  * nay (chưa tới 24 giờ) — tức một dòng "Hôm qua đã xong" kể cả việc của hôm nay
  * và bỏ nửa giờ cuối của hôm qua. Nên hai vế của d.325 và d.328 đi qua
  * `khoangNgay` dưới đây, **không** qua `CUA_SO_VUA_XONG_MS` của Tổng quan. Cách
- * đọc này là một đề xuất tạm — `cau-hoi-spec.md` **#118**.
+ * đọc này là một đề xuất tạm — `spec-questions.md` **#118**.
  *
  * ## Trần: báo cáo thừa hưởng trần của Tổng quan
  *
@@ -304,7 +304,7 @@ export async function viecDangChay(
  * **"Chuyển sang mai"** — d.333.
  *
  * SPEC **không định nghĩa** vế này: nó cho đúng bốn chữ ấy và không nói "chuyển"
- * là gì. Đề xuất tạm (`cau-hoi-spec.md` **#119**): **ticket còn trong nhóm trạng
+ * là gì. Đề xuất tạm (`spec-questions.md` **#119**): **ticket còn trong nhóm trạng
  * thái `chạy`** lúc sinh handoff, tức `in_progress` + `verifying` (bảng
  * `NHOM_CUA_TRANG_THAI_TICKET` của mục 0.1) — đó là tập việc **đã mở và chưa
  * kết** lúc hết ngày, nên nó là tập việc sang mai phải tiếp.
@@ -401,7 +401,7 @@ export async function canChuMoiTrongNgay(
  * là một lời khai sai về việc ai đọc được báo cáo.
  *
  * "Mới" = **ngày hôm qua** khi báo cáo sáng gọi nó (cùng khung với d.325, xem khối
- * đầu file và `cau-hoi-spec.md` #118) — người gọi truyền ngày, hàm này không đoán.
+ * đầu file và `spec-questions.md` #118) — người gọi truyền ngày, hàm này không đoán.
  */
 export async function quyetDinhTrongNgay(
   db: D1Database,
@@ -515,7 +515,7 @@ export function duAnCuaBaoCao(h: HangDuAn): DuAnBaoCao {
  * **Dữ liệu của báo cáo sáng** — sáu vế của d.322–328.
  *
  * `bay_gio` qua **tham số**, như mọi chỗ phụ thuộc thời gian của dự án này
- * (`quyet-dinh.md` 01/10): ba khoảng ngày của báo cáo này phải ghim được bằng một
+ * (`decisions.md` 01/10): ba khoảng ngày của báo cáo này phải ghim được bằng một
  * con số, không bằng cách chờ tới 07:30 thật.
  *
  * `ngay` là ngày trên tường của `bay_gio` (`ngayDiaPhuong`, tức qua

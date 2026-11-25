@@ -288,7 +288,7 @@ const O_BANG: O[] = [
   /* --- Hàng 5: Ghi kết quả review (reviewer, và manager từ 13/10) --
    *
    * Ô `manager` đổi từ `khong` thành `trong_du_an` ngày 13/10 (migration 0022
-   * khối B, `quyet-dinh.md`): reviewer thật là sub-agent **không có token Baton**,
+   * khối B, `decisions.md`): reviewer thật là sub-agent **không có token Baton**,
    * nên trước đó **không ai** mở được điều kiện phụ của cổng (d.215). Luật thêm
    * của ca này (bắt buộc kèm đường dẫn báo cáo reviewer) nằm ở
    * `handlerGuiBangChung` và có ca riêng trong `gui-bang-chung.test.ts`.

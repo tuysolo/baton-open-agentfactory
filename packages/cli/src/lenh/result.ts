@@ -14,7 +14,7 @@
  * `baton result T-x` **không** `--wait`, mục còn `open` → **mã 0**: đó là câu trả
  * lời đúng của d.376 ("in trạng thái"), không phải một lần chờ hết giờ.
  *
- * **Ranh giới với `baton evidence`** (`cau-hoi-spec.md` #87), đừng "thống nhất"
+ * **Ranh giới với `baton evidence`** (`spec-questions.md` #87), đừng "thống nhất"
  * hai chỗ này: `evidence` hết 10 giây mà xác minh còn `pending` thì ra **mã 0**,
  * còn ở đây ra **mã 4**, và chúng khác nhau có lý do, không phải do sơ ý.
  *   * d.543 gắn mã 4 vào **đúng một lệnh** — `baton result --wait`. Nó là câu

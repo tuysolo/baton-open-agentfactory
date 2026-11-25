@@ -6,7 +6,7 @@
  * tầng đó không thấy:
  *
  *   1. **Tính đầy đủ của ánh xạ**: mọi mã trong `BANG_LOI` phải nằm trong đúng một
- *      nhóm HTTP và đúng một nhóm mã thoát của bảng đã chốt (`quyet-dinh.md`).
+ *      nhóm HTTP và đúng một nhóm mã thoát của bảng đã chốt (`decisions.md`).
  *      Bảng ca thử **sinh từ `BANG_LOI`**, không viết tay 16 ca rời, nên thêm một
  *      mã mà quên ánh xạ là test đỏ ngay — đó là điểm chính của file này.
  *   2. **Thân response qua HTTP thật**: đúng `error`, đúng mã HTTP, `message` là
@@ -50,9 +50,9 @@ const { it, beforeEach } = caQuaSo(bay);
 const MOI_MA = Object.keys(BANG_LOI) as MaLoi[];
 
 /* ------------------------------------------------------------------ *
- * Bảng ánh xạ đã chốt — `quyet-dinh.md` 01/10, SPEC mục 13
+ * Bảng ánh xạ đã chốt — `decisions.md` 01/10, SPEC mục 13
  * ------------------------------------------------------------------ *
- * Viết theo **nhóm HTTP** (đúng hình dạng của bảng trong `quyet-dinh.md`), rồi
+ * Viết theo **nhóm HTTP** (đúng hình dạng của bảng trong `decisions.md`), rồi
  * kiểm hợp của các nhóm phủ đúng `BANG_LOI`: không thiếu mã nào, không mã nào ở
  * hai nhóm.
  */

@@ -8,7 +8,7 @@
  *     qua ô **"Tạo mục Cần Chủ"** của bảng quyền (mục 3; 19.12 câu 18 chốt rằng
  *     cấp `T-số` cũng đi qua đúng ô đó). `worker`/`reviewer` → `FORBIDDEN`.
  *     Mục **Chung** cũng chỉ đi qua đúng ô đó (hướng **MỞ** — d.229 cho `manager`
- *     tạo, 19.12 câu 4 cho mục không dự án; xem `cau-hoi-spec.md` #69).
+ *     tạo, 19.12 câu 4 cho mục không dự án; xem `spec-questions.md` #69).
  *   * **Dự án rỗng = "Chung"** (19.12 câu 4) — không có dòng `project` nào tên
  *     "Chung".
  *   * Trường bắt buộc **theo loại** (mục 8 d.236–239) → `OPTIONS_REQUIRED`,
@@ -106,7 +106,7 @@ export interface LenhTaoCanChu extends LenhChung {
   /**
    * Lệnh hoặc script — **bắt buộc** với `run_command` (d.237), **tuỳ chọn** với
    * ba loại kia (d.250 "lệnh có nút Copy", viết chung cho mọi thẻ;
-   * `cau-hoi-spec.md` #130).
+   * `spec-questions.md` #130).
    */
   lenh_chay?: unknown;
   /** Cờ cần TTY của chính lệnh trên — d.237 ("chạy ở terminal thật"). */
@@ -213,7 +213,7 @@ export async function handlerTaoCanChu(
    *    chặn nó là siết **vượt** chữ SPEC. Nếp "chưa chốt thì ĐÓNG" của dự án này
    *    dùng cho chỗ SPEC **im lặng**; ở đây SPEC chỉ im lặng về **phạm vi/tầm
    *    nhìn** của mục Chung (ai **đọc** được nó), không về quyền **tạo** — xem
-   *    `cau-hoi-spec.md` **#69**, đã thu hẹp đúng vào chỗ đó.
+   *    `spec-questions.md` **#69**, đã thu hẹp đúng vào chỗ đó.
    *
    *    Cùng ô `create_ask` cũng là luật duy nhất của `handlerCapSoCanChu`
    *    (`lenh-ticket.ts`, 19.12 câu 18), nên hai đường **cấp `T-số`** và **tạo
@@ -325,7 +325,7 @@ export async function handlerTaoCanChu(
         noi_dung.loai === 'decision' ? noi_dung.ly_do_de_xuat : null,
         /*
          * **Lệnh của mọi loại** — d.250 ("mỗi thẻ hiện đủ: … lệnh có nút
-         * Copy"), `cau-hoi-spec.md` #130. Hai chỗ ghi, đúng một chỗ có giá trị
+         * Copy"), `spec-questions.md` #130. Hai chỗ ghi, đúng một chỗ có giá trị
          * ở mỗi dòng: `lenh`/`can_tty` của 0013 là lệnh **bắt buộc** của
          * `run_command` (cặp CHECK của 0013 canh cả hai vế), `lenh_kem`/
          * `can_tty_kem` của 0023 là lệnh **tuỳ chọn** của ba loại kia. Đường
@@ -604,7 +604,7 @@ async function kiemTicketLienQuan(
      * ra phản hồi giống hệt nhau"): ticket ngoài phạm vi ⇒ **cùng dòng `throw
      * NOT_FOUND`** với id bịa. Trước BAT-58 câu tra cả workspace rồi mới kiểm
      * `vaoDuocDuAn`, nên id thật ra 403 còn id bịa ra 404 — một máy dò. Cùng lựa
-     * chọn 404 với `cau-hoi-spec.md` #172/#175/#176. Phép kiểm `vaoDuocDuAn` dưới
+     * chọn 404 với `spec-questions.md` #172/#175/#176. Phép kiểm `vaoDuocDuAn` dưới
      * đây giữ làm hàng rào thứ hai (với bộ lọc hiện tại nó không còn bắn).
      */
     const ticket = await ticketBatBuoc(db, workspace_id, t, false, ai);
@@ -628,7 +628,7 @@ async function kiemTicketLienQuan(
  * Phép so **không phân biệt hoa/thường nằm ở đây**, trong SQL
  * (`lower(tieu_de) = lower(?)`), không chỉ trong bộ nhớ: lọc `tieu_de = ?` đúng
  * chuỗi rồi mới hạ chữ ở `mucCoTheTrung` là một phép so không bao giờ khớp thêm
- * gì — tức mã chết, và một lời khai sai trong `cau-hoi-spec.md` #70. `0013` có
+ * gì — tức mã chết, và một lời khai sai trong `spec-questions.md` #70. `0013` có
  * index **biểu thức** `(workspace_id, lower(tieu_de), tao_luc)` để câu này vẫn là
  * một `SEARCH`.
  *

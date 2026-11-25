@@ -1,6 +1,6 @@
 /**
  * **BAT-73 — `layDuAn()` lấy ĐỦ mọi dự án**, và Tổng quan nói ra phần bị trần
- * `TRAN_DU_AN` cắt (`cau-hoi-spec.md` #181).
+ * `TRAN_DU_AN` cắt (`spec-questions.md` #181).
  *
  * Trước BAT-73, `layDuAn` gọi `/v1/du-an` một trang không `limit` ⇒ máy chủ trả
  * 50 dự án đầu (`LIMIT_TRANG_MAC_DINH`) và dự án thứ 51 trở đi biến mất khỏi

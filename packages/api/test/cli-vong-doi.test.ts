@@ -499,7 +499,7 @@ describe('baton log <type> "<nội dung>" — SPEC d.363', () => {
   });
 
   /**
-   * **Hai phiên mở cùng lúc, không chỉ định lượt** (`cau-hoi-spec.md` #83): CLI
+   * **Hai phiên mở cùng lúc, không chỉ định lượt** (`spec-questions.md` #83): CLI
    * **chặn** thay vì đoán (chỉ định bằng `--luot`/`BATON_LUOT` — BAT-56, ca ghim ở
    * `nhieu-phien-mot-agent.test.ts`) — ghi nhầm phiên là
    * ghi vào dòng hoạt động của một việc khác, và mục đã gửi không sửa được.

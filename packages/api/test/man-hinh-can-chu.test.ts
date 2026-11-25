@@ -8,7 +8,7 @@
  *
  * Khối `EXPLAIN QUERY PLAN` ở cuối đo **chính câu sản phẩm** (`cauKhoiCho`,
  * `cauHuyHieu`, `cauDaXuLy`, `cauAsksVuaXuLy`), không một chuỗi SQL viết lại trong
- * test — nếp đã chốt ở `quyet-dinh.md`: một chuỗi viết lại vẫn xanh sau khi câu
+ * test — nếp đã chốt ở `decisions.md`: một chuỗi viết lại vẫn xanh sau khi câu
  * thật đã hỏng.
  */
 
@@ -120,7 +120,7 @@ describe('d.249 — 3 khối, trong khối sắp theo HẠN rồi theo LÚC TẠ
 
   /**
    * **SPEC không nói mục KHÔNG ĐẶT HẠN nằm đâu** trong thứ tự của d.249 —
-   * `cau-hoi-spec.md` #77. Hướng tạm đã cài: **cuối khối**.
+   * `spec-questions.md` #77. Hướng tạm đã cài: **cuối khối**.
    *
    * Ca này ghim hướng đó, nên nếu phiên spec chốt ngược thì nó **đỏ** chứ không
    * lặng lẽ đổi nghĩa. Nó cũng là ca duy nhất chứng minh hai **pha** của

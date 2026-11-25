@@ -1,41 +1,41 @@
 # Baton Open
 
-**Baton** là nơi điều hành công việc cho **một người chủ cùng một đội agent AI**, trải trên nhiều dự án. Người chủ quyết định và duyệt. Agent nhận việc, làm, chuyền việc cho nhau và nộp bằng chứng. Mọi thứ cần người chủ nằm ở một chỗ duy nhất.
+**Baton** is the place where **one owner and a team of AI agents** run their work across many projects. The owner decides and approves. Agents pick up work, do it, hand it off to each other and submit evidence. Everything that needs the owner lives in exactly one place.
 
-Repo này là bản mở của Baton: **nguyên tắc, đặc tả, mã nguồn tham khảo và cách triển khai**, để bạn tải về và giao cho agent của chính bạn dựng lại một hệ Baton riêng. Nó không kèm dữ liệu, dự án hay nội dung của ai cả.
+This repo is the open edition of Baton: **principles, spec, reference source code and deployment guide**, so you can download it and hand it to your own agent to rebuild a Baton system of your own. It ships with nobody's data, projects or content.
 
-## Bạn nhận được gì
+## What you get
 
-| Thứ | Ở đâu | Dùng để |
+| What | Where | Used for |
 |---|---|---|
-| **Nguyên tắc** | [`nguyen-tac/`](nguyen-tac/) | Hiểu vì sao: tổ chức đội agent, luật cho agent, tổ chức dự án, giới hạn 3 dự án đang đẩy, bản đồ cây tròn, bài học vận hành |
-| **Đặc tả** | [`SPEC.md`](SPEC.md), [`viec-v0.1.md`](viec-v0.1.md), [`THIET-KE.md`](THIET-KE.md) | Nguồn sự thật về hành vi. Agent của bạn build theo file này |
-| **Mã nguồn tham khảo** | [`packages/`](packages/) | Bản Baton v0.1 chạy được: API, CLI, MCP, giao diện web, kèm bộ test |
-| **Cách triển khai** | [`TRIEN-KHAI.md`](TRIEN-KHAI.md) | Sổ tay từng bước đưa lên Cloudflare, cho người |
-| **Cách agent dùng Baton** | [`HUONG-DAN-AGENT.md`](HUONG-DAN-AGENT.md) | Một trang cho agent: vòng làm việc bằng CLI, mã thoát, các lệnh |
-| **Mẫu để chép** | [`mau/`](mau/), [`CLAUDE.md`](CLAUDE.md), [`.claude/agents/`](.claude/agents/) | Luật cho CoS, Manager, Worker; brief; báo cáo; đuôi prompt; script giao việc |
-| **Dữ liệu mẫu** | [`mau-nhap/`](mau-nhap/) | Dữ liệu **giả** và mockup bản đồ dự án mở được bằng trình duyệt |
+| **Principles** | [`principles/`](principles/) | The why: how the agent team is organized, rules for agents, how projects are organized, the limit of 3 projects being pushed, the radial tree map, operating lessons |
+| **Spec** | [`SPEC.md`](SPEC.md), [`build-plan-v0.1.md`](build-plan-v0.1.md), [`DESIGN.md`](DESIGN.md) | The source of truth for behaviour. Your agent builds from these files |
+| **Reference source** | [`packages/`](packages/) | A working Baton v0.1: API, CLI, MCP, web UI, with its test suite |
+| **Deployment** | [`DEPLOYMENT.md`](DEPLOYMENT.md) | A step-by-step handbook for putting it on Cloudflare, written for humans |
+| **How agents use Baton** | [`AGENT-GUIDE.md`](AGENT-GUIDE.md) | One page for agents: the work loop via the CLI, exit codes, commands |
+| **Templates to copy** | [`templates/`](templates/), [`CLAUDE.md`](CLAUDE.md), [`.claude/agents/`](.claude/agents/) | Rules for CoS, Manager and Worker; brief; report; prompt footer; work-assignment scripts |
+| **Sample data** | [`sample-data/`](sample-data/) | **Fake** data and a project-map mockup you can open in a browser |
 
-## Bắt đầu
+## Getting started
 
-Đọc [`BAT-DAU.md`](BAT-DAU.md). Nó có ba đường đi và câu lệnh để dán cho agent của bạn:
+Read [`GETTING-STARTED.md`](GETTING-STARTED.md). It has three paths and the prompts to paste to your agent:
 
-1. **Chỉ lấy cách làm.** Đọc `nguyen-tac/`, chép `mau/`, vận hành đội agent bằng file markdown. Chưa cần chạy phần mềm nào.
-2. **Triển khai bản có sẵn.** Giao agent kiểm, bạn làm theo `TRIEN-KHAI.md`.
-3. **Dựng lại theo cách của bạn.** Giao agent build từ `SPEC.md` trong phòng sạch, dùng mã ở đây để đối chiếu.
+1. **Take only the method.** Read `principles/`, copy `templates/`, run your agent team on markdown files. No software to run yet.
+2. **Deploy the existing build.** Have your agent check it, then follow `DEPLOYMENT.md` yourself.
+3. **Rebuild it your way.** Have your agent build from `SPEC.md` in a clean room, using the code here as a reference.
 
-## Năm ý chính
+## Five core ideas
 
-1. **Bốn tầng:** Chủ → CoS (điều phối) → Manager của từng dự án → Worker. Người lập kế hoạch không code; người làm không tự chấm mình.
-2. **Xong phải có bằng chứng:** commit đã merge hoặc URL đã chạy thật, cộng review đạt của một agent khác.
-3. **Một chỗ duy nhất cho việc cần người chủ,** duyệt theo phiên sáng và tối, mỗi mục đủ bối cảnh để quyết trong một lần đọc.
-4. **Tối đa 3 dự án đang đẩy.** Còn lại là hàng chờ hoặc khu vực duy trì.
-5. **Bản đồ cây tròn:** người chủ ở tâm, mảng, rồi dự án. Bong bóng to theo ưu tiên, màu theo trạng thái, bấm vào dự án để thấy các khối việc lớn.
+1. **Four tiers:** Owner → CoS (coordination) → one Manager per project → Workers. Whoever plans does not code; whoever does the work does not grade it.
+2. **Done requires evidence:** a merged commit or a URL that really runs, plus a passing review from a different agent.
+3. **One single place for everything that needs the owner,** approved in a morning and an evening session, each item carrying enough context to decide in one read.
+4. **At most 3 projects being pushed.** Everything else is in the queue or in a maintenance area.
+5. **Radial tree map:** the owner at the centre, then domains, then projects. Bubble size follows priority, colour follows status; click a project to see its large work blocks.
 
-## Mã nguồn tham khảo
+## Reference source
 
-- **Stack:** TypeScript · Cloudflare Workers + D1 (cơ sở dữ liệu) + Durable Objects + R2 (sao lưu) · React + Vite · vitest.
-- **Cần có:** Node 20 trở lên; để triển khai thì cần một tài khoản Cloudflare. Token GitHub (xác minh commit) và bot Telegram (thông báo) là tuỳ chọn.
+- **Stack:** TypeScript · Cloudflare Workers + D1 (database) + Durable Objects + R2 (backups) · React + Vite · vitest.
+- **Requirements:** Node 20 or later; to deploy you need a Cloudflare account. A GitHub token (commit verification) and a Telegram bot (notifications) are optional.
 
 ```
 npm ci
@@ -45,18 +45,19 @@ npm run lint
 npm test
 ```
 
-Bộ test gồm khoảng 3.500 ca cho API và 1.400 ca cho giao diện, chạy trên máy, không cần tài khoản nào.
+The test suite has about 3,500 cases for the API and 1,400 for the web UI. It runs locally and needs no account.
 
-## Điều cần biết trước khi dùng
+## Things to know before you use it
 
-- **Đây là v0.1, một bản dùng sớm.** Mục "CHƯA CÓ" ở cuối `TRIEN-KHAI.md` liệt kê những gì còn thiếu, trong đó có khôi phục từ bản sao lưu.
-- **Một workspace, một người chủ.** Không có team, không phân quyền theo người.
-- **Tiếng Việt.** Giao diện, đặc tả, tên biến và tên bảng đều bằng tiếng Việt (không dấu trong mã). Mã trạng thái trong API là tiếng Anh; bảng đối chiếu ở `SPEC.md` mục 0.1.
-- **Tên người chủ là "Chủ".** Mục việc cần người chủ gọi là **"Cần Chủ"** (trong mã: `can_chu`). Lúc khởi tạo bạn đặt tên hiển thị của mình qua `ten_chu`.
-- **Chú thích trong mã còn nhắc lịch sử build gốc:** các mã như `BAT-16`, `T-131`, "`cau-hoi-spec.md` #116", "`quyet-dinh.md` 05/10" trỏ về ticket và sổ nội bộ không đi kèm repo này. Lý do của từng quyết định đã nằm ngay trong chú thích, hoặc trong `SPEC.md` mục 19.12.
-- **`TRIEN-KHAI.md` ghi nhiều lệnh `wrangler` là "chưa chạy thử".** Sổ tay được viết bởi agent bị cấm chạy `wrangler`. Coi nó là hướng dẫn cần đối chiếu với tài liệu Cloudflare hiện hành, nhất là ở lần triển khai đầu.
-- **Cấu hình cần bạn tự điền:** `database_id` và `BATON_URL_CONG_KHAI` trong `packages/api/wrangler.toml`.
+- **This is v0.1, an early build.** The "NOT YET AVAILABLE" section at the end of `DEPLOYMENT.md` lists what is missing, including restore from backup.
+- **One workspace, one owner.** No teams, no per-person permissions.
+- **The documentation is in English; the code is in Vietnamese.** The app's UI text, variable names, table names, file names under `packages/` and code comments are Vietnamese (written without diacritics in identifiers). API status codes are English; the mapping table is in `SPEC.md` section 0.1. The docs keep every identifier exactly as it appears in the code and quote UI labels in the original with an English gloss.
+- **`docs/vi/` keeps the original Vietnamese `SPEC.md` and agent guide.** Several tests read those two files and cross-check their command tables and rules against the code, so they stay as the text the test suite is bound to. The English `SPEC.md` and `AGENT-GUIDE.md` are translations of them; if you change behaviour, update both.
+- **The owner is called "Chủ" (Owner).** The list of items that need the owner is called **"Cần Chủ" (Needs Owner)**; in code: `can_chu`. At setup you set your own display name through `ten_chu`.
+- **Code comments still refer to the original build history:** codes such as `BAT-16`, `T-131`, "`spec-questions.md` #116", "`decisions.md` 05/10" point to tickets and internal ledgers that do not ship with this repo. The reason behind each decision is already in the comment itself, or in `SPEC.md` section 19.12.
+- **`DEPLOYMENT.md` marks many `wrangler` commands as "not yet run".** The handbook was written by an agent that was forbidden from running `wrangler`. Treat it as a guide to check against the current Cloudflare documentation, especially on your first deployment.
+- **Configuration you must fill in yourself:** `database_id` and `BATON_URL_CONG_KHAI` in `packages/api/wrangler.toml`.
 
-## Giấy phép
+## License
 
-[MIT](LICENSE) © TuySolo. Dùng, sửa, chia sẻ tự do; không kèm bảo hành.
+[MIT](LICENSE) © TuySolo. Use, modify and share freely; no warranty.

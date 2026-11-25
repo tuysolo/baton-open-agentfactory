@@ -21,7 +21,7 @@
  *
  * **Phạm vi không nới ở đây.** `agent_id` luôn lấy từ `AiGoi` đã xác thực, không
  * bao giờ từ query của client; mọi câu SQL ràng cả `workspace_id` (nếp đã chốt
- * trong `quyet-dinh.md`). Không có đối tượng nào nhận theo id, nên không có ca
+ * trong `decisions.md`). Không có đối tượng nào nhận theo id, nên không có ca
  * "ngoài phạm vi" riêng của đường này.
  */
 
@@ -47,7 +47,7 @@ export const CHO_DAI_TOI_DA_GIAY = 60;
  * Đọc `?wait=<giây>` thành milliseconds.
  *
  * **`wait` lớn hơn 60 bị KẸP về 60**, không trả `INVALID_INPUT`. Lý do (ghi vào
- * `quyet-dinh.md`): 60 giây là một **trần tài nguyên của server** — mỗi lệnh chờ
+ * `decisions.md`): 60 giây là một **trần tài nguyên của server** — mỗi lệnh chờ
  * giữ một request và một waiter trong DO — không phải một con số nghiệp vụ mà
  * agent phải đoán đúng. Agent gửi `--wait 300` nói rõ ý "chờ lâu nhất có thể";
  * kẹp phục vụ đúng ý đó, còn `INVALID_INPUT` thì bắt mọi CLI và MCP phải tự biết
@@ -101,7 +101,7 @@ export function msChoDai(tho: string | undefined): number {
  * nên không có đường nào cho client đặt nó.
  *
  * Token thô thì **không bao giờ** đi qua dây — chỉ `token_bam`, để DO kiểm lại
- * token còn hiệu lực giữa lúc chờ (SPEC mục 15, `quyet-dinh.md` dòng 19).
+ * token còn hiệu lực giữa lúc chờ (SPEC mục 15, `decisions.md` dòng 19).
  */
 export type AiKeoViec =
   | { loai: 'chu' }
@@ -205,7 +205,7 @@ export async function phienMoMinhGiao(
  *   * `agent:<tôi>` — **danh tính của tôi vừa đổi**: token bị thu hồi hoặc tạo lại,
  *     agent bị tắt (`lenh-agent.ts`). Không phải "việc mới", nhưng một lệnh chờ
  *     dài phải tỉnh để **kiểm lại token** rồi cắt — xem `choViec`, và
- *     `cau-hoi-spec.md` #51. Để nó ngủ tiếp thì một token đã thu hồi còn đọc được
+ *     `spec-questions.md` #51. Để nó ngủ tiếp thì một token đã thu hồi còn đọc được
  *     dữ liệu tới 60 giây nữa.
  *
  * Chủ (`chu`) chỉ nghe nhóm `cau_hoi:`: chủ không bao giờ là **người nhận** của
@@ -246,7 +246,7 @@ export interface ViecCuaToi {
    * `tasks` hay bất kỳ lệnh nào), trong trường **`resolved_asks`**."
    *
    * Dẫn xuất, không trạng thái: mọi mục do chính agent này tạo đã rời `open`
-   * trong một cửa sổ thời gian. Xem `asksVuaXuLy` và `cau-hoi-spec.md` #76.
+   * trong một cửa sổ thời gian. Xem `asksVuaXuLy` và `spec-questions.md` #76.
    */
   resolved_asks: MucCanChuRa[];
   /**

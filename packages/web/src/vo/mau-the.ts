@@ -1,6 +1,6 @@
 /**
  * **Màu và viết tắt của một thẻ việc** — BAT-6 đợt 2, phần ngoài SPEC của brief
- * (`cau-hoi-spec.md` #135, #136).
+ * (`spec-questions.md` #135, #136).
  *
  * Ba hàm thuần, không một dòng JSX: màu của một nhãn, màu của một mức ưu tiên, và
  * chữ viết tắt của người đang cầm. Để ở đây vì cả ba **phải test được không cần
@@ -67,7 +67,7 @@ export const LOP_UU_TIEN: Record<UuTien, string> = {
 
 /**
  * **Màu icon trạng thái ticket** — bảy trạng thái của bảng 0.1, năm màu của hệ
- * thiết kế (`THIET-KE.md`): Cần làm (gồm `backlog`) xám, Đang làm vàng, Chờ
+ * thiết kế (`DESIGN.md`): Cần làm (gồm `backlog`) xám, Đang làm vàng, Chờ
  * kiểm chứng xanh dương, Xong tím (màu nhấn), Huỷ (gồm `duplicate`) xám.
  *
  * Như `LOP_UU_TIEN`: icon tô bằng `currentColor`, nên màu là `text-*`; lưới
@@ -86,7 +86,7 @@ export const LOP_TRANG_THAI: Record<TrangThaiTicket, string> = {
 };
 
 /**
- * **Màu chấm trạng thái agent** — năm trạng thái của bảng 0.1 (`THIET-KE.md`,
+ * **Màu chấm trạng thái agent** — năm trạng thái của bảng 0.1 (`DESIGN.md`,
  * BAT-66): Đang làm xanh (`tot`), Chờ Chủ vàng (`canh`), Đứng đỏ (`loi` — cùng
  * nghĩa với chấm agent của sidebar), Rảnh xám, Đã tắt xám tắt (`tt-huy`).
  *
@@ -102,7 +102,7 @@ export const LOP_TRANG_THAI_AGENT: Record<TrangThaiAgent, string> = {
   disabled: 'text-tt-huy',
 };
 
-/** **Màu mức gấp Cần Chủ** — đỏ / vàng / xám (`THIET-KE.md`). */
+/** **Màu mức gấp Cần Chủ** — đỏ / vàng / xám (`DESIGN.md`). */
 export const LOP_MUC_GAP: Record<MucDoKhan, string> = {
   urgent: 'text-gap-khan',
   today: 'text-gap-hom-nay',

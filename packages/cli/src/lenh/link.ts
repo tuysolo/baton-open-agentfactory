@@ -1,7 +1,7 @@
 /**
  * `baton link <MÃ-điều-phối> <MÃ-dự-án> [--type dieu_phoi|related|blocks]` — nối
  * hai ticket (SPEC mục 4 "Liên kết", 19.4 "Ticket điều phối"). Lệnh thêm ở BAT-43
- * (Chủ chốt T-50 = A, 22/10 — `cau-hoi-spec.md` #168; bảng lệnh mục 13 đã thêm
+ * (Chủ chốt T-50 = A, 22/10 — `spec-questions.md` #168; bảng lệnh mục 13 đã thêm
  * dòng), để chuỗi của mục 17 bước 1 chạy trọn qua CLI.
  *
  *   * Hai mã là **mã ticket** `MÃ-số` (hoặc id) → `ticketTheoMaHoacId`, vì
@@ -14,7 +14,7 @@
  *   * `--type` mặc định `dieu_phoi`. Mã sai bị chặn **tại CLI** (0 request), thông
  *     điệp kể các mã kèm nhãn tiếng Việt (d.381) — nhãn lấy từ bảng
  *     `loai_lien_ket_ticket` của `@baton/shared`. `parent` **không** nối được ở đây
- *     (ticket cha đặt lúc tạo: `baton create --parent`, `cau-hoi-spec.md` #21).
+ *     (ticket cha đặt lúc tạo: `baton create --parent`, `spec-questions.md` #21).
  *   * Quyền là của server: chỉ chủ và `coordinator` nối `dieu_phoi` (19.12 câu 16),
  *     và phải có quyền trên **cả hai** dự án — CLI không đoán, chỉ chuyển mã lỗi.
  *

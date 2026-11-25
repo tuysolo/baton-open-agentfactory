@@ -147,7 +147,7 @@ export async function handlerGhiNhatKy(
    *    **duy nhất** áp cho việc **ghi** nó — cùng hướng MỞ mà `handlerTaoCanChu`
    *    đã chọn cho mục Chung, và cùng căn cứ: SPEC chỉ im lặng về **tầm nhìn**
    *    (ai **đọc** được), không về quyền ghi. Tầm nhìn nằm ở `doc-nhat-ky.ts`,
-   *    qua `pham-vi-chung.ts` — xem `cau-hoi-spec.md` #69.
+   *    qua `pham-vi-chung.ts` — xem `spec-questions.md` #69.
    */
   batBuocQuyen(lenh.ai, 'write_decision', project_id === null ? {} : { project_id });
 
@@ -349,7 +349,7 @@ async function kiemCanCu(
        * workspace**. Không kiểm phạm vi dự án của chúng, có chủ ý — cả hai có
        * thể là **Chung** (`project_id IS NULL`, 19.12 câu 4), nên không có dự án
        * nào để kiểm, và tầm nhìn của lớp dòng đó là một câu hỏi chưa chốt
-       * (`cau-hoi-spec.md` #69) sống ở **đường đọc** (`pham-vi-chung.ts`). Đặt
+       * (`spec-questions.md` #69) sống ở **đường đọc** (`pham-vi-chung.ts`). Đặt
        * nửa luật ở đây nữa là hai nguồn sự thật cho cùng một câu hỏi.
        */
       const bang = loai === 'ask' ? 'can_chu' : 'nhat_ky';

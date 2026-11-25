@@ -530,7 +530,7 @@ export interface GhiNhatKyRa {
  *
  * `LoaiTacGia` của server có đúng ba giá trị: `owner` · `agent` · `system`.
  * Bảng mục 0.1 **không có hàng nào** cho loại tác giả, nên nhãn ở đây là một
- * chọn tạm — đã ghi `cau-hoi-spec.md` #82. Để nó thành một bảng thay vì một
+ * chọn tạm — đã ghi `spec-questions.md` #82. Để nó thành một bảng thay vì một
  * chuỗi `if`: thêm một loại ở server mà quên nhãn thì ra `(loại lạ: x)`, thấy
  * ngay, chứ không in lặng chữ Anh.
  */

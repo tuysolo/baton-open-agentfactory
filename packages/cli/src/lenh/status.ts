@@ -9,7 +9,7 @@
  * `--reason` trong SPEC viết **không có chỗ cho giá trị**, nhưng mục 4 đòi "vào
  * Huỷ phải có **lý do**" — một cờ bật/tắt không mang được lý do nào. Nên ở đây nó
  * là tuỳ chọn **có giá trị**, đúng như d.369 viết cho `baton verdict`
- * (`[--reason ...]`); xem `cau-hoi-spec.md` **#90**.
+ * (`[--reason ...]`); xem `spec-questions.md` **#90**.
  *
  * ## "Theo luật mục 4" — chặn gì ở CLI, để gì cho máy chủ
  *

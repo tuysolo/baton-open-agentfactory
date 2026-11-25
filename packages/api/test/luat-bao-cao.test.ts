@@ -8,7 +8,7 @@
  *
  * ## Bảng phủ không được tự xác nhận chính nó
  *
- * Nếp đã chốt (`quyet-dinh.md` 01/10, ghi chú reviewer lượt 4): **một phía của một
+ * Nếp đã chốt (`decisions.md` 01/10, ghi chú reviewer lượt 4): **một phía của một
  * ca là chữ người đọc từ `SPEC.md`, phía kia sinh từ mã**. Nên các danh sách chữ
  * trong file này được **chép tay** từ `SPEC.md` d.322–336 và **không** nhập từ
  * `TIEU_DE_VE_SANG` / `TIEU_DE_VE_TOI` — đổi một tiêu đề vế trong mã là một ca đỏ.

@@ -1,6 +1,6 @@
 /**
  * Phân trang **keyset (cursor)** và index — mốc 200 dự án + 200.000 ticket
- * (`quyet-dinh.md` 01/10).
+ * (`decisions.md` 01/10).
  *
  * Hai thứ được chứng minh ở đây:
  *
@@ -456,7 +456,7 @@ describe('EXPLAIN QUERY PLAN — không quét bảng, không sắp bằng B-tree
    * **Hướng của `ORDER BY` phải khớp hướng của index.**
    *
    * Thứ tự chuẩn của danh sách ticket là `(hang_uu_tien ASC, tao_luc DESC,
-   * id DESC)` (`quyet-dinh.md` 01/10) và index mang đúng hướng đó. Viết
+   * id DESC)` (`decisions.md` 01/10) và index mang đúng hướng đó. Viết
    * `ORDER BY hang_uu_tien, tao_luc, id` (cả ba tăng) thì SQLite vẫn khớp được
    * tiền tố index cho `WHERE`, nhưng phải
    * `USE TEMP B-TREE FOR LAST 2 TERMS OF ORDER BY` — sắp lại trong bộ nhớ, đúng

@@ -6,7 +6,7 @@
  * CLI không gọi thêm đường nào — `phien_da_dong` trong phản hồi là lời khai của
  * server về việc đó.
  *
- * Đọc file: `bao-cao-md.ts` (và `cau-hoi-spec.md` #84 cho chỗ SPEC im lặng).
+ * Đọc file: `bao-cao-md.ts` (và `spec-questions.md` #84 cho chỗ SPEC im lặng).
  * Ba luật nghiệp vụ ở server, CLI chỉ in lại: lượt phải đang `in_progress`
  * (19.12 câu 38), chỉ **người nhận** nộp được (câu 37), và lượt `review` tự
  * `accepted` (19.3).

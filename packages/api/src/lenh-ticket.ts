@@ -185,7 +185,7 @@ export async function handlerCapSoCanChu(
    * **Không** truyền `project_id`: một `T-số` là số của **workspace**, và mục nó
    * sắp mang có thể là mục **Chung** (19.12 câu 4). Nên ô này là luật **duy nhất**
    * của đường cấp số — y như nó là luật duy nhất của `handlerTaoCanChu` khi
-   * `project_id` rỗng, sau khi `cau-hoi-spec.md` **#69** chốt hướng **MỞ**. Hai
+   * `project_id` rỗng, sau khi `spec-questions.md` **#69** chốt hướng **MỞ**. Hai
    * đường **khớp nhau**: không vai nào đốt được số mà không tạo được mục. Ca khoá
    * cặp đó ở `test/can-chu.test.ts` ("hai đường cùng ô `create_ask` khớp nhau");
    * đổi một bên thì ca đó đỏ.
@@ -385,7 +385,7 @@ async function kiemChiuTrachNhiem(
  * (`lenh-du-an.ts` cố ý không khoá vai trò của `quan_ly_agent_id`). Lúc đó rơi
  * về **chủ**, không ghi một giá trị trái luật mục 4.
  *
- * Agent quản lý **đã tắt** cũng rơi về chủ (BAT-49, `cau-hoi-spec.md` #173):
+ * Agent quản lý **đã tắt** cũng rơi về chủ (BAT-49, `spec-questions.md` #173):
  * cửa ghi không cho đặt agent tắt làm người chịu trách nhiệm, mặc định cũng không.
  */
 async function chiuTrachNhiemMacDinh(
@@ -539,7 +539,7 @@ export async function handlerTaoTicket(
    *      một **máy trả lời** cho câu "dự án này có thật không", nên agent dò được
    *      danh sách dự án mình không được vào. Kiểm quyền trước thì cả hai ca đều
    *      ra 403 (agent ngoài phạm vi không thoả `vaoDuocDuAn` dù dự án có hay
-   *      không), nên không còn gì để dò. Xem `cau-hoi-spec.md` #24.
+   *      không), nên không còn gì để dò. Xem `spec-questions.md` #24.
    *
    * Cờ phạm vi dựng **ở đây**, từ DB, không bao giờ từ thân request.
    */
@@ -690,7 +690,7 @@ export async function handlerDoiTieuDe(
 
   // SPEC mục 3 không có hàng riêng cho "sửa trường của ticket"; dùng hàng gần
   // nhất là "Đổi trạng thái ticket" (cùng phạm vi: ticket của lượt mình với
-  // worker, trong dự án với manager) — xem `cau-hoi-spec.md` #12.
+  // worker, trong dự án với manager) — xem `spec-questions.md` #12.
   // Cờ phạm vi dựng từ DB bên trong cửa ghi, không bao giờ từ thân request.
   batBuocQuyen(lenh.ai, 'change_status', {
     project_id: cu.project_id,
@@ -826,7 +826,7 @@ export async function handlerSuaTicket(
 
   /*
    * Hàng "Đổi trạng thái ticket" dùng chung cho mọi lần sửa trường
-   * (`cau-hoi-spec.md` #12) — **trừ** lệnh chỉ mang `khoi_lon`/`doi`: hai trường
+   * (`spec-questions.md` #12) — **trừ** lệnh chỉ mang `khoi_lon`/`doi`: hai trường
    * đó có cột "Ai sửa" riêng của 20.1 (kiểm ngay dưới), không mượn hàng của mục 3.
    * Lệnh mang cả hai loại trường thì phải qua **cả hai** cửa.
    */
@@ -940,7 +940,7 @@ export async function handlerDatNhan(
    * Hàng "Xoá bất cứ thứ gì — không bao giờ" (SPEC mục 3) nói về xoá **đối
    * tượng** (ticket, bằng chứng, dòng lịch sử, mục Cần Chủ). Bỏ một nhãn là đặt
    * lại giá trị của một trường, cùng loại việc với đổi ưu tiên, và vẫn để lại dấu
-   * vết trong lịch sử. Xem `cau-hoi-spec.md` #20.
+   * vết trong lịch sử. Xem `spec-questions.md` #20.
    */
   batBuocQuyen(lenh.ai, 'change_status', {
     project_id: cu.project_id,
@@ -1003,7 +1003,7 @@ export async function handlerDatNhan(
  *
  * `parent` **không** nằm ở đây: ticket cha đặt lúc tạo (`tao_ticket`), vì đổi cha
  * về sau là đổi cả luật `CHILDREN_OPEN` của cây — SPEC không nói hành vi đó, nên
- * không tự làm (`cau-hoi-spec.md` #21).
+ * không tự làm (`spec-questions.md` #21).
  */
 export const LOAI_NOI_DUOC = ['related', 'blocks', 'dieu_phoi'] as const satisfies readonly LoaiLienKetTicket[];
 
@@ -1028,7 +1028,7 @@ export async function handlerNoiTicket(
 
   /*
    * **Chỉ chủ và agent vai `coordinator`** nối được `dieu_phoi` — SPEC 19.12 câu
-   * 16 (chốt `cau-hoi-spec.md` #25). Kiểm **trước khi tra ticket** để agent sai
+   * 16 (chốt `spec-questions.md` #25). Kiểm **trước khi tra ticket** để agent sai
    * vai nhận đúng một phản hồi 403 dù hai id có thật hay không — nếu không, cặp
    * (403, 404) lại thành một máy dò sự tồn tại, đúng thứ 19.12 câu 15 cấm.
    *
@@ -1127,7 +1127,7 @@ export async function handlerXoaTicket(
 
   /*
    * Ticket xoá mềm **không tính** vào tập ticket dự án mà một ticket điều phối
-   * theo — SPEC 19.12 câu 17 (chốt `cau-hoi-spec.md` #26). Nên xoá một ticket dự
+   * theo — SPEC 19.12 câu 17 (chốt `spec-questions.md` #26). Nên xoá một ticket dự
    * án phải tính lại trạng thái ticket điều phối, **trong cùng batch** với lệnh
    * xoá: tách ra hai lần ghi là mở một cửa sổ mà ticket điều phối sai trạng thái.
    *

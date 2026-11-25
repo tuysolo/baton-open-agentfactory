@@ -320,7 +320,7 @@ describe('SPEC mục 4 — vào Huỷ bắt buộc có lý do', () => {
 
 /* ================================================================== *
  * Luật 6 — Vào Trùng phải có ticket gốc hợp lệ
- *   SPEC mục 4 dòng 137 (`INVALID_DUPLICATE_TARGET`), `cau-hoi-spec.md` #19
+ *   SPEC mục 4 dòng 137 (`INVALID_DUPLICATE_TARGET`), `spec-questions.md` #19
  * ================================================================== */
 
 describe('SPEC mục 4 — vào Trùng bắt buộc có ticket gốc hợp lệ', () => {
@@ -894,7 +894,7 @@ describe('SPEC mục 3 — ai đổi được trạng thái ticket', () => {
     expect(res.status).toBe(200);
   });
 
-  // BAT-58 (19.12 câu 15, `cau-hoi-spec.md` #176): trước ghim 403 FORBIDDEN; nay
+  // BAT-58 (19.12 câu 15, `spec-questions.md` #176): trước ghim 403 FORBIDDEN; nay
   // ticket người gọi không thấy ra 404 GIỐNG HỆT id bịa (403 cho id thật là máy dò).
   it('`manager`: BỊ TỪ CHỐI ở dự án không được vào → 404 NOT_FOUND giống hệt id bịa (BAT-58)', async () => {
     const res = await goiApi('/v1/ticket/tk-pj-INC-1/trang-thai', TOKEN_MGR, {
@@ -1015,7 +1015,7 @@ describe('SPEC mục 0.1 + 13 — API nhận MÃ tiếng Anh, không nhận nhã
  * và cột Cần làm đi qua đúng đường đổi trạng thái của chủ. Chỉ test, không
  * đổi luật: `apDungLuat` (nhánh `doi_tay`) không có điều kiện riêng cho cặp
  * này nên nó rơi xuống `return { trang_thai: dich }`; rời nhóm `closed` sang
- * Backlog vẫn "chỉ chủ" (SPEC mục 4, `cau-hoi-spec.md` #18).
+ * Backlog vẫn "chỉ chủ" (SPEC mục 4, `spec-questions.md` #18).
  * ================================================================== */
 
 describe('SPEC mục 14 (BAT-64) — kéo giữa cột Backlog và Cần làm', () => {
@@ -1135,7 +1135,7 @@ describe('SPEC mục 4 dòng 134 + 19.2 — sự kiện lượt giao (luật thu
     expect(
       apDungLuat({ loai: 'luot_huy', con_luot_mo: false }, bc({ trang_thai: 'done' })),
     ).toEqual({ trang_thai: 'done' });
-    // Mục 4 dòng 138 + `cau-hoi-spec.md` #18: rời nhóm `closed` chỉ chủ làm được,
+    // Mục 4 dòng 138 + `spec-questions.md` #18: rời nhóm `closed` chỉ chủ làm được,
     // nên `huy` lượt (đường của agent người giao) không được là cửa sau.
     expect(
       apDungLuat({ loai: 'luot_huy', con_luot_mo: false }, bc({ trang_thai: 'canceled' })),

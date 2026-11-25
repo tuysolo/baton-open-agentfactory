@@ -212,7 +212,7 @@ describe('d.271 — dòng không hiểu thì báo đỏ, mỗi ca một lý do r
 });
 
 /* ================================================================== *
- * D. Mục `review` — chỗ SPEC im lặng (cau-hoi-spec.md #107)
+ * D. Mục `review` — chỗ SPEC im lặng (spec-questions.md #107)
  * ================================================================== */
 
 describe('mục `review` trong ô hàng loạt — hướng tạm, có test', () => {
@@ -241,7 +241,7 @@ describe('mục `review` trong ô hàng loạt — hướng tạm, có test', ()
 
 /* ================================================================== *
  * D2. `decision` — trả lời TỰ DO được, nhưng nhãn SAI vẫn đỏ
- *     (`cau-hoi-spec.md` #121)
+ *     (`spec-questions.md` #121)
  * ================================================================== */
 
 describe('#121 — mục `decision` nhận một câu trả lời tự do', () => {

@@ -328,7 +328,7 @@ describe('d.249 — ba khối 🔴 · 🟡 · ⚪, đúng thứ tự; mục quá
 });
 
 /* ------------------------------------------------------------------ *
- * Hệ thiết kế 29/10 (`THIET-KE.md`, lượt UI-B) — chấm mức gấp
+ * Hệ thiết kế 29/10 (`DESIGN.md`, lượt UI-B) — chấm mức gấp
  * ------------------------------------------------------------------ */
 
 describe('UI-B — mức gấp là CHẤM, không nền màu cả khối/thẻ', () => {
@@ -446,7 +446,7 @@ describe('d.250 — thẻ hiện ĐỦ các vế', () => {
 
   /**
    * **d.250 viết chung cho MỌI thẻ** ("… lệnh có nút Copy …"), nên khối lệnh
-   * không phải đặc sản của `run_command` — `cau-hoi-spec.md` #130. Ca này cũng
+   * không phải đặc sản của `run_command` — `spec-questions.md` #130. Ca này cũng
    * ghim vế thứ hai: bảng d.257–262 **không đổi**, nút "Gửi duyệt" của
    * `decision` vẫn mờ tới khi chọn phương án dù thẻ có lệnh.
    */
@@ -1337,7 +1337,7 @@ describe('d.270 — `1`–`5`, `Cmd/Ctrl+Enter`, `D`, `S`, `J`/`K`', () => {
     datGhi(m, kho, '/v1/can-chu/ct-T-120/xu-ly', 'ct-T-120');
     const u = await moTrang();
     /*
-     * Vừa mở trang thì **chưa thẻ nào** đang chọn (`cau-hoi-spec.md` #108) —
+     * Vừa mở trang thì **chưa thẻ nào** đang chọn (`spec-questions.md` #108) —
      * `J` là cú chọn đầu tiên, và nó rơi vào thẻ đầu danh sách.
      */
     expect(theCua('T-120').getAttribute('data-dang-chon')).toBe('khong');
@@ -1468,7 +1468,7 @@ describe('d.270 — `1`–`5`, `Cmd/Ctrl+Enter`, `D`, `S`, `J`/`K`', () => {
     expect(m.da_goi.find((l) => l.method === 'POST')?.than).toEqual({ ly_do: 'để sau' });
   });
 
-  it('mới mở trang: một phím `d` lạc KHÔNG xử lý mục nào (cau-hoi-spec.md #108)', async () => {
+  it('mới mở trang: một phím `d` lạc KHÔNG xử lý mục nào (spec-questions.md #108)', async () => {
     /*
      * SPEC im lặng chuyện phím phá huỷ có cần xác nhận. Hướng tạm: **không** tự
      * chọn thẻ nào khi trang mở. Lý do là chi phí của ca ngược: `d` xử lý xong
@@ -1671,7 +1671,7 @@ describe('d.411 — Cần Chủ ở 375px, kể cả phiên duyệt và ô trả
 });
 
 /* ================================================================== *
- * `/can-chu?the=<T-số>` — mở đúng một mục (cau-hoi-spec.md #154, BAT-37)
+ * `/can-chu?the=<T-số>` — mở đúng một mục (spec-questions.md #154, BAT-37)
  * ================================================================== */
 
 describe('?the=<T-số> — mở đúng một mục (#154)', () => {

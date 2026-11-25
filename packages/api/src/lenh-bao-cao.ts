@@ -8,7 +8,7 @@
  *
  * Bảng quyền mục 3 **không có hàng nào** cho việc này, và d.324 gọi tên một **vai
  * trò** (`coordinator`) chứ không một ô của bảng đó. Theo nếp đã chốt hai lần
- * (19.12 câu 13 và câu 37; `cau-hoi-spec.md` #113, #22): **không mượn** một hàng
+ * (19.12 câu 13 và câu 37; `spec-questions.md` #113, #22): **không mượn** một hàng
  * nào — mượn là âm thầm đổi nghĩa hàng đó, và một `manager` có "Ghi Nhật ký" sẽ
  * bất ngờ ghi được cả trọng tâm.
  *
@@ -17,7 +17,7 @@
  *
  * Hệ quả khai thẳng: **chủ không chỉnh được** ai ghi trọng tâm (không có ô trong
  * Cài đặt), và `manager` **không** ghi được. Cả hai là chỗ SPEC im lặng —
- * `cau-hoi-spec.md` **#117**. Hướng chọn là hướng **chặt** (nới dễ hơn siết): nếu
+ * `spec-questions.md` **#117**. Hướng chọn là hướng **chặt** (nới dễ hơn siết): nếu
  * chủ chốt cho `manager` ghi, việc phải làm là thêm một mã vào `VAI_GHI_TRONG_TAM`
  * dưới đây, một dòng.
  *
@@ -140,7 +140,7 @@ export async function handlerGhiTrongTam(
    *    (BAT-58, 19.12 câu 15): trước BAT-58 id thật ngoài phạm vi ra **thành công**
    *    còn id bịa ra `NOT_FOUND` — một máy dò sự tồn tại. Nay ngoài phạm vi ⇒ cùng
    *    `NOT_FOUND` với id bịa. Agent "tất cả dự án" (vai điều phối toàn hệ thường
-   *    mang cờ này) không đổi gì. `cau-hoi-spec.md` #176.
+   *    mang cờ này) không đổi gì. `spec-questions.md` #176.
    *
    *    Trùng ticket ⇒ `INVALID_INPUT` **tường minh**, không âm thầm bỏ bớt: d.324
    *    nói **3 việc**, nên một bộ gửi lên 3 dòng mà ghi được 2 là một đề xuất khác

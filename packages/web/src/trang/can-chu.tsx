@@ -43,7 +43,7 @@
  * `data-hang="nut"` và test ghim rằng **mọi** hàng đó có `flex-wrap`, bảng Đã xử
  * lý nằm trong `overflow-x-auto`, và **không** lớp nào chốt một chiều rộng cứng
  * vượt 375px. Khai thẳng: đó là một lưới chống hồi quy, **không** thay được một
- * lần mở thật trên điện thoại ở bước nghiệm thu mục 17 (đã ghi `cau-hoi-spec.md`).
+ * lần mở thật trên điện thoại ở bước nghiệm thu mục 17 (đã ghi `spec-questions.md`).
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -170,7 +170,7 @@ export const CAU_KHOI_RONG = 'Không có mục nào.';
 export const CAU_CHUA_XU_LY_GI = 'Chưa có mục nào đã xử lý.';
 export const CAU_HET_MUC_CHO = 'Không còn mục nào đang Chờ.';
 /**
- * Nhãn ô "Ghi thêm" của **riêng** mục `decision` — `cau-hoi-spec.md` **#121**.
+ * Nhãn ô "Ghi thêm" của **riêng** mục `decision` — `spec-questions.md` **#121**.
  *
  * Nó phải nói được rằng **gõ vào đây là gửi được**, không cần chọn phương án:
  * nhãn cũ ("Ghi thêm (tuỳ chọn)") là chữ của một luật đã nới, và một ô nói
@@ -195,7 +195,7 @@ export const cauKhongThayThe = (ma: string): string =>
 
 /**
  * Bốn khoá truy vấn trên URL. Tên tiếng Việt không dấu, cùng nếp đường của
- * `cau-hoi-spec.md` #101 (SPEC **không** chốt đường nào ngoài `/t/<MÃ>`, nên
+ * `spec-questions.md` #101 (SPEC **không** chốt đường nào ngoài `/t/<MÃ>`, nên
  * không tự chốt đường mới ở lượt này — chỉ dùng đề xuất tạm đã ghi ở đó).
  *
  * `du_an` nhận **id dự án** hoặc `chung` (mục Chung — 19.12 câu 4), tức đúng
@@ -252,7 +252,7 @@ export const NHAP_RONG: NhapThe = {
  *   * `decision`: **đã chọn một phương án HOẶC đã gõ "Ghi thêm"** — d.259 viết
  *     "mờ cho tới khi đã chọn 1 phương án", nhưng d.244 nói kết quả là "phương án
  *     đã chọn **và/hoặc** chữ tự do", và chủ đã yêu cầu trực tiếp (11/10) cho
- *     trả lời tự do. Xung đột + chỗ nới: `cau-hoi-spec.md` **#121**;
+ *     trả lời tự do. Xung đột + chỗ nới: `spec-questions.md` **#121**;
  *   * `review`: hai nút chọn, và "**Cần sửa thì bắt buộc ghi chú**" (d.261);
  *   * `run_command` / `fyi`: không điều kiện nào (ô kết quả **tuỳ chọn**).
  */
@@ -274,7 +274,7 @@ export function coTheGui(loai: LoaiCanChu, nhap: NhapThe): boolean {
  * `phuong_an` **vắng mặt hẳn** — không `phuong_an: undefined`, cũng không
  * `null`: `JSON.stringify` bỏ `undefined` nên hai cách cho cùng một gói gửi đi,
  * nhưng kiểu của thân thì khác, và `kiemKetQuaXuLy` phân biệt `''`/`null`/vắng
- * mặt. Giữ "vắng mặt" là giữ đúng hình mà máy chủ đọc (`cau-hoi-spec.md` #121).
+ * mặt. Giữ "vắng mặt" là giữ đúng hình mà máy chủ đọc (`spec-questions.md` #121).
  */
 export function thanTuNhap(loai: LoaiCanChu, nhap: NhapThe): ThanXuLyMuc {
   const ghi_them = nhap.ghi_them.trim();
@@ -314,7 +314,7 @@ export const SO_PHIM_PHUONG_AN = 5;
  *     lệnh/review/fyi; `S` bỏ qua; `J`/`K` lên xuống.
  *
  * Hai luật **không** có trong d.270 mà không thể không có (đã khai ở
- * `cau-hoi-spec.md` #108):
+ * `spec-questions.md` #108):
  *
  *   * **Đang gõ trong một ô thì chữ là chữ, không là phím tắt.** Không có luật
  *     này thì gõ "ngưỡng 500" vào ô ghi thêm sẽ bấm `5` → đổi phương án, và gõ
@@ -490,7 +490,7 @@ export function TrangCanChu(): React.JSX.Element {
   );
 
   /*
-   * Bản **chờ được** của `guiThe`, chỉ ô hàng loạt dùng (`cau-hoi-spec.md` #107).
+   * Bản **chờ được** của `guiThe`, chỉ ô hàng loạt dùng (`spec-questions.md` #107).
    *
    * Lô phải chạy **tuần tự**, và muốn tuần tự thì phải chờ được từng mục. Bắn N
    * mutation song song thì mỗi cái tự `cancelQueries` + chụp ảnh, nên ảnh của
@@ -527,7 +527,7 @@ export function TrangCanChu(): React.JSX.Element {
   const [chon_id, datChonId] = useState<string | null>(null);
   /*
    * **Chưa chọn gì thì KHÔNG có thẻ nào đang chọn** — cố ý không `?? ds_phim[0]`
-   * (`cau-hoi-spec.md` #108).
+   * (`spec-questions.md` #108).
    *
    * d.270 không nói phím phá huỷ có cần xác nhận hay không, nhưng mặc định một
    * thẻ sẵn sàng nhận phím ngay khi trang mở là ca xấu nhất của chỗ im lặng đó:
@@ -660,7 +660,7 @@ interface KetDich {
 }
 
 /**
- * **`/can-chu?the=<T-số>`** — `cau-hoi-spec.md` #154 (chốt 19/10 T-31, BAT-37).
+ * **`/can-chu?the=<T-số>`** — `spec-questions.md` #154 (chốt 19/10 T-31, BAT-37).
  *
  *   * Mục còn `Chờ` ⇒ đặt nó làm **thẻ đang chọn** (cùng `chon_id` của d.270 —
  *     không dựng trạng thái chọn thứ hai), cuộn tới, focus, làm nổi (`data-noi`).
@@ -1223,7 +1223,7 @@ export function The({
         *
         * Điều kiện là "**có lệnh**", không "loại là `run_command`" — d.250 viết
         * chung cho mọi thẻ, và từ lượt này máy chủ giữ lệnh cho cả bốn loại
-        * (`cau-hoi-spec.md` #130). Nút chính và điều kiện bật nút của bảng
+        * (`spec-questions.md` #130). Nút chính và điều kiện bật nút của bảng
         * d.257–262 **không** đổi: khối lệnh chỉ hiện thêm.
         */}
       {the.lenh === null ? null : <OLenh lenh={the.lenh} can_tty={the.can_tty} />}
@@ -1486,7 +1486,7 @@ function TraLoi({
           /*
            * Mờ cho tới khi **trả lời được**: `decision` cần một phương án
            * **hoặc** một câu tự do ở ô "Ghi thêm" (d.259 nới theo d.244 và yêu
-           * cầu của chủ 11/10 — `cau-hoi-spec.md` #121); `review` cần Đạt/Cần
+           * cầu của chủ 11/10 — `spec-questions.md` #121); `review` cần Đạt/Cần
            * sửa, và Cần sửa cần ghi chú (d.261). Luật ở `coTheGui`.
            */
           className={`rounded px-3 py-1 text-sm ${bat ? NUT_CHINH : NUT_MO}`}
@@ -1805,7 +1805,7 @@ function OHangLoat({
   const ap_duoc = xem !== null && coTheAp(xem);
 
   /**
-   * Áp cả lô — **tuần tự**, một mục một lúc (`cau-hoi-spec.md` #107).
+   * Áp cả lô — **tuần tự**, một mục một lúc (`spec-questions.md` #107).
    *
    * Vẫn **không nguyên tử** ở v0.1 (máy chủ không có đường ghi theo lô), nhưng
    * tuần tự là điều kiện để cập nhật lạc quan nói đúng: hai mutation song song

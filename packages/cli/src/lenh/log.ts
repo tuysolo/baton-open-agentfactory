@@ -19,7 +19,7 @@
  * **Không có cờ `--tam-thoi`, cố ý.** Mục 6 d.190 cho một mục được "đánh dấu tạm
  * thời" và API nhận `tam_thoi`, nhưng bảng lệnh mục 13 d.363 viết đúng hai tham
  * số (`<type>` và `"<nội dung>"`) — thêm một cờ SPEC không viết là tự đặt cú
- * pháp. Hệ quả: từ CLI chưa gửi được mục tạm thời; đã ghi `cau-hoi-spec.md` #85.
+ * pháp. Hệ quả: từ CLI chưa gửi được mục tạm thời; đã ghi `spec-questions.md` #85.
  * (`--luot` là cờ thêm **có giao việc** — BAT-56, phương án của #83 — không phải
  * tiền lệ để tự thêm cờ.)
  */

@@ -25,7 +25,7 @@
  * **không cấp mã hiển thị nào** cho một dòng Nhật ký — chỉ có id. Chọn "còn lại
  * là id dòng cũ" thay vì bắt một tiền tố: một id sai vẫn ra `NOT_FOUND` của máy
  * chủ với đúng câu "Không tìm thấy dòng Nhật ký cũ dùng làm căn cứ", tức người
- * gõ vẫn biết mình sai ở đâu. Khai ở `cau-hoi-spec.md` #93.
+ * gõ vẫn biết mình sai ở đâu. Khai ở `spec-questions.md` #93.
  *
  * `--ref` **lặp được** (`nhieu_gia_tri`): d.308 kể ba loại căn cứ cho **một**
  * dòng, nên một dòng trỏ được nhiều căn cứ, và bảng con `nhat_ky_can_cu` có cột
@@ -40,7 +40,7 @@
  *
  * **Dòng "Chung"** (`project_id` rỗng — 19.12 câu 4) **không gõ được từ lệnh
  * này**: d.377 viết `<DỰ ÁN>` không trong ngoặc vuông, tức bắt buộc. Nói thẳng ra
- * thay vì tự thêm một cờ SPEC không có; `cau-hoi-spec.md` #94.
+ * thay vì tự thêm một cờ SPEC không có; `spec-questions.md` #94.
  */
 
 import { batonFetch } from '@baton/client';

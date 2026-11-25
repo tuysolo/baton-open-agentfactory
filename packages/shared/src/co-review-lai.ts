@@ -35,7 +35,7 @@
  * 19.11 **không nói dùng cờ nào** cho ca (3). Truy vấn "Cần chú ý" hiện chỉ có bốn
  * cờ (`co_khong_ai_cam`, `co_can_review_lai`, `co_xong_khong_bang_chung`,
  * `co_nhap_khong_bang_chung`), nên đây là chỗ SPEC thiếu —
- * `cau-hoi-spec.md` **#64**. Đề xuất tạm cài ở đây: dùng chính `co_can_review_lai`,
+ * `spec-questions.md` **#64**. Đề xuất tạm cài ở đây: dùng chính `co_can_review_lai`,
  * vì một review KHÔNG ĐẠT đúng nghĩa là **cần review lại**. Không tự thêm một cờ
  * thứ năm: thêm cột là đổi schema theo một suy đoán, và `#64` có thể được chốt theo
  * hướng khác.

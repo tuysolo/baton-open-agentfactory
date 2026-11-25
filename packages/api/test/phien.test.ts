@@ -176,7 +176,7 @@ describe('SPEC 0.1 — 7 trạng thái phiên (mục 6 chỉ liệt kê 6)', () 
   /**
    * Danh sách này là **chữ người đọc từ `SPEC.md` dòng 36**, không sinh từ mã
    * sản phẩm: một bảng "phủ" mà cả hai phía cùng một nguồn là khẳng định vòng
-   * quanh, xanh vĩnh viễn (`quyet-dinh.md` 01/10, bài học của bảng quyền).
+   * quanh, xanh vĩnh viễn (`decisions.md` 01/10, bài học của bảng quyền).
    */
   const MA_CUA_0_1 = [
     'running',
@@ -912,7 +912,7 @@ describe('SPEC mục 6 d.195 — "mọi lệnh ghi sau khi phiên đóng bị t�
  *
  * `gui_bang_chung` cũng ở đây: 19.12 câu 45 kể "bằng chứng **của lượt**" vào nhóm
  * bị chặn, nhưng bằng chứng **không gắn lượt giao nào** trong mô hình hiện tại —
- * xem `cau-hoi-spec.md` **#67**, cài theo hướng (a) (lệnh ghi chung). Ca dưới đây
+ * xem `spec-questions.md` **#67**, cài theo hướng (a) (lệnh ghi chung). Ca dưới đây
  * khoá **hành vi đang chọn**, nên phiên spec chốt ngược thì nó đỏ ngay, đúng chỗ.
  *
  * Danh tính dùng ở đây là `AG.mgr` (vai `manager`): phạm vi "sửa ticket" của
@@ -1374,7 +1374,7 @@ describe('nhiều phiên trên nhiều ticket cùng lúc', () => {
 
   /**
    * **BAT-57 — thu hẹp 19.12 câu 41 cho ca nhiều phiên** (CoS/Chủ giao;
-   * `cau-hoi-spec.md` mục BAT-57). Ca này **thay** ca cũ "lệnh ghi của agent
+   * `spec-questions.md` mục BAT-57). Ca này **thay** ca cũ "lệnh ghi của agent
    * nhích tín hiệu của MỌI phiên mở của nó (chốt tạm)": ca cũ ghim đúng hành vi
    * đã làm phiên chết không bao giờ bị báo đứng (nhịp tim lượt 1 cứu phiên lượt 2).
    * Nay nhịp tim gắn **một** lượt chỉ nhích phiên của lượt đó. Ca đầy đủ (lệnh

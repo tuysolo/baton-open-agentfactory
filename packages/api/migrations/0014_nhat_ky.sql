@@ -93,7 +93,7 @@ CREATE TABLE nhat_ky (
 
   -- **Vì sao** — d.306 ("ai đã quyết cái này, **vì sao**, lúc nào") và d.308
   -- liệt kê nó là một trường của dòng. Bắt buộc, không rỗng: xem
-  -- `cau-hoi-spec.md` #71 (SPEC không nói rõ nó có bắt buộc không, hướng tạm là
+  -- `spec-questions.md` #71 (SPEC không nói rõ nó có bắt buộc không, hướng tạm là
   -- **chặt**, vì cả mục 10 tồn tại để trả lời đúng câu "vì sao").
   vi_sao       TEXT    NOT NULL CHECK (length(vi_sao) BETWEEN 1 AND 20000),
 
@@ -168,7 +168,7 @@ CREATE INDEX ix_nhat_ky_can_cu_ticket
 -- Thứ tự chuẩn của mọi đường đọc là `(luc DESC, id DESC)`: "gom theo ngày" là
 -- một phép gom **trên kết quả đã sắp theo thời gian**, không một cột `ngay`
 -- riêng — ngày là một **dẫn xuất** của `luc` theo múi giờ của chủ
--- (`MUI_GIO_CHU_PHUT`, `cau-hoi-spec.md` #68), và lưu nó thành cột là khoá cứng
+-- (`MUI_GIO_CHU_PHUT`, `spec-questions.md` #68), và lưu nó thành cột là khoá cứng
 -- một múi giờ vào dữ liệu. `id` đứng cuối để thứ tự là **toàn phần** (bài học
 -- của `test/phan-trang.test.ts`).
 

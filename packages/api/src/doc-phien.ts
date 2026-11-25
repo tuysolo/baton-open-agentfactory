@@ -15,7 +15,7 @@
  * dẫn xuất ở mọi đường đọc.
  *
  * Mọi câu SQL ở đây ràng cả `workspace_id`, kể cả khi khoá đã là UUID toàn cục
- * (`quyet-dinh.md` 01/10, luật áp cho mọi bảng mới).
+ * (`decisions.md` 01/10, luật áp cho mọi bảng mới).
  */
 
 import {

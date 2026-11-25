@@ -7,7 +7,7 @@
  * Luật *hình dạng* URL nằm ở `@baton/shared/bang-chung.ts`
  * (`kiemBangChungDeploy` + `laHostBiChan`) và chạy **trước khi** dòng
  * `evidence` được ghi. File này là phần còn lại: **một lần gọi mạng**, và ba
- * quyết định mà SPEC không nói rõ (xem `cau-hoi-spec.md` #57).
+ * quyết định mà SPEC không nói rõ (xem `spec-questions.md` #57).
  *
  * ## Ba chốt tạm của #57 — đều chọn hướng ĐÓNG
  *
@@ -38,8 +38,8 @@ export interface KiemNoiBo {
 }
 
 /**
- * ⚠️ **HẠN CHẾ ĐÃ BIẾT, KHÔNG IM LẶNG** (ghi cả ở `quyet-dinh.md` và
- * `cau-hoi-spec.md` #57).
+ * ⚠️ **HẠN CHẾ ĐÃ BIẾT, KHÔNG IM LẶNG** (ghi cả ở `decisions.md` và
+ * `spec-questions.md` #57).
  *
  * Lớp chặn của d.207 chặn được **cú pháp host**: `127.0.0.1`, `10.0.0.5`,
  * `localhost`, mọi cách viết lách của chúng, và các dải nội bộ. Nó **không** chặn
@@ -52,13 +52,13 @@ export interface KiemNoiBo {
  * giải DNS, và `fetch` không nhận IP đã ghim — địa chỉ do chính runtime phân giải
  * ở tầng dưới.
  *
- * Nên hạn chế này **ở lại**, và nó phải được viết ra ở đây, trong `quyet-dinh.md`
- * và trong `cau-hoi-spec.md` #57 — chứ không được âm thầm gọi ra như thể đã an
+ * Nên hạn chế này **ở lại**, và nó phải được viết ra ở đây, trong `decisions.md`
+ * và trong `spec-questions.md` #57 — chứ không được âm thầm gọi ra như thể đã an
  * toàn. Cái vẫn làm được và đã làm: `redirect: 'manual'` (chặn đường vòng dễ
  * nhất), kiểm lại cú pháp host ngay trước khi gọi, không đọc body, hạn cứng.
  */
 export const HAN_CHE_KHONG_GHIM_DUOC_IP =
-  'Cloudflare Workers không cho phân giải DNS hay ghim IP, nên lớp chặn d.207 chỉ chặn được cú pháp host, không chặn được tên miền công khai trỏ tới địa chỉ nội bộ. Xem cau-hoi-spec.md #57.';
+  'Cloudflare Workers không cho phân giải DNS hay ghim IP, nên lớp chặn d.207 chỉ chặn được cú pháp host, không chặn được tên miền công khai trỏ tới địa chỉ nội bộ. Xem spec-questions.md #57.';
 
 /**
  * Kết quả một lần gọi URL deploy.

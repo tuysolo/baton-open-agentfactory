@@ -26,7 +26,7 @@
  * ## Ai sửa được
  *
  * Cổng nằm ở **máy chủ**: sửa hồ sơ chỉ chủ, thêm "Lỗi đã gặp" thì chủ hoặc agent
- * **được vào dự án** (đề xuất tạm `cau-hoi-spec.md` #113 — mục 9 không nói ai
+ * **được vào dự án** (đề xuất tạm `spec-questions.md` #113 — mục 9 không nói ai
  * sửa). Trang không kiểm quyền lần hai; máy chủ từ chối thì câu của máy chủ hiện
  * nguyên văn thành toast.
  *

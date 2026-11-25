@@ -188,7 +188,7 @@ export function vaiTroSuaKhoiTicket(ai: AiGoi): KetQuaQuyen {
  * Sửa `khoi_lon`, `doi` của ticket thuộc `project_id`: **chủ, `coordinator`,
  * `manager` của dự án**. "Manager của dự án" = agent quản lý của dự án đó (mục 2,
  * `du_an_minh_quan_ly`) — một `manager` chỉ được vào dự án mà không quản lý nó
- * thì không (`cau-hoi-spec.md` #188, chốt tạm hướng hẹp). Cả hai vai vẫn qua cửa dự án.
+ * thì không (`spec-questions.md` #188, chốt tạm hướng hẹp). Cả hai vai vẫn qua cửa dự án.
  */
 export function quyenSuaKhoiTicket(ai: AiGoi, project_id: string): KetQuaQuyen {
   const vai = vaiTroSuaKhoiTicket(ai);

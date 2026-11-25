@@ -20,7 +20,7 @@
 -- giờ yên lặng 23:00–07:00 của d.347 là một luật **về thời điểm gửi**, nên nó phải
 -- đọc được "tin này đã ra kênh ngoài lúc nào" để biết tin nào còn nợ.
 --
--- Cùng nếp "mốc, không cờ" đã chốt bốn lần trong dự án này (xem `quyet-dinh.md`):
+-- Cùng nếp "mốc, không cờ" đã chốt bốn lần trong dự án này (xem `decisions.md`):
 -- `ticket.trong_tay_tu_luc` (19.1), `phien.canh_bao_tin_hieu_luc` / `phien.error_luc`
 -- (mục 6 d.196, 0007/0008), `evidence.chua_merge_bao_moc` (19.7, 0010),
 -- `ticket.can_review_lai_luc` (19.3, 0011).

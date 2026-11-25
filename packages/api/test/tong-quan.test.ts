@@ -340,7 +340,7 @@ describe('mục 2 d.71–74 — luật thuần `sucSongDuAn`', () => {
   });
 
   it('ticket Đang làm mà KHÔNG phiên nào ⇒ 🟡, không 🟢 và không ⚪', () => {
-    // Chỗ SPEC không nói (`cau-hoi-spec.md` #102). Ca ghim hướng đang cài: không
+    // Chỗ SPEC không nói (`spec-questions.md` #102). Ca ghim hướng đang cài: không
     // được nói "Dự án không chạy" (d.74 dành cho ca khác) và không được vẽ 🟢.
     expect(sucSongDuAn({ so_ticket_dang_lam: 1, trang_thai_phien: [] })).toBe('vang');
   });
@@ -449,7 +449,7 @@ describe('d.317 — mỗi dự án một hàng: sức sống + ba con số', () 
   it('thanh tiến độ xong/tổng: `done` là tử số, `canceled`/`duplicate` NGOÀI tổng', async () => {
     /*
      * d.317 "thanh tiến độ xong/tổng (kèm số)". Mẫu số là chỗ SPEC im lặng
-     * (`cau-hoi-spec.md` #138) — ca này ghim đề xuất tạm đang cài: `backlog` và
+     * (`spec-questions.md` #138) — ca này ghim đề xuất tạm đang cài: `backlog` và
      * `todo` **trong** tổng (việc còn phải làm), `canceled` và `duplicate`
      * **ngoài** (không làm nữa; để chúng trong tổng thì càng huỷ càng trông càng
      * ít xong).
@@ -1285,7 +1285,7 @@ describe('19.12 câu 1 — số truy vấn KHÔNG tăng theo số dự án hay s
  * trigger của lược đồ vẫn áp — không có cửa hậu nào ở tầng DB.
  *
  * Đây là lưới duy nhất cho luật "mọi câu SQL ràng cả `workspace_id`"
- * (`quyet-dinh.md`): không có workspace thứ hai thì bỏ một vế `workspace_id = ?`
+ * (`decisions.md`): không có workspace thứ hai thì bỏ một vế `workspace_id = ?`
  * **không làm ca nào đỏ**, và ca "`toContain('workspace_id = ?')`" của lượt
  * trước chỉ đọc được **một** câu trong mười.
  */

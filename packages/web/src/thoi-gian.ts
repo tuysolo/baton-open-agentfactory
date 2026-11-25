@@ -13,7 +13,7 @@
  *   * `gioDayDu(moc)` → chữ trong `title` của thẻ, tức thứ hiện ra khi rê chuột.
  *
  * `bay_gio` qua **tham số**, không `Date.now()` bên trong: cùng kỷ luật với tầng
- * máy chủ (`quyet-dinh.md` 01/10) — một hàm tự đọc đồng hồ thì ca test chỉ ghim
+ * máy chủ (`decisions.md` 01/10) — một hàm tự đọc đồng hồ thì ca test chỉ ghim
  * được bằng cách giả lập đồng hồ toàn cục, và nó sẽ đỏ theo ngày chạy.
  *
  * ## Vì sao `Intl` ở đây mà `MUI_GIO_CHU_PHUT` ở tầng máy chủ

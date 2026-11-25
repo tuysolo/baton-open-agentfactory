@@ -20,7 +20,7 @@
  * **Ai được gọi.** Bảng quyền SPEC mục 3 **không có hàng nào** cho nhịp tim hay
  * cho nút Dừng, và mục 6 nói theo **danh tính** ("agent", "chủ bấm Dừng"), không
  * theo vai trò. Nên hai lệnh này kiểm danh tính, **không mượn** hàng nào của bảng
- * quyền — cùng lý do đã ghi ở `cau-hoi-spec.md` #22 và #37 (mượn là âm thầm đổi
+ * quyền — cùng lý do đã ghi ở `spec-questions.md` #22 và #37 (mượn là âm thầm đổi
  * nghĩa hàng đó, và sẽ chặn đúng những vai trò cần dùng). Câu hỏi SPEC gửi
  * M-Baton lượt này.
  */
@@ -378,7 +378,7 @@ export async function handlerHeartbeat(
    * "Nhịp tim" là **lời khai của agent rằng nó đang chạy** (mục 6 d.178: "biết
    * agent **có thật đang chạy**"), nên chỉ **chính agent của phiên** gửi được —
    * kể cả chủ cũng không, đúng cùng lý do đã chốt cho lệnh "nhận"
-   * (`cau-hoi-spec.md` #31). Chủ gửi hộ là tạo ra một nhịp tim giả, tức làm hỏng
+   * (`spec-questions.md` #31). Chủ gửi hộ là tạo ra một nhịp tim giả, tức làm hỏng
    * đúng thứ mục 6 sinh ra để bảo đảm.
    */
   if (lenh.ai.loai !== 'agent' || lenh.ai.agent_id !== phien.agent_id) {

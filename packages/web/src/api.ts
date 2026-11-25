@@ -273,7 +273,7 @@ export interface TheCanChu {
   boi_canh: string | null;
   /**
    * Lệnh của thẻ — **mọi loại** có thể có (d.250 "lệnh có nút Copy", viết chung
-   * cho mọi thẻ; `cau-hoi-spec.md` #130). `null` = thẻ không mang lệnh nào.
+   * cho mọi thẻ; `spec-questions.md` #130). `null` = thẻ không mang lệnh nào.
    */
   lenh: string | null;
   /** d.237: agent đánh dấu cần TTY ⇒ ghi chú "chạy ở terminal thật". */
@@ -821,7 +821,7 @@ export interface TicketDong {
   nhan: string[];
   /** Tổng số ticket con. Thẻ hiện "xong/tổng" = `con_tong - con_chua_ket`. */
   con_tong: number;
-  /** 19.11 — số con **chưa kết**; xem `cau-hoi-spec.md` #134. */
+  /** 19.11 — số con **chưa kết**; xem `spec-questions.md` #134. */
   con_chua_ket: number;
   /** Số mục Cần Chủ **đang Chờ** nối với ticket này. */
   can_chu_so: number;

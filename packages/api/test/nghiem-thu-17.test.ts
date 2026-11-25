@@ -1,6 +1,6 @@
 /**
  * **Nghiệm thu v0.1 — SPEC mục 17 "Định nghĩa xong", 11 bước** (BAT-9, phần 9
- * của `viec-v0.1.md`).
+ * của `build-plan-v0.1.md`).
  *
  * Mỗi bước một `describe('Bước N — ...')`. File này **tự đứng làm bằng chứng**:
  * mỗi ca đi đúng kịch bản chữ của mục 17, trên **đường thật** của dự án —
@@ -332,7 +332,7 @@ async function chuoiToiChoMerge(
 
   /*
    * Nối "điều phối" COS-1 → SAI-1 bằng token **của coordinator** qua CLI
-   * `baton link` (BAT-43, T-50 = A, `cau-hoi-spec.md` #168; mặc định `dieu_phoi`).
+   * `baton link` (BAT-43, T-50 = A, `spec-questions.md` #168; mặc định `dieu_phoi`).
    */
   const noi = await cli<{ tu_ticket_id: string; den_ticket_id: string; loai_lien_ket: string }>(
     tk.coord,
@@ -378,7 +378,7 @@ async function chuoiToiChoMerge(
    * 1d. manager giao reviewer; reviewer gửi review `pass`.
    *
    * Lượt **review** tạo bằng token **của manager** qua CLI `baton assign --review`
-   * (BAT-43, T-50 = A, `cau-hoi-spec.md` #168). Cả chuỗi bước 1 nay đi trọn CLI.
+   * (BAT-43, T-50 = A, `spec-questions.md` #168). Cả chuỗi bước 1 nay đi trọn CLI.
    */
   const lg_rv = await cli<{ id: string; loai: string }>(tk.man, ['assign', 'SAI-1', ag.rv, '--review']);
   expect(lg_rv.loai).toBe('review');
@@ -450,7 +450,7 @@ describe('Bước 1 — 3 dự án, 4 agent, chuỗi đầy đủ qua CLI, ticke
    * **"manager giao reviewer" qua CLI** — SPEC 17 bước 1 + 19.3. Trước BAT-43 bảng
    * lệnh mục 13 chỉ có `baton assign <MÃ> <agent>` và lệnh đó chỉ tạo lượt `work`:
    * reviewer thành "người làm" của 19.3 và review của chính họ bị `REVIEWER_IS_WORKER`
-   * (ca `it.fails` cũ). Chủ chốt T-50 = A (22/10, `cau-hoi-spec.md` #168): thêm cờ
+   * (ca `it.fails` cũ). Chủ chốt T-50 = A (22/10, `spec-questions.md` #168): thêm cờ
    * `baton assign --review`. Không cờ vẫn là `work` — ca thứ hai ghim điều đó.
    */
   async function giaoReviewerBangCli(
@@ -491,7 +491,7 @@ describe('Bước 1 — 3 dự án, 4 agent, chuỗi đầy đủ qua CLI, ticke
 
   /**
    * **Nối ticket điều phối với ticket dự án qua CLI** — SPEC mục 4, 19.4, 17 bước 1.
-   * Lệnh `baton link` thêm ở BAT-43 (T-50 = A, `cau-hoi-spec.md` #168), mặc định
+   * Lệnh `baton link` thêm ở BAT-43 (T-50 = A, `spec-questions.md` #168), mặc định
    * `dieu_phoi`. Ca này đứng riêng (ngoài chuỗi đầy đủ ở ca đầu, vốn cũng nối bằng
    * `baton link`) để kiểm **hai chiều thấy nhau** qua `baton show` của cả hai bên
    * ngay sau khi nối, trước mọi việc khác.
@@ -800,7 +800,7 @@ describe('Bước 7 — token worker giao việc ⇒ FORBIDDEN; token không có
 describe('Bước 8 — chủ bấm Dừng ⇒ lệnh nhịp tim kế tiếp của agent thoát mã 3', () => {
   /**
    * Mục 17 bước 8 viết "lệnh `heartbeat` kế tiếp" (trước là "lệnh `tim`"; sửa chữ
-   * theo T-50 = A, 22/10 — `cau-hoi-spec.md` #169). Ca kiểm cả
+   * theo T-50 = A, 22/10 — `spec-questions.md` #169). Ca kiểm cả
    * `baton tasks` (mục 6: "lần gọi kế tiếp của agent nhận về tín hiệu STOP").
    */
   it('chủ (cookie web) POST Dừng ⇒ phiên `stopping`; `baton heartbeat` in STOP, mã thoát 3; `tasks` cũng mã 3', async () => {
@@ -828,15 +828,15 @@ describe('Bước 8 — chủ bấm Dừng ⇒ lệnh nhịp tim kế tiếp c�
  * Bước 9 — nhập can-chu.md và decision-log.md
  * ================================================================== */
 
-describe('Bước 9 — nhập `mau-nhap/can-chu-mau.md` và `mau-nhap/decision-log-mau.md` (mục 16), giữ nguyên số T', () => {
+describe('Bước 9 — nhập `sample-data/needs-owner-sample.md` và `sample-data/decision-log-sample.md` (mục 16), giữ nguyên số T', () => {
   /**
    * **TRƯỢT — chưa có đường nhập.** Mục 16 **hoãn theo T-119** (Chủ chốt A, 16/10;
-   * `cau-hoi-spec.md` #142): không có route, lệnh CLI hay màn hình nào nhận file
+   * `spec-questions.md` #142): không có route, lệnh CLI hay màn hình nào nhận file
    * markdown Cần Chủ / Nhật ký. Không viết `it.fails` vì SPEC không đặt tên giao
    * diện nhập (route/lệnh), nên không có gì để gọi mà không bịa ra.
    */
-  itGoc.todo('TRƯỢT — nhập can-chu-mau.md: giữ nguyên số T, bộ đếm T tiếp tục từ số lớn nhất (mục 16; hoãn T-119)');
-  itGoc.todo('TRƯỢT — nhập decision-log-mau.md: mỗi dòng bảng thành một dòng Nhật ký (mục 16; hoãn T-119)');
+  itGoc.todo('TRƯỢT — nhập needs-owner-sample.md: giữ nguyên số T, bộ đếm T tiếp tục từ số lớn nhất (mục 16; hoãn T-119)');
+  itGoc.todo('TRƯỢT — nhập decision-log-sample.md: mỗi dòng bảng thành một dòng Nhật ký (mục 16; hoãn T-119)');
   itGoc.todo('TRƯỢT — chạy lại lần hai bỏ qua mục đã nhập, in báo cáo đã nhập/bỏ qua/lỗi (mục 16; hoãn T-119)');
 });
 

@@ -5,7 +5,7 @@
  * d.398–401 (nội dung chi tiết — panel dùng **cùng** thân với trang `/t/<MÃ>`),
  * d.405–406 (`J`/`K` trên ticket đang chọn), d.411 (375px), d.412 (thời gian
  * tương đối + rê chuột thấy giờ VN). Phần **ngoài** SPEC là yêu cầu của chủ qua
- * brief, ghi ở `cau-hoi-spec.md` #131–#136 — ca ở đây ghim **đề xuất tạm đang
+ * brief, ghi ở `spec-questions.md` #131–#136 — ca ở đây ghim **đề xuất tạm đang
  * dùng**.
  *
  * Luật thuần (năm nhóm, lọc nhanh, mốc "Xong cũ", băm màu nhãn, viết tắt) có ca
@@ -171,7 +171,7 @@ describe('thẻ việc hiện ĐỦ TÁM thứ', () => {
       nhan: ['hạ-tầng', 'bug'],
       uu_tien_icon: true,
       uu_tien_nhan: 'Cao',
-      // "xong/tổng" = đã kết / tổng = (3 − 1)/3 — `cau-hoi-spec.md` #134.
+      // "xong/tổng" = đã kết / tổng = (3 − 1)/3 — `spec-questions.md` #134.
       viec_con: '2/3',
       can_chu: 'Cần Chủ 2',
       thoi_gian: '2 giờ trước',
@@ -781,7 +781,7 @@ describe('bộ lọc nhanh Active / Backlog / All — và GHI TRÊN URL', () => 
 
   /**
    * **Dòng cảnh báo phải nói đúng điều nó cảnh báo** — hai phép lọc máy khách
-   * chỉ soi trang đã tải (`cau-hoi-spec.md` #132, #133). Không có vế này thì chủ
+   * chỉ soi trang đã tải (`spec-questions.md` #132, #133). Không có vế này thì chủ
    * bấm "Backlog" ra 3 dòng và tưởng cả workspace có 3.
    */
   it('còn trang sau ⇒ nói rõ lọc nhanh CHỈ soi trang đã tải', async () => {
@@ -977,7 +977,7 @@ describe('d.409 — bộ tuỳ chọn ảo hoá: có đo thật, và ước lư�
 });
 
 /* ================================================================== *
- * Hệ thiết kế 29/10 (`THIET-KE.md`, lượt UI-B) — icon trạng thái, đầu nhóm/cột
+ * Hệ thiết kế 29/10 (`DESIGN.md`, lượt UI-B) — icon trạng thái, đầu nhóm/cột
  * ================================================================== *
  * Chỉ ghim phần trình bày mà hệ thiết kế đòi và jsdom thấy được: icon trạng
  * thái (đúng hình của đúng trạng thái) đứng TRƯỚC tiêu đề trên dòng/thẻ, và đầu
@@ -1006,7 +1006,7 @@ describe('UI-B — icon trạng thái trước tiêu đề, đầu nhóm/cột c
     const tieu_de = hang.querySelector('[data-o="tieu-de"]');
     expect(icon?.getAttribute('data-icon-trang-thai')).toBe('in_progress');
     expect(icon !== null && tieu_de !== null && dungTruoc(icon, tieu_de)).toBe(true);
-    // Icon đứng cạnh chữ ⇒ `aria-hidden` (THIET-KE.md "ARIA"); chữ của máy chủ còn.
+    // Icon đứng cạnh chữ ⇒ `aria-hidden` (DESIGN.md "ARIA"); chữ của máy chủ còn.
     expect(icon?.getAttribute('aria-hidden')).toBe('true');
     expect(hang.querySelector('[data-o="trang-thai"]')?.textContent).toBe(
       DS[1]!.nhan_trang_thai,

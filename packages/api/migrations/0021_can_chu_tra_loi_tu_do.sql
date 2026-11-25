@@ -2,7 +2,7 @@
 -- 0021 — **Mục `decision` gửi được một câu trả lời TỰ DO**
 -- SPEC mục 8 d.244 ("kết quả: phương án đã chọn **và/hoặc** chữ tự do")
 -- vs mục 8 d.259 + 19.9 d.539 ("bắt buộc chọn 1 phương án")
--- `cau-hoi-spec.md` **#121**
+-- `spec-questions.md` **#121**
 -- ===================================================================
 --
 -- ## Vì sao nới
@@ -11,7 +11,7 @@
 -- muốn chọn cái nào, gõ ý riêng vào ô "Ghi thêm" — và nút Gửi mờ, không gửi
 -- được. Yêu cầu trực tiếp của chủ là cho trả lời tự do. SPEC **xung đột với
 -- chính nó** ở chỗ này (d.244 "và/hoặc" vs d.259/d.539 "bắt buộc"), nên đây là
--- một chỗ **nới** đã ghi vào `cau-hoi-spec.md` #121 để chốt lại với Chủ, không
+-- một chỗ **nới** đã ghi vào `spec-questions.md` #121 để chốt lại với Chủ, không
 -- một lần tự đoán.
 --
 -- Luật mới: mục `decision` ở `resolved` thì **phải có `ket_qua`**, còn

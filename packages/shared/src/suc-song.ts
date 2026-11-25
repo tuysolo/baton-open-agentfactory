@@ -18,7 +18,7 @@
  * nhau ở đúng chỗ khó thấy nhất, và chủ sẽ thấy 🟢 ở một chỗ, 🟡 ở chỗ kia.
  *
  * -------------------------------------------------------------------------
- * **Chỗ SPEC KHÔNG nói, và lựa chọn tạm đang cài** (`cau-hoi-spec.md` #102):
+ * **Chỗ SPEC KHÔNG nói, và lựa chọn tạm đang cài** (`spec-questions.md` #102):
  *
  * Ba dòng trên không phủ hết các ca có thật. Một dự án có ticket **Đang làm** mà
  * ticket đó **không có phiên mở nào** (chưa ai nhận lượt, hoặc phiên đã đóng) thì

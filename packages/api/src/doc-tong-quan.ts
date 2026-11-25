@@ -30,7 +30,7 @@
  *
  * ## Số truy vấn là O(1) theo số dự án và số agent
  *
- * Mốc nghiệm thu là 200 dự án + 200.000 ticket (`quyet-dinh.md` 01/10) và
+ * Mốc nghiệm thu là 200 dự án + 200.000 ticket (`decisions.md` 01/10) và
  * "Tổng quan < 1 giây". Nên **không** có vòng `for` nào gọi DB: mỗi khối là một
  * (hoặc một vài) câu gộp, rồi gom trong bộ nhớ. Cụ thể, một lần mở Tổng quan là
  * một số **cố định** câu truy vấn, không phụ thuộc số dự án hay số agent — có ca
@@ -40,7 +40,7 @@
  * ba khối dùng lại (sức sống dự án, Cần chú ý, Đội agent): ba lượt đọc riêng là
  * ba ảnh chụp có thể lệch nhau ngay trong một màn hình.
  *
- * Mọi câu SQL ràng cả `workspace_id` (`quyet-dinh.md`, luật áp cho mọi bảng).
+ * Mọi câu SQL ràng cả `workspace_id` (`decisions.md`, luật áp cho mọi bảng).
  *
  * ## Đợt 3 (14/10): Tổng quan là màn hình QUẢN LÝ CÔNG VIỆC, không hộp thư
  *
@@ -127,10 +127,10 @@ export const TRAN_DU_AN = 200;
 /**
  * Trần **khối lớn** của cả workspace trong một lượt Tổng quan (SPEC 20.3–20.4):
  * 200 dự án × 25 khối. `khoi_lon` tối đa 99 nhưng một dự án thật chia vài khối;
- * trần chỉ chặn một lượt đọc vô hạn (`cau-hoi-spec.md` #192).
+ * trần chỉ chặn một lượt đọc vô hạn (`spec-questions.md` #192).
  */
 export const TRAN_KHOI_LON = 5000;
-/** Trần "danh sách mở ra" của ô Cần Chủ (SPEC 20.5) — `cau-hoi-spec.md` #192. */
+/** Trần "danh sách mở ra" của ô Cần Chủ (SPEC 20.5) — `spec-questions.md` #192. */
 export const TRAN_O_CAN_CHU = 50;
 export const TRAN_AGENT = 200;
 export const TRAN_CAN_CHU_Y_MOI_NGUON = 50;
@@ -273,7 +273,7 @@ export interface HangDuAn {
    * thấy ở d.403, nên "nổi bật nhất" ở đây **là** dòng đầu của chính danh sách
    * ấy, không một thứ tự thứ hai. `null` khi dự án không có ticket Đang làm nào
    * (lúc đó dự án là ⚪ và dòng nói "Dự án không chạy"). SPEC không định nghĩa
-   * "nổi bật" — `cau-hoi-spec.md` #139.
+   * "nổi bật" — `spec-questions.md` #139.
    */
   viec_noi_bat: TicketTroTa | null;
 
@@ -509,7 +509,7 @@ function troTa(d: {
  * **Trang Tổng quan** — d.315–320, năm khối, một lượt gọi.
  *
  * `bay_gio` qua **tham số**, như mọi chỗ phụ thuộc thời gian của dự án này
- * (`quyet-dinh.md` 01/10): ba mốc của màn hình này (ngưỡng đứng của mục 6, hạn
+ * (`decisions.md` 01/10): ba mốc của màn hình này (ngưỡng đứng của mục 6, hạn
  * phản hồi của mục 5, hai cửa sổ 24 giờ của d.319–320) phải ghim được bằng một
  * con số, không bằng cách chờ thật.
  */
@@ -740,7 +740,7 @@ function ghepBanDo(
 
 /**
  * Câu của "**3 mục Chờ gấp nhất**" — tách ra để test đo chính câu sản phẩm bằng
- * `EXPLAIN QUERY PLAN` (nếp `quyet-dinh.md`).
+ * `EXPLAIN QUERY PLAN` (nếp `decisions.md`).
  *
  * **Thứ tự: mức → hạn → lúc tạo**, và nó không phải một lựa chọn tuỳ ý:
  *   1. **mức** (🔴 → 🟡 → ⚪) vì d.316 gọi chúng là "mục **gấp nhất**" và mục 8
@@ -754,7 +754,7 @@ function ghepBanDo(
  *
  * `ct.han_luc IS NULL` trong `ORDER BY` đẩy mục **không hẹn hạn** xuống cuối
  * (SQLite xếp NULL lên đầu) — cùng kết luận với `cauKhoiCho` của màn hình Cần
- * Chủ, nơi lý lẽ đầy đủ và `cau-hoi-spec.md` #77 đã ghi.
+ * Chủ, nơi lý lẽ đầy đủ và `spec-questions.md` #77 đã ghi.
  *
  * **Khai thẳng: câu này KHÔNG đi `ORDER BY` theo index.** `CASE` trên `muc` và
  * `han_luc IS NULL` không phải tiền tố của `ix_can_chu_khoi`, nên SQLite sắp
@@ -1181,7 +1181,7 @@ export function gomTheoTicket(ds: readonly DongCanChuY[]): NhomCanChuY[] {
  * Sáu nguồn của d.321, **theo đúng thứ tự câu đó liệt kê**, mỗi nguồn sắp theo
  * `luc` **tăng dần** (cái chờ lâu nhất lên trước).
  *
- * SPEC không nói thứ tự giữa năm nguồn hay trong một nguồn (`cau-hoi-spec.md`
+ * SPEC không nói thứ tự giữa năm nguồn hay trong một nguồn (`spec-questions.md`
  * #103). Chọn thứ tự của chính d.319 vì nó là thứ duy nhất SPEC viết ra, và
  * "chờ lâu nhất trước" vì mục đích của khối là bắt chủ chú ý tới thứ đã bị bỏ
  * lâu nhất.
@@ -1546,7 +1546,7 @@ async function nguonBangChungTruot(
  * (5) "ticket **Chờ kiểm chứng quá 24 giờ**" — d.321.
  *
  * **Quá 24 giờ kể từ lúc nào?** SPEC không nói, và không có cột nào ghi "vào
- * `verifying` lúc nào" (`cau-hoi-spec.md` #104). Ba nguồn có thật:
+ * `verifying` lúc nào" (`spec-questions.md` #104). Ba nguồn có thật:
  *   * `cap_nhat_luc` — **sai**: nó nhích vì mọi lần sửa, nên thêm một nhãn cho
  *     một ticket đã chờ ba ngày sẽ đặt lại đồng hồ về 0, tức luật này **không
  *     bao giờ** chạy đúng ca duy nhất nó cần chạy;

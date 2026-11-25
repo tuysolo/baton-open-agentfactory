@@ -6,7 +6,7 @@
  * 19.12 câu 41 (chữ nguyên): mọi lệnh ghi của agent nhích tín hiệu của **mọi**
  * phiên còn mở của nó. Agent có lượt A (đã chết) và lượt B (đang chạy) thì mọi
  * lệnh của B làm A "sống" mãi, cron d.196 không bao giờ báo A. CoS/Chủ giao thu hẹp
- * (`cau-hoi-spec.md` mục BAT-57, chờ Chủ chốt sửa câu 41):
+ * (`spec-questions.md` mục BAT-57, chờ Chủ chốt sửa câu 41):
  *   * lệnh **gắn một lượt** (nhịp tim, hoạt động, kế hoạch, nộp, nhận) ⇒ chỉ phiên
  *     của đúng lượt đó;
  *   * lệnh **chung** (bình luận, sửa ticket…) ⇒ chỉ khi agent có **đúng 1** phiên
@@ -625,7 +625,7 @@ describe('BAT-57 lỗi 2 — người gọi THẤY được lượt nhưng khôn
  * Hành vi ghim = hành vi **trước BAT-57** (lúc đó câu tra lượt/phiên không lọc
  * phạm vi, rồi kiểm danh tính): bị gỡ khỏi dự án không đổi gì cho lệnh trên lượt
  * của chính mình. Đường ĐỌC (`GET /v1/phien/:id`) giữ luật `layTicket` như trước
- * BAT-57: người bị gỡ ra 404 (`cau-hoi-spec.md` #175).
+ * BAT-57: người bị gỡ ra 404 (`spec-questions.md` #175).
  */
 describe('BAT-57 (reviewer) — người nhận/người giao bị gỡ khỏi dự án vẫn làm tiếp lệnh trên lượt của mình', () => {
   beforeEach(async () => {

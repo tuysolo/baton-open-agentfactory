@@ -225,7 +225,7 @@ describe('chặn 1 — deploy trỏ vào chính Baton (d.207)', () => {
    * Hai ca HTTP ở trên chạy trong môi trường **không gắn `ASSETS`**, nên ở đó
    * `phucVuSpa` và `assetDungDuong` cho **cùng** 404 — tức hoàn nguyên `index.ts`
    * về `phucVuRequest` vẫn xanh. Reviewer bắt đúng, và đó là cùng loại lỗi mà
-   * `quyet-dinh.md` 10/10 đã ghi là bài học lặp lại ("ca test tính qua chính thứ
+   * `decisions.md` 10/10 đã ghi là bài học lặp lại ("ca test tính qua chính thứ
    * nó định canh thì không đỏ được").
    *
    * Nên ca này gọi **đúng hàm đã đăng ký** (`tuyenNoiBo()`) với một `env` **có**

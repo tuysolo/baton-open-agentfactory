@@ -148,7 +148,7 @@ export const BANG_QUYEN_MAC_DINH = {
   },
   /*
    * **`manager` được ghi review từ 13/10** — SPEC mục 7 d.208, migration 0022
-   * khối B, `quyet-dinh.md` 13/10.
+   * khối B, `decisions.md` 13/10.
    *
    * Vì sao nới đúng một ô này: reviewer thật của hệ này là sub-agent do Manager
    * gọi (`claude -p`) và **không có token Baton**, nên không ai gửi được một
@@ -419,7 +419,7 @@ export function oCuaAgent(ai: AiGoiAgent, viec: ViecQuyen): PhamViQuyen {
   if (!ghi_de.cho_phep) return 'khong';
   if (ghi_de.pham_vi !== null) return ghi_de.pham_vi;
   // Chủ bật một ô mà vai trò vốn `—` nhưng không ghi phạm vi: hiểu là "có"
-  // (SPEC mục 3 không nói trường hợp này — xem `cau-hoi-spec.md` #10).
+  // (SPEC mục 3 không nói trường hợp này — xem `spec-questions.md` #10).
   return mac_dinh === 'khong' ? 'co' : mac_dinh;
 }
 
@@ -430,7 +430,7 @@ export function batBuocQuyen(ai: AiGoi, viec: ViecQuyen, boi_canh: BoiCanhQuyen 
 }
 
 /* ------------------------------------------------------------------ *
- * Nối liên kết `dieu_phoi` — SPEC 19.12 câu 16 (chốt `cau-hoi-spec.md` #25)
+ * Nối liên kết `dieu_phoi` — SPEC 19.12 câu 16 (chốt `spec-questions.md` #25)
  * ------------------------------------------------------------------ */
 
 /**

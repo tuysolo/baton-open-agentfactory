@@ -26,7 +26,7 @@
  */
 
 /**
- * Nút hành động chính: **màu nhấn** (hệ thiết kế 29/10, `THIET-KE.md` — màu nhấn
+ * Nút hành động chính: **màu nhấn** (hệ thiết kế 29/10, `DESIGN.md` — màu nhấn
  * dành cho nút chính, mục đang chọn, focus ring, liên kết). Chữ là token
  * `tren-nhan-manh` (không `text-white`: lưới "không mã màu cứng" của
  * `test/vo-linear.test.tsx`). Hover đậm hơn, và chỉ khi nút **bật** (`enabled:`)
@@ -61,7 +61,7 @@ export const NUT_MO = 'bg-neutral-200 text-neutral-500';
 export const NUT_MO_KHI_DISABLED = 'disabled:bg-neutral-200 disabled:text-neutral-500';
 
 /* ================================================================== *
- * Ô nhập, chip, phím, tab-pill, mục menu — dùng chung (THIET-KE.md)
+ * Ô nhập, chip, phím, tab-pill, mục menu — dùng chung (DESIGN.md)
  * ================================================================== */
 
 /** Ô nhập / ô chọn: bo 6px, viền mờ, nền trang; focus = vòng màu nhấn (kieu.css). */
@@ -114,7 +114,7 @@ export const LOP_TAM_NOI = 'rounded-lg border border-vien bg-nen-lop text-chu sh
 
 /* ================================================================== *
  * Trang: vùng chính, tiêu đề, thẻ, danh sách dòng, câu trạng thái
- * (THIET-KE.md — "Trang", "Bảng và danh sách", "Trạng thái rỗng / lỗi / đang tải")
+ * (DESIGN.md — "Trang", "Bảng và danh sách", "Trạng thái rỗng / lỗi / đang tải")
  * ================================================================== */
 
 /**

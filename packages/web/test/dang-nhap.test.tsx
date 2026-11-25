@@ -213,7 +213,7 @@ describe('nộp biểu mẫu đăng nhập', () => {
     expect(screen.getByRole('menuitem', { name: NHAN_DANG_XUAT_MOI_NOI })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: NHAN_TIEU_DE })).toBeNull();
 
-    // **Một** request mang cả hai yếu tố (`cau-hoi-spec.md` #99).
+    // **Một** request mang cả hai yếu tố (`spec-questions.md` #99).
     const goi = may.da_goi.filter((l) => l.duong === '/v1/dang-nhap');
     expect(goi.length).toBe(1);
     expect(goi[0]?.than).toEqual({ mat_khau: 'mat-khau-that-123', ma_totp: '123456' });

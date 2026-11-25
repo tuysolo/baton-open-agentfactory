@@ -343,7 +343,7 @@ export const LAN: readonly { ma: Lan; nhan: string }[] = [
 /**
  * 20.4: Đang đẩy (`dang_day`) · Hàng chờ (còn lại, đang chạy) · Tạm dừng. Dự án
  * vừa `dang_day` vừa Tạm dừng ⇒ làn Đang đẩy (chữ SPEC "dự án `dang_day`" xét
- * trước) — `cau-hoi-spec.md` #193.
+ * trước) — `spec-questions.md` #193.
  */
 export function lanCua(d: Pick<HangDuAn, 'dang_day' | 'trang_thai'>): Lan {
   if (d.dang_day) return 'dang_day';

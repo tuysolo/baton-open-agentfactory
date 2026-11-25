@@ -25,7 +25,7 @@
  * d.217: dự án không code cần 1 `file` hoặc `note` **cộng chủ xác nhận**, tức
  * "một mục Cần Chủ loại Review tự sinh".
  *
- * Câu hỏi "mục đó sinh **lúc nào**, do **đường nào**" (`cau-hoi-spec.md` #59) đã
+ * Câu hỏi "mục đó sinh **lúc nào**, do **đường nào**" (`spec-questions.md` #59) đã
  * được chủ chốt ngày 04/10 thành **19.12 câu 57**: sinh **lúc cổng được kiểm** và
  * cổng thiếu đúng phần chủ xác nhận, **mọi** đường kiểm cổng kể cả đường tự lên
  * Xong định kỳ (d.221); **một** mục cho mỗi ticket; mục đã **Bỏ qua** chỉ dựng
@@ -157,7 +157,7 @@ export type DieuChinhBangChung =
  * hiệu lực", nên chúng phải đọc **cùng một tập dữ liệu**, không hai câu truy vấn.
  *
  * Lấy cả bằng chứng **đã rút**: luật 19.3 tính mốc "commit/deploy cuối cùng" trên
- * cả chúng (xem `cong-xong.ts` và `cau-hoi-spec.md` #56), nên lọc ở SQL là bỏ mất
+ * cả chúng (xem `cong-xong.ts` và `spec-questions.md` #56), nên lọc ở SQL là bỏ mất
  * dữ kiện của luật.
  *
  * `workspace_id` trong `WHERE` là **bắt buộc về hiệu năng**, không chỉ là phòng thủ

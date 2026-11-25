@@ -70,7 +70,7 @@
  * ticket chưa có mã cho tới khi máy chủ cấp số (mục 4), nên không có gì để hiện
  * trước. Hộp **khoá nút** trong lúc gửi (không tạo đôi), lỗi máy chủ hiện **trong
  * hộp** và ở toast (vế "báo lỗi dạng toast ghi rõ lý do"), nội dung đã nhập **giữ
- * nguyên** để bấm lại. `cau-hoi-spec.md` #149.
+ * nguyên** để bấm lại. `spec-questions.md` #149.
  *
  * **Mất mạng** (BAT-34 việc 2): lượt gửi tạm dừng ⇒ hộp nói rõ "đang chờ có mạng",
  * Esc/Huỷ bật lại, và đóng hộp lúc đó là **huỷ gửi** (0 request khi có mạng lại,
@@ -215,7 +215,7 @@ export function chuanMaCha(ma: string): string {
  *
  * Dùng **cùng** `MAU_MA_TICKET_WEB` với đường `/t/:ma` của hộp tạo việc: một
  * mã ticket có một định nghĩa. Người dùng: dòng "Mở MÃ" dưới ô lọc Nhãn của
- * danh sách (BAT-41, `cau-hoi-spec.md` #167).
+ * danh sách (BAT-41, `spec-questions.md` #167).
  */
 export function maTicketTuChuoiGo(chuoi: string): string | null {
   const ma = chuanMaCha(chuoi);

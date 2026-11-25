@@ -366,7 +366,7 @@ describe('SPEC mục 2, 4 — trạng thái dự án chi phối việc mới', (
 
   it('`archived`: gửi `trang_thai` KÈM trường khác → từ chối cả lệnh, không lách được', async () => {
     // Lách cũ: đính thêm `trang_thai` vào request là sửa được mọi trường khác
-    // trong cùng lệnh. `cau-hoi-spec.md` #15 chỉ xin ngoại lệ cho RIÊNG trường đó.
+    // trong cùng lệnh. `spec-questions.md` #15 chỉ xin ngoại lệ cho RIÊNG trường đó.
     const res = await goiApi('/v1/du-an/pj-ARC', TOKEN_CHU, {
       method: 'PATCH',
       than: { trang_thai: 'active', ten: 'Tên lách vào', mo_ta: 'Mô tả lách vào' },

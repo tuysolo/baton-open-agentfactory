@@ -500,7 +500,7 @@ describe('d.397 — bộ lọc ghi trên URL và đi vào truy vấn máy chủ'
 });
 
 /* ================================================================== *
- * C'. BAT-41 (tạm, `cau-hoi-spec.md` #167) — gõ mã ticket vào ô Nhãn
+ * C'. BAT-41 (tạm, `spec-questions.md` #167) — gõ mã ticket vào ô Nhãn
  * ================================================================== */
 
 describe('BAT-41 — ô lọc Nhãn đúng dạng mã ticket ⇒ thêm dòng "Mở MÃ"; lọc nhãn giữ nguyên', () => {

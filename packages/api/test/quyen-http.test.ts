@@ -189,7 +189,7 @@ function taoTicket(vai_tro: VaiTroAgent, project_id: string, tieu_de: string, ch
  * Sửa một trường của ticket — hàng "Đổi trạng thái ticket".
  *
  * SPEC mục 3 không có hàng riêng cho "sửa trường"; cửa ghi dùng hàng gần nhất là
- * "Đổi trạng thái ticket" (`cau-hoi-spec.md` #12), nên đây đúng là đường HTTP của
+ * "Đổi trạng thái ticket" (`spec-questions.md` #12), nên đây đúng là đường HTTP của
  * hàng này. Chọn `PATCH` thay vì đổi trạng thái thật để luật trạng thái (cổng bằng
  * chứng, ticket con, lý do) không chen vào trước kết luận về quyền.
  */
@@ -230,7 +230,7 @@ const TC = (ten: string, goi: () => Promise<Response>): CaHttp => ({
 
 /**
  * Ca bị từ chối vì ticket **ngoài phạm vi người gọi thấy được** — BAT-58 (19.12
- * câu 15, `cau-hoi-spec.md` #176): cửa ghi trả `NOT_FOUND` giống hệt id bịa (ghim
+ * câu 15, `spec-questions.md` #176): cửa ghi trả `NOT_FOUND` giống hệt id bịa (ghim
  * so trực tiếp ở `bat58-lo-id-ticket-bang-chung.test.ts`). Trước BAT-58 các ca này
  * là `TC` (403) — 403 cho id thật, 404 cho id bịa là một máy dò.
  */
@@ -414,7 +414,7 @@ const O_HTTP: OHttp[] = [
 
   /* --- Hàng 5: Ghi kết quả review ---------------------------------- *
    * SPEC: | — | — | — | có |, và ô `manager` nới thành "trong dự án" ngày 13/10
-   * (migration 0022 khối B, `quyet-dinh.md`): reviewer thật là sub-agent **không
+   * (migration 0022 khối B, `decisions.md`): reviewer thật là sub-agent **không
    * có token Baton**, nên trước đó không ai mở được điều kiện phụ của cổng
    * (d.215). Luật thêm của ca đó (bắt buộc kèm đường dẫn báo cáo reviewer) có ca
    * riêng trong `gui-bang-chung.test.ts`. */
@@ -586,7 +586,7 @@ describe('đối chứng: chủ không bị bảng quyền của agent chặn', 
 /* ================================================================== *
  * Đọc ngoài phạm vi → NOT_FOUND / 404 (không FORBIDDEN)
  * ================================================================== *
- * `quyet-dinh.md`: ngoài phạm vi thì ĐỌC trả `NOT_FOUND`/404 (không lộ sự tồn
+ * `decisions.md`: ngoài phạm vi thì ĐỌC trả `NOT_FOUND`/404 (không lộ sự tồn
  * tại), GHI trả `FORBIDDEN`/403. Hai mã khác nhau cho cùng một đối tượng là một
  * máy trả lời cho câu "thứ này có thật không", nên đường đọc phải đóng kín.
  */
@@ -909,7 +909,7 @@ describe('mọi lệnh ghi trong SO_DANG_KY_HANDLER đều từ chối agent `di
       // Giới hạn WIP — SPEC 20.1 (Bản đồ L1). Chỉ chủ: agent nào cũng FORBIDDEN.
       sua_cai_dat_workspace: { gioi_han_wip: 5 },
 
-      /* Hồ sơ dự án và Luật chung — SPEC mục 9 (`cau-hoi-spec.md` #113). */
+      /* Hồ sơ dự án và Luật chung — SPEC mục 9 (`spec-questions.md` #113). */
       sua_ho_so_du_an: { project_id: P_QL, la_gi: 'Dự án để test' },
       them_loi_da_gap: { project_id: P_QL, loi: 'D1 không nhận `STRICT`' },
       sua_luat_chung: { danh_sach_cam: 'Không dữ liệu thật' },

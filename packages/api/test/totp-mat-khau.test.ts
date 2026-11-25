@@ -1,6 +1,6 @@
 /**
  * **TOTP và mật khẩu chủ** — luật thuần của SPEC mục 15 d.415 ("mật khẩu cộng mã
- * TOTP (2 lớp)"), `quyet-dinh.md` 01/10 Q6 (PBKDF2-SHA256).
+ * TOTP (2 lớp)"), `decisions.md` 01/10 Q6 (PBKDF2-SHA256).
  *
  * Ở đây **không có DB, không có HTTP**: hai module này là hàm thuần trên
  * WebCrypto, nên mỗi luật đo được một mình. Đường HTTP có file riêng
@@ -17,7 +17,7 @@
  * mọi đột biến thật trong cài đặt đỏ lên (bảng đột biến trong báo cáo lượt này):
  * cùng secret cùng thời điểm ra cùng mã · mã đổi sau 30 giây · cửa sổ ±1 nhận,
  * ±2 từ chối · secret khác ra mã khác · 6 chữ số · bộ đếm là 8 byte big-endian ·
- * Base32 vòng tròn. **Đã ghi `cau-hoi-spec.md`**: cần một lượt đối chiếu bộ
+ * Base32 vòng tròn. **Đã ghi `spec-questions.md`**: cần một lượt đối chiếu bộ
  * vector chuẩn ngoài phòng sạch trước khi chủ dùng thật.
  */
 
@@ -164,7 +164,7 @@ describe('SPEC mục 15 d.415 — TOTP: tính chất của thuật toán', () =>
    *     đầu ra — đó là biến một known-answer test thành một khẳng định vòng
    *     quanh. Lỗi nằm ở cài đặt.
    *
-   * Vẫn còn **một** việc cần ngoài phòng sạch, đã ghi `cau-hoi-spec.md`: đối
+   * Vẫn còn **một** việc cần ngoài phòng sạch, đã ghi `spec-questions.md`: đối
    * chiếu bộ vector **TOTP** (RFC 6238, mốc thời gian + SHA256/SHA512) với văn
    * bản chuẩn. Ca này phủ HOTP, tức cái lõi; phần TOTP thêm vào chỉ là
    * `bo_dem = floor(giây/30)`, và phép đó có ca riêng ở trên.
@@ -250,7 +250,7 @@ describe('SPEC mục 15 d.415 — Base32 và secret', () => {
   });
 });
 
-describe('quyet-dinh.md 01/10 Q6 — mật khẩu băm PBKDF2-SHA256', () => {
+describe('decisions.md 01/10 Q6 — mật khẩu băm PBKDF2-SHA256', () => {
   /** Mật khẩu **giả**, chỉ sống trong test. */
   const MAT_KHAU = 'mat-khau-gia-cua-test-1';
   /** Số vòng thấp cho test; hằng sản phẩm là `SO_VONG_PBKDF2` = 100.000. */

@@ -43,7 +43,7 @@ export interface BienXacThuc {
    * phiên và không bằng token agent.
    *
    * Chỉ **một** đường đọc cờ này: `POST /v1/chu/thiet-lap`. Thiết lập lần đầu
-   * phải là đường của người **đứng ở máy chủ** (`cau-hoi-spec.md` #3), nên nó
+   * phải là đường của người **đứng ở máy chủ** (`spec-questions.md` #3), nên nó
    * không được mở cho một cookie phiên — mà cookie cũng dựng ra `{ loai: 'chu' }`,
    * nên `ai.loai === 'chu'` một mình **không** phân biệt được hai đường. Mọi chỗ
    * khác tuyệt đối không đọc cờ này: quyền của chủ là một, không hai hạng.
@@ -270,7 +270,7 @@ export function laDuongCongKhai(duong: string): boolean {
  * Từ chối:
  *   * thiếu token, token sai, token đã thu hồi → `INVALID_TOKEN` / **401**
  *   * agent `disabled` → `FORBIDDEN` / **403** (SPEC mục 3 "gọi API sẽ bị từ
- *     chối"; token *đúng*, chỉ danh tính bị tắt — xem `cau-hoi-spec.md` #11)
+ *     chối"; token *đúng*, chỉ danh tính bị tắt — xem `spec-questions.md` #11)
  *   * quá 600 req/phút → `RATE_LIMITED` / **429** kèm `Retry-After`
  */
 export const xacThuc: MiddlewareHandler<MoiTruongHono> = async (c, next) => {
@@ -291,7 +291,7 @@ export const xacThuc: MiddlewareHandler<MoiTruongHono> = async (c, next) => {
    *
    * Nhánh này dựng ra đúng `{ loai: 'chu' }` của union `AiGoi` đã có từ phần 1,
    * nên **không một `batBuocQuyen` nào phải đổi một dòng** — đúng món nợ mà
-   * `quyet-dinh.md` 01/10 đã ghi ("phần 6 thay nhánh `'chu'` mà không sửa chỗ
+   * `decisions.md` 01/10 đã ghi ("phần 6 thay nhánh `'chu'` mà không sửa chỗ
    * khác").
    *
    * **Agent không đăng nhập web (d.416)**: cookie chỉ tra bảng `chu_phien` và

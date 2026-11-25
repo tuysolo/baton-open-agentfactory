@@ -25,7 +25,7 @@
  * `G` trơn **không** bị chặn: nó chỉ ghi lại thời điểm. Phím kế không phải
  * `T`/`O`/`N` ⇒ chuỗi huỷ và phím đó được xử lý **như thường** (tới trang, hoặc
  * chính nó là `C`/`?`/`G`). Chuỗi hết hạn sau `THOI_HAN_CHUOI_G_MS`
- * (`cau-hoi-spec.md` #150). Phím phụ đứng riêng (Shift, Ctrl…) không huỷ chuỗi —
+ * (`spec-questions.md` #150). Phím phụ đứng riêng (Shift, Ctrl…) không huỷ chuỗi —
  * `G` rồi `Shift+T` vẫn là `G T`.
  *
  * ## Không bắt phím khi
@@ -55,7 +55,7 @@ import {
  * ================================================================== */
 
 /**
- * Thời gian chờ phím thứ hai sau `G`. SPEC không nói (`cau-hoi-spec.md` #150);
+ * Thời gian chờ phím thứ hai sau `G`. SPEC không nói (`spec-questions.md` #150);
  * 1,5 giây đủ cho một người bấm hai phím liền, và đủ ngắn để một chữ `g` lạc
  * không biến chữ `t` bấm nhiều giây sau thành một lượt chuyển trang.
  */

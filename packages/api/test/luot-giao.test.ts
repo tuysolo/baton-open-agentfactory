@@ -213,7 +213,7 @@ describe('SPEC mục 5 — người nhận', () => {
 /*
  * BAT-48 — **agent ngoài phạm vi người gọi = không tồn tại** (SPEC mục 13 d.399
  * "404 … cũng dùng khi đối tượng ngoài phạm vi, để không lộ sự tồn tại"; 19.12
- * câu 15 "cả hai ca phải ra phản hồi giống hệt nhau"; `cau-hoi-spec.md` #172).
+ * câu 15 "cả hai ca phải ra phản hồi giống hệt nhau"; `spec-questions.md` #172).
  *
  * Phạm vi "agent nào được thấy" là của `GET /v1/agent` (`locPhamViAgent`): chính
  * mình, agent chung ít nhất một dự án, agent `vao_tat_ca_du_an`; chủ và agent
